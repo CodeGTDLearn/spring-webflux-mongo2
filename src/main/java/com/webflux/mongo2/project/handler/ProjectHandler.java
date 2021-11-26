@@ -16,20 +16,22 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Component
 public class ProjectHandler {
 
+  private final MediaType JSON = MediaType.APPLICATION_JSON;
+
   @Autowired
   IProjectService IProjectService;
 
 
   public Mono<ServerResponse> createProject(ServerRequest request) {
 
-    final Mono<Project> project = request.bodyToMono(Project.class); // convert JSON to Entity
+    final Mono<Project> project = request.bodyToMono(Project.class); // convert/abstracting JSON to Entity
 
     return
          project
               .flatMap(IProjectService::createProject)
               .flatMap(data ->
                             ServerResponse.ok()
-                                          .contentType(MediaType.APPLICATION_JSON)
+                                          .contentType(JSON)
                                           .bodyValue(data));/*.onErrorResume(error -> { if
                                                   (error instanceof
 								  OptimisticLockingFailureException){ return
@@ -50,14 +52,14 @@ public class ProjectHandler {
               .flatMap(IProjectService::createTask)
               .flatMap(data ->
                             ServerResponse.ok()
-                                          .contentType(MediaType.APPLICATION_JSON)
+                                          .contentType(JSON)
                                           .bodyValue(data));
   }
 
 
   public Mono<ServerResponse> findAll(ServerRequest request) {
     return ServerResponse.ok()
-                         .contentType(MediaType.APPLICATION_JSON)
+                         .contentType(JSON)
                          .body(IProjectService.findAll(),Project.class);
 
   }
@@ -69,10 +71,10 @@ public class ProjectHandler {
 
     return IProjectService.findById(id)
                           .flatMap(data -> ServerResponse.ok()
-                                                        .contentType(MediaType.APPLICATION_JSON)
-                                                        .bodyValue(data))
+                                                         .contentType(JSON)
+                                                         .bodyValue(data))
                           .switchIfEmpty(ServerResponse.notFound()
-                                                      .build());
+                                                       .build());
 
   }
 
@@ -83,7 +85,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.deleteById(id),Void.class)
          .log();
@@ -97,7 +99,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByName(name),Project.class)
          .log();
@@ -110,7 +112,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByNameNot(name),Project.class)
          .log();
@@ -123,7 +125,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByEstimatedCostGreaterThan(Long.valueOf(cost)),Project.class)
          .log();
@@ -137,7 +139,7 @@ public class ProjectHandler {
                        .get();
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByEstimatedCostBetween(Long.valueOf(from),Long.valueOf(to)),
                Project.class
@@ -152,7 +154,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByNameLike(name),Project.class)
          .log();
@@ -165,7 +167,7 @@ public class ProjectHandler {
     String regex = "^" + name + "";
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByNameRegex(regex),Project.class)
          .log();
@@ -178,7 +180,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findProjectByNameQuery(name),Project.class)
          .log();
@@ -192,7 +194,7 @@ public class ProjectHandler {
                          .get();
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findProjectByNameAndCostQuery(name,Long.valueOf(cost)),Project.class)
          .log();
@@ -206,7 +208,7 @@ public class ProjectHandler {
                        .get();
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByEstimatedCostBetweenQuery(Long.valueOf(from),Long.valueOf(to)),
                Project.class
@@ -221,7 +223,7 @@ public class ProjectHandler {
     String regex = "^" + name + "";
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByNameRegexQuery(regex),Project.class)
          .log();
@@ -233,7 +235,7 @@ public class ProjectHandler {
                          .get();
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findProjectByNameQueryWithTemplate(name),Project.class)
          .log();
@@ -247,7 +249,7 @@ public class ProjectHandler {
                        .get();
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByEstimatedCostBetweenQueryWithTemplate(Long.parseLong(from),
                                                                            Long.parseLong(to)
@@ -266,7 +268,7 @@ public class ProjectHandler {
     String regex = "^" + name + "";
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.findByNameRegexQueryWithTemplate(regex),Project.class)
          .log();
@@ -282,7 +284,7 @@ public class ProjectHandler {
                          .get();
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.upsertCostWithCriteriaTemplate(id,Long.valueOf(cost)),Void.class)
          .log();
@@ -297,7 +299,7 @@ public class ProjectHandler {
 
     return ok()
 
-         .contentType(MediaType.APPLICATION_JSON)
+         .contentType(JSON)
 
          .body(IProjectService.deleteWithCriteriaTemplate(id),Void.class)
          .log();
@@ -311,7 +313,7 @@ public class ProjectHandler {
   //                         .get();
   //    return ok()
   //
-  //         .contentType(MediaType.APPLICATION_JSON)
+  //         .contentType(JSON)
   //
   //         .body(projectService.findNoOfProjectsCostGreaterThan(Long.valueOf(cost)),Long.class)
   //         .log();
@@ -325,7 +327,7 @@ public class ProjectHandler {
   //                         .get();
   //    return ok()
   //
-  //         .contentType(MediaType.APPLICATION_JSON)
+  //         .contentType(JSON)
   //
   //         .body(projectService.findCostsGroupByStartDateForProjectsCostGreaterThan(
   //              Long.valueOf(cost)),ResultByStartDateAndCost.class)
@@ -338,7 +340,7 @@ public class ProjectHandler {
   //
   //    return ok()
   //
-  //         .contentType(MediaType.APPLICATION_JSON)
+  //         .contentType(JSON)
   //
   //         .body(projectService.findAllProjectTasks(),ResultProjectTasks.class)
   //         .log();
@@ -359,26 +361,26 @@ public class ProjectHandler {
   //
   //    return ok()
   //
-  //         .contentType(MediaType.APPLICATION_JSON)
+  //         .contentType(JSON)
   //
   //         .body(projectService.saveProjectAndTask(Mono.just(p),Mono.just(t)),Void.class)
   //         .log();
   //  }
 
 
-//  public Mono<ServerResponse> chunkAndSaveProject(ServerRequest request) {
-//
-//    Project p = new Project();
-//    p.set_id("20");
-//    p.setName("ProjectGrid");
-//
-//    return ok()
-//
-//         .contentType(MediaType.APPLICATION_JSON)
-//
-//         .body(projectService.chunkAndSaveProject(p),Void.class)
-//         .log();
-//  }
+  //  public Mono<ServerResponse> chunkAndSaveProject(ServerRequest request) {
+  //
+  //    Project p = new Project();
+  //    p.set_id("20");
+  //    p.setName("ProjectGrid");
+  //
+  //    return ok()
+  //
+  //         .contentType(JSON)
+  //
+  //         .body(projectService.chunkAndSaveProject(p),Void.class)
+  //         .log();
+  //  }
 
 
   //  public Mono<ServerResponse> loadProjectFromGrid(ServerRequest request) {
@@ -388,24 +390,24 @@ public class ProjectHandler {
   //
   //    return ok()
   //
-  //         .contentType(MediaType.APPLICATION_JSON)
+  //         .contentType(JSON)
   //
   //         .body(projectService.loadProjectFromGrid(pid),Project.class)
   //         .log();
   //  }
 
 
-//  public Mono<ServerResponse> deleteProjectFromGrid(ServerRequest request) {
-//    String pid = request.queryParam("pid")
-//                        .get();
-//
-//
-//    return ok()
-//
-//         .contentType(MediaType.APPLICATION_JSON)
-//
-//         .body(projectService.deleteProjectFromGrid(pid),Project.class)
-//         .log();
-//  }
+  //  public Mono<ServerResponse> deleteProjectFromGrid(ServerRequest request) {
+  //    String pid = request.queryParam("pid")
+  //                        .get();
+  //
+  //
+  //    return ok()
+  //
+  //         .contentType(JSON)
+  //
+  //         .body(projectService.deleteProjectFromGrid(pid),Project.class)
+  //         .log();
+  //  }
 
 }

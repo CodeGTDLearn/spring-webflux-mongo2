@@ -14,7 +14,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 @Retention(RUNTIME)
 @Target(TYPE)
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
-@TestPropertySource("classpath:application-test.properties")
+@TestPropertySource("classpath:application.properties")
 @ActiveProfiles("test")
 public @interface GlobalConfig {
 }

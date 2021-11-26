@@ -1,7 +1,7 @@
-version: "3.5"
+version: "3.4"
 
 x-common-variables:
-  &db-env-vars
+  &env-vars
   MONGO_INITDB_DATABASE: api-db
   MONGO_INITDB_ROOT_USERNAME: root
   MONGO_INITDB_ROOT_PASSWORD: root
@@ -14,30 +14,53 @@ volumes:
   api_vol:
 
 networks:
-  api_net:
+  mongo-cluster:
 
 services:
-  api-db:
-    container_name: api-db
-    image: mongo:4.0
-    hostname: api-db
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4.4
+    restart: always
+    command: mongod --replSet docker-rs --port 9042
+    ports:
+      - "9042:9042"
+    networks:
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data1:/data/db
+      - ./:/scripts/
+      - api_vol:/data/db
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:4.4.4
+    restart: always
+    command: mongod --replSet docker-rs --port 9142
+    ports:
+      - "9142:9142"
+    networks:
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data2:/data/db
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:4.4.4
     restart: always
     ports:
-      - "27017:27017"
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
-    volumes:
-      - api_vol:/data/db
+      - "9242:9242"
+    command: mongod --replSet docker-rs --port 9242
     networks:
-      - api_net
-    environment:
-      *db-env-vars
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data3:/data/db
 
-  api-web:
-    container_name: api-web
+  api:
+    container_name: api
     image: pauloportfolio/api
     build:
       context: ../
-      dockerfile: docker/dev-dockerfile
+      dockerfile: docker/Dockerfile
       args:
         JAR_FILE: target/*.jar
     ports:
@@ -46,23 +69,12 @@ services:
     volumes:
       - api_vol:/data/db
     depends_on:
-      - api-db
+      - mongo1
     networks:
-      - api_net
+      - mongo-cluster
     environment:
       PROFILE: dev
-      <<: *db-env-vars
+      <<: *env-vars
       PORT_API: 8080
       PORT_DEBUG: 5005
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
-      #      JAVA_OPTIONS: -XX:+AllowRedefinitionToAddDeleteMethods
-      #   *JDK11: ADDITIONAL_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
-      #   *JDK08: ADDITIONAL_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
-#        api-web: -- how it was..............
-#          container_name: api-web
-#          image: pauloportfolio/api
-#          build:
-#            context: ./
-#            dockerfile: dev-dockerfile
-#            args:
-#              JAR_FILE: target/*.jar

@@ -17,7 +17,7 @@ public class TcComposeConfig {
   final static public int TC_COMPOSE_STARTUP_TIMEOUT = 30;
   final static public int TC_COMPOSE_SERVICE_PORT = 27017;
   final static public String TC_COMPOSE_SERVICE = "mongo-db-service";
-  final static private String TC_COMPOSE_PATH = "src/test/resources/tc-compose.yml";
+  final static private String TC_COMPOSE_PATH = "src/test/resources/tc-dev-compose.yml";
 
   
 
@@ -39,7 +39,3 @@ public class TcComposeConfig {
   }
 
 }
-
-
-
-

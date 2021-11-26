@@ -79,14 +79,15 @@ public class ProjectRouter {
          //                   handler::saveProjectAndTask
          //                  )
 
-//         .andRoute(POST(PROJ_CRID_CHUNK_SAVE).and(accept(JSON)),handler::chunkAndSaveProject)
+         //         .andRoute(POST(PROJ_CRID_CHUNK_SAVE).and(accept(JSON)),
+         //         handler::chunkAndSaveProject)
          //         .andRoute(RequestPredicates.GET("/project/grid/load")
          //                                    .and(RequestPredicates.accept(MediaType
          //                                    .APPLICATION_JSON)),
          //                   handler::loadProjectFromGrid
          //                  )
-//         .andRoute(DELETE(PROJ_CRID_DEL).and(accept(JSON)),handler::deleteProjectFromGrid);
+         //         .andRoute(DELETE(PROJ_CRID_DEL).and(accept(JSON)),handler::deleteProjectFromGrid);
 
-    ;
+         ;
   }
 }

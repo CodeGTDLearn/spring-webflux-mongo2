@@ -17,6 +17,11 @@ docker scan --version --json --group-issues
 :: DOCKER-COMPOSE UP
 docker-compose -f dev-compose.yml up --build --force-recreate
 
+REM TIMEOUT 05
+timeout 5
+
+docker exec mongo1 bash -c "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh"
+
 pause
 REM ===================================================================
 REM                 DOCKER-COMPOSE SYSTEM: FINISHING
