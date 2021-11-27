@@ -1,5 +1,7 @@
 package com.webflux.mongo2.project.handler;
 
+import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -10,20 +12,28 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-import java.util.Arrays;
-
+import static com.webflux.mongo2.config.Routes.PROJ_CREATE;
+import static config.databuilders.ProjectBuilder.projectWithID;
+import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.BlockhoundUtils.bhWorks;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
-import static config.utils.TestUtils.globalTestMessage;
-import static org.junit.jupiter.api.Assertions.*;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.springframework.http.HttpStatus.OK;
 
 @DisplayName("UserResourceTest")
 @MergedResource
 class ProjectHandlerTest {
+
+  //ERRO:
+  //Caused by: org.springframework.boot.context.config.InvalidConfigDataPropertyException: Property 'spring.profiles.include' imported from location 'class path resource [application-test.properties]' is invalid in a profile specific resource [origin: class path resource [application-test.properties] - 1:25]
+
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -36,6 +46,10 @@ class ProjectHandlerTest {
   // BECAUSE THERE IS NO 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
   @Autowired
   WebTestClient mockedWebClient;
+
+  private Project project1;
+  private Task task1;
+
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
@@ -69,9 +83,19 @@ class ProjectHandlerTest {
     //                      .baseUrl("http://localhost:8080/customer")
     //                      .build();
 
-    // RestAssuredWebTestClient.reset();
     globalTestMessage(testInfo.getTestMethod()
                               .toString(),"method-start");
+
+    project1 = projectWithID("C",
+                             "2020-05-05",
+                             "2021-05-05",
+                             1000L
+                            ).create();
+
+    task1 = taskWithID("3",
+                       "Mark",
+                       1000L
+                      ).create();
   }
 
 
@@ -85,17 +109,55 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("CreateProject")
-  void CreateProject() {
+  void CreateTask() {
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
+         .body(task1)
+
+         .when()
+         .post()
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id",containsStringIgnoringCase(task1.get_id()))
+         .body("projectId",containsStringIgnoringCase(task1.getProjectId()))
+         .body("cost",equalTo(task1.getCost()))
+         .body(matchesJsonSchemaInClasspath("contracts/task.json"))
+    ;
   }
 
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("CreateTask")
-  void CreateTask() {
+  void CreateProject() {
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
+         .body(project1)
+
+         .when()
+         .post(PROJ_CREATE)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id",equalTo(project1.get_id()))
+         .body("name",equalTo(project1.getName()))
+         .body("countryList",hasItems(project1.getCountryList()))
+
+         .body(matchesJsonSchemaInClasspath("contracts/project.json"))
+    ;
   }
+
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)

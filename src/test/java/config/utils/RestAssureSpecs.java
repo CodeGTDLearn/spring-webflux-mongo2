@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 @NoArgsConstructor
 public class RestAssureSpecs {
 
-  final private static Long MAX_TIMEOUT = 15000L;
+  final private static Long MAX_TIMEOUT = 30000L;
   final private static ContentType JSON_CONTENT_TYPE = ContentType.JSON;
   final private static ContentType ANY_CONTENT_TYPE = ContentType.ANY;
 

@@ -1,5 +1,6 @@
 package config.testcontainer;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -16,8 +17,8 @@ public class TcComposeConfig {
 
   final static public int TC_COMPOSE_STARTUP_TIMEOUT = 30;
   final static public int TC_COMPOSE_SERVICE_PORT = 27017;
-  final static public String TC_COMPOSE_SERVICE = "mongo-db-service";
-  final static private String TC_COMPOSE_PATH = "src/test/resources/tc-dev-compose.yml";
+  final static public String TC_COMPOSE_SERVICE = "mongo-tc-db-test";
+  final static private String TC_COMPOSE_PATH = "src/test/resources/tc-compose.yml";
 
   
 
