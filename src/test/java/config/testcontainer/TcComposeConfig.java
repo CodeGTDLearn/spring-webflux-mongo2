@@ -16,8 +16,8 @@ https://medium.com/pictet-technologies-blog/speeding-up-your-integration-tests-w
 public class TcComposeConfig {
 
   final static public int TC_COMPOSE_STARTUP_TIMEOUT = 30;
-  final static public int TC_COMPOSE_SERVICE_PORT = 27017;
-  final static public String TC_COMPOSE_SERVICE = "mongo-tc-db-test";
+  final static public int TC_COMPOSE_SERVICE_PORT = 9042;
+  final static public String TC_COMPOSE_SERVICE = "mongo1";
   final static private String TC_COMPOSE_PATH = "src/test/resources/tc-compose.yml";
 
   

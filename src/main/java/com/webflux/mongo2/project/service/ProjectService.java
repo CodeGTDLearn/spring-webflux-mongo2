@@ -3,9 +3,9 @@ package com.webflux.mongo2.project.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.repo.ProjectRepo;
+import com.webflux.mongo2.project.repo.IProjectRepo;
 import com.webflux.mongo2.task.Task;
-import com.webflux.mongo2.task.repo.TaskRepo;
+import com.webflux.mongo2.task.repo.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -28,10 +28,10 @@ public class ProjectService implements IProjectService {
 //  private ReactiveGridFsOperations reactiveGridFsOperations;
 
   @Autowired
-  ProjectRepo projectRepo;
+  IProjectRepo projectRepo;
 
   @Autowired
-  TaskRepo taskRepository;
+  ITaskRepo taskRepository;
 
   @Autowired
   ReactiveMongoTemplate reactiveMongoTemplate;

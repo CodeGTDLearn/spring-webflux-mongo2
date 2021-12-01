@@ -10,6 +10,13 @@ x-common-variables:
   MONGO_REPLICASET_DB: udemy
   MONGO_REPLICASET_AUTH_DB: admin
   PORT_API: 8080
+  DB_MONGO_INITDB_DATABASE: mongo1
+  DB_MONGO_INITDB_ROOT_USERNAME: admin
+  DB_MONGO_INITDB_ROOT_PASSWORD: admin
+  DB_HOST: mongo1
+  DB_PORT: 9042
+  DB_AUTH_MAN: admin
+
 
 volumes:
   api_vol:
@@ -63,7 +70,7 @@ services:
     image: pauloportfolio/api
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: ./docker/Dockerfile
       args:
         JAR_FILE: target/*.jar
     ports:
@@ -76,8 +83,8 @@ services:
     networks:
       - mongo-cluster
     environment:
-#      PORT_API: 8080
-      PORT_DEBUG: 5005
-      <<: *env-vars
+#      dev-compose uses profile 'dev': specific for 'development'
 #      PROFILE: dev
+      <<: *env-vars
+      PORT_DEBUG: 5005
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

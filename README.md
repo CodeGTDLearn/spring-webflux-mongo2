@@ -16,17 +16,34 @@
         3. "Assemble" full objects
 
 
-3. Application.Properties:
+3. Application.Yml:
     1. Importation of properties:
         1. "@Value" annotation
+    2. Yml filesystem
+    3. Custom Logging.pattern.console
 
 
-4. Docker:
+4. Application PROFILES:
+   1. Sufix:
+      1. Defining Application-sufix.Yml files
+   2. Annotations:
+      1. Selecting beans with specific Db properties
+
+
+5. Docker:
     1. Compose
+       1. Specific file:
+          1. dev-compose.yml
     2. Dockerfile
-    3. Bat Scripts
+       1. Specific file:
+          1. Dockerfile-dev
+    3. Bat Scripts:
+       1. Parametric-scripts (env_variables)
+          1. Parametric-scripts IDE execution
+       2. Reusing bat-scripts:
+          1. ex.: compose-up.bat using clean.bat
     
 
-5. Testcontainers
+4. Testcontainers
     * Containers
     * compose

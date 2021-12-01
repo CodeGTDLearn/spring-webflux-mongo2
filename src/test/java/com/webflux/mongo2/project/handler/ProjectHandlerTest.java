@@ -2,15 +2,19 @@ package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.task.Task;
+import config.TestDbConfig;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
+import config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
+import reactor.core.publisher.Flux;
 
 import static com.webflux.mongo2.config.Routes.PROJ_CREATE;
 import static config.databuilders.ProjectBuilder.projectWithID;
@@ -22,23 +26,23 @@ import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.http.HttpStatus.OK;
 
-@DisplayName("UserResourceTest")
+//@Import({
+//     TestDbConfig.class,
+//})
+@DisplayName("ProjectHandlerTest")
 @MergedResource
 class ProjectHandlerTest {
 
-  //ERRO:
-  //Caused by: org.springframework.boot.context.config.InvalidConfigDataPropertyException: Property 'spring.profiles.include' imported from location 'class path resource [application-test.properties]' is invalid in a profile specific resource [origin: class path resource [application-test.properties] - 1:25]
-
-
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
-  @Container
-  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
+//  @Container
+//  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -46,6 +50,9 @@ class ProjectHandlerTest {
   // BECAUSE THERE IS NO 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
   @Autowired
   WebTestClient mockedWebClient;
+
+  @Autowired
+  TestDbUtils dbUtils;
 
   private Project project1;
   private Task task1;
@@ -55,10 +62,10 @@ class ProjectHandlerTest {
   static void beforeAll(TestInfo testInfo) {
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(),"class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+//    globalComposeServiceContainerMessage(compose,
+//                                         TC_COMPOSE_SERVICE,
+//                                         TC_COMPOSE_SERVICE_PORT
+//                                        );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080/");
@@ -91,11 +98,15 @@ class ProjectHandlerTest {
                              "2021-05-05",
                              1000L
                             ).create();
+    Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
+    dbUtils.countAndExecuteProjectFlux(projectFlux,1);
 
     task1 = taskWithID("3",
                        "Mark",
                        1000L
                       ).create();
+    Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
+    dbUtils.countAndExecuteTaskFlux(taskFlux,1);
   }
 
 

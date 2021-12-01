@@ -13,3 +13,4 @@ EXPOSE ${PORT_DEBUG}
 CMD java ${DEBUG_OPTIONS} -jar api.jar
 #CMD java ${DEBUG_OPTIONS} -jar api.jar --spring.profiles.active=${PROFILE}
 #CMD java ${DEBUG_OPTIONS} ${JAVA_OPTIONS} -jar api.jar
+#CMD java -jar api.jar --spring.profiles.active=${PROFILE}

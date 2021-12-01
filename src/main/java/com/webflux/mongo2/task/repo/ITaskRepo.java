@@ -3,7 +3,9 @@ package com.webflux.mongo2.task.repo;
 
 import com.webflux.mongo2.task.Task;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TaskRepo extends ReactiveMongoRepository<Task, String> {
+@Repository("taskRepo")
+public interface ITaskRepo extends ReactiveMongoRepository<Task, String> {
 
 }

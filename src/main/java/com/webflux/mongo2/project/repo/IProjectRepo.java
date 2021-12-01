@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository("projectRepo")
-public interface ProjectRepo extends ReactiveMongoRepository<Project, String> {
+public interface IProjectRepo extends ReactiveMongoRepository<Project, String> {
 
   //{"name" : name}
   Flux<Project> findByName(String name);

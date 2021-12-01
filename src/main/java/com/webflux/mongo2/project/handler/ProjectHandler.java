@@ -1,7 +1,6 @@
 package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.service.IProjectService;
 import com.webflux.mongo2.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,7 +18,7 @@ public class ProjectHandler {
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  IProjectService IProjectService;
+  com.webflux.mongo2.project.service.IProjectService IProjectService;
 
 
   public Mono<ServerResponse> createProject(ServerRequest request) {
