@@ -10,12 +10,12 @@ spring:
 udemy:
   mongodb:
     replicaset:
+      port: ${MONGO_REPLICASET_PORT}
+      primary: ${MONGO_REPLICASET_PRIMARY}
+      database: ${MONGO_REPLICASET_DB}
       name: ${MONGO_REPLICASET_NAME}
       username: ${MONGO_REPLICASET_USERNAME}
       password: ${MONGO_REPLICASET_PASSWORD}
-      primary: ${MONGO_REPLICASET_PRIMARY}
-      port: ${MONGO_REPLICASET_PORT}
-      database: ${MONGO_REPLICASET_DB}
       authentication-database: ${MONGO_REPLICASET_AUTH_DB}
 
 #udemy:

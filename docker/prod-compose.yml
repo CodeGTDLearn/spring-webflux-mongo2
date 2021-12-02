@@ -10,13 +10,6 @@ x-common-variables:
   MONGO_REPLICASET_DB: udemy
   MONGO_REPLICASET_AUTH_DB: admin
   PORT_API: 8080
-  DB_MONGO_INITDB_DATABASE: mongo1
-  DB_MONGO_INITDB_ROOT_USERNAME: admin
-  DB_MONGO_INITDB_ROOT_PASSWORD: admin
-  DB_HOST: mongo1
-  DB_PORT: 9042
-  DB_AUTH_MAN: admin
-
 
 volumes:
   api_vol:
@@ -30,16 +23,25 @@ services:
     image: mongo:4.4.4
     restart: always
     command: mongod --replSet docker-rs --port 9042
+#    OPTION 01 - DO NOT REMOVE:
+#    command: >
+#      bash -c "chmod +x /scripts/rs-init.sh
+#      && sh /scripts/rs-init.sh"
+#    OPTION 02 - DO NOT REMOVE:
+#    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh"]
     ports:
       - "9042:9042"
     networks:
       - mongo-cluster
     volumes:
       - ~/mongors/data1:/data/db
-      - ./:/scripts/
+      - ./rs-init.sh:/scripts/rs-init.sh
       - api_vol:/data/db
     environment:
       *env-vars
+    depends_on:
+      - mongo2
+      - mongo3
 
   mongo2:
     container_name: mongo2
@@ -83,8 +85,8 @@ services:
     networks:
       - mongo-cluster
     environment:
-#      dev-compose uses profile 'dev': specific for 'development'
+      # PROFILES ARE MANAGED BY APPLICATION.YML - WEBAPP IS MANAGING AUTOMATICALLY THE PROFILES
 #      PROFILE: dev
-      <<: *env-vars
       PORT_DEBUG: 5005
+      <<: *env-vars
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

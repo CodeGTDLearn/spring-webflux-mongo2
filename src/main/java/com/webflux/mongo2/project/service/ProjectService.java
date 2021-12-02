@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
+@Service("projectService")
 public class ProjectService implements IProjectService {
 
 //  @Autowired
@@ -31,7 +31,7 @@ public class ProjectService implements IProjectService {
   IProjectRepo projectRepo;
 
   @Autowired
-  ITaskRepo taskRepository;
+  ITaskRepo taskRepo;
 
   @Autowired
   ReactiveMongoTemplate reactiveMongoTemplate;
@@ -47,7 +47,7 @@ public class ProjectService implements IProjectService {
   @Override
   public Mono<Task> createTask(Task task) {
     // TODO Auto-generated method stub
-    return taskRepository.save(task);
+    return taskRepo.save(task);
   }
 
 
@@ -282,7 +282,7 @@ public class ProjectService implements IProjectService {
 
     return p.flatMap(projectRepo::save)
             .then(t)
-            .flatMap(taskRepository::save)
+            .flatMap(taskRepo::save)
             .then();
 
   }

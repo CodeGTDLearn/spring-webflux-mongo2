@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
      basePackages = {
           "com.webflux.mongo2.project.repo",
           "com.webflux.mongo2.task.repo"})
-public class ConfigDbProd extends AbstractReactiveMongoConfiguration {
+public class ProdConfigDb extends AbstractReactiveMongoConfiguration {
 
   @Value("${udemy.mongodb.replicaset.name}")
   private String replicasetName;
@@ -44,13 +44,16 @@ public class ConfigDbProd extends AbstractReactiveMongoConfiguration {
   @Override
   public MongoClient reactiveMongoClient() {
 
-    return MongoClients.create(
-         "mongodb://"
-              + replicasetUsername + ":" + replicasetPassword +
-              "@" + replicasetPrimary + ":" + replicasetPort + "/"
-              + database
-              + "?replicaSet=" + replicasetName
-              + "&authSource=" + replicasetAuthenticationDb);
+    String connectionURI = "mongodb://"
+         + replicasetUsername + ":" + replicasetPassword +
+         "@" + replicasetPrimary + ":" + replicasetPort + "/"
+         + database
+         + "?replicaSet=" + replicasetName
+         + "&authSource=" + replicasetAuthenticationDb;
+
+    System.out.println("Connection --------------->  URI ---------------> :" + connectionURI);
+
+    return MongoClients.create(connectionURI);
 
   }
 

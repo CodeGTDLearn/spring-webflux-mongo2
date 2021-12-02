@@ -16,8 +16,8 @@ https://medium.com/pictet-technologies-blog/speeding-up-your-integration-tests-w
 public class TcComposeConfig {
 
   final static public int TC_COMPOSE_STARTUP_TIMEOUT = 30;
-  final static public int TC_COMPOSE_SERVICE_PORT = 9042;
-  final static public String TC_COMPOSE_SERVICE = "mongo1";
+  final static public int TC_COMPOSE_SERVICE_PORT = 27017;
+  final static public String TC_COMPOSE_SERVICE = "api-db-tc";
   final static private String TC_COMPOSE_PATH = "src/test/resources/tc-compose.yml";
 
   
@@ -28,11 +28,16 @@ public class TcComposeConfig {
             new File(TC_COMPOSE_PATH))
             .withExposedService(
                  TC_COMPOSE_SERVICE,
-                 TC_COMPOSE_SERVICE_PORT,
+                 TC_COMPOSE_SERVICE_PORT
                  Wait.forListeningPort()
                      .withStartupTimeout(Duration.ofSeconds(TC_COMPOSE_STARTUP_TIMEOUT))
                                );
-
+/* PISTA DA SOLUCAO
+new DockerComposeContainer<>(new File("../docker-compose.yml"))
+    .withEnv(Map.of("TEST_ENV_VAR", "test_value"))
+    .withLocalCompose(true)
+    .start();
+ */
 
   //format 02: using a getter/accessor to create the tcContainerCompose
   public DockerComposeContainer<?> getTcCompose() {

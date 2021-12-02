@@ -1,14 +1,20 @@
-REM ===================================================================
-REM        DOCKER CLEAN-UP SYSTEM: STARTING - FOLDER .\DOCKER
-REM ===================================================================
-set parameter1=%1
+@echo off
+echo ===========================================================================
+echo                        DOCKER CLEAN-UP - STARTING
+echo ===========================================================================
 
 cd
 docker system df
 
-::----------------------------COMPOSE TO CHANGE---------------------------------
-docker-compose -f %parameter1%.yml down --remove-orphans
-
+echo ===========================================================================
+echo          DOCKER-COMPOSE CLEANING-UP %parameter1% %parameter2%
+echo ===========================================================================
+::set parameter1=%1
+::set parameter2=%2
+::docker-compose -f %parameter1%.yml down --remove-orphans
+::docker-compose -f %parameter2%.yml down --remove-orphans
+docker-compose -f dev-compose.yml down --remove-orphans
+docker-compose -f prod-compose.yml down --remove-orphans
 ::------------------------------------------------------------------------------
 docker container prune --force
 docker system prune --volumes --force
@@ -31,6 +37,6 @@ set JAVA_HOME=C:\Program Files\Java\jdk-8.0.282.8-hotspot
 :: TASKKILL /F /IM cmd.exe /T
 
 :: exit
-REM ===================================================================
-REM        DOCKER CLEAN-UP SYSTEM: STARTING - FOLDER .\DOCKER
-REM ===================================================================
+echo ===========================================================================
+echo                      DOCKER CLEAN-UP - FINISHING
+echo ===========================================================================

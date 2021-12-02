@@ -1,6 +1,7 @@
 package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.service.IProjectService;
 import com.webflux.mongo2.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ public class ProjectHandler {
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  com.webflux.mongo2.project.service.IProjectService IProjectService;
+  IProjectService projectService;
 
 
   public Mono<ServerResponse> createProject(ServerRequest request) {
@@ -27,7 +28,7 @@ public class ProjectHandler {
 
     return
          project
-              .flatMap(IProjectService::createProject)
+              .flatMap(projectService::createProject)
               .flatMap(data ->
                             ServerResponse.ok()
                                           .contentType(JSON)
@@ -48,7 +49,7 @@ public class ProjectHandler {
 
     return
          task
-              .flatMap(IProjectService::createTask)
+              .flatMap(projectService::createTask)
               .flatMap(data ->
                             ServerResponse.ok()
                                           .contentType(JSON)
@@ -59,7 +60,7 @@ public class ProjectHandler {
   public Mono<ServerResponse> findAll(ServerRequest request) {
     return ServerResponse.ok()
                          .contentType(JSON)
-                         .body(IProjectService.findAll(),Project.class);
+                         .body(projectService.findAll(),Project.class);
 
   }
 
@@ -68,11 +69,11 @@ public class ProjectHandler {
 
     String id = request.pathVariable("id");
 
-    return IProjectService.findById(id)
-                          .flatMap(data -> ServerResponse.ok()
+    return projectService.findById(id)
+                         .flatMap(data -> ServerResponse.ok()
                                                          .contentType(JSON)
                                                          .bodyValue(data))
-                          .switchIfEmpty(ServerResponse.notFound()
+                         .switchIfEmpty(ServerResponse.notFound()
                                                        .build());
 
   }
@@ -86,7 +87,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.deleteById(id),Void.class)
+         .body(projectService.deleteById(id),Void.class)
          .log();
 
   }
@@ -100,7 +101,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByName(name),Project.class)
+         .body(projectService.findByName(name),Project.class)
          .log();
   }
 
@@ -113,7 +114,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByNameNot(name),Project.class)
+         .body(projectService.findByNameNot(name),Project.class)
          .log();
   }
 
@@ -126,7 +127,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByEstimatedCostGreaterThan(Long.valueOf(cost)),Project.class)
+         .body(projectService.findByEstimatedCostGreaterThan(Long.valueOf(cost)),Project.class)
          .log();
   }
 
@@ -140,7 +141,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByEstimatedCostBetween(Long.valueOf(from),Long.valueOf(to)),
+         .body(projectService.findByEstimatedCostBetween(Long.valueOf(from),Long.valueOf(to)),
                Project.class
               )
          .log();
@@ -155,7 +156,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByNameLike(name),Project.class)
+         .body(projectService.findByNameLike(name),Project.class)
          .log();
   }
 
@@ -168,7 +169,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByNameRegex(regex),Project.class)
+         .body(projectService.findByNameRegex(regex),Project.class)
          .log();
   }
 
@@ -181,7 +182,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findProjectByNameQuery(name),Project.class)
+         .body(projectService.findProjectByNameQuery(name),Project.class)
          .log();
   }
 
@@ -195,7 +196,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findProjectByNameAndCostQuery(name,Long.valueOf(cost)),Project.class)
+         .body(projectService.findProjectByNameAndCostQuery(name,Long.valueOf(cost)),Project.class)
          .log();
   }
 
@@ -209,7 +210,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByEstimatedCostBetweenQuery(Long.valueOf(from),Long.valueOf(to)),
+         .body(projectService.findByEstimatedCostBetweenQuery(Long.valueOf(from),Long.valueOf(to)),
                Project.class
               )
          .log();
@@ -224,7 +225,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByNameRegexQuery(regex),Project.class)
+         .body(projectService.findByNameRegexQuery(regex),Project.class)
          .log();
   }
 
@@ -236,7 +237,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findProjectByNameQueryWithTemplate(name),Project.class)
+         .body(projectService.findProjectByNameQueryWithTemplate(name),Project.class)
          .log();
   }
 
@@ -250,9 +251,9 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByEstimatedCostBetweenQueryWithTemplate(Long.parseLong(from),
-                                                                           Long.parseLong(to)
-                                                                          ),
+         .body(projectService.findByEstimatedCostBetweenQueryWithTemplate(Long.parseLong(from),
+                                                                          Long.parseLong(to)
+                                                                         ),
                Project.class
               )
          .log();
@@ -269,7 +270,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.findByNameRegexQueryWithTemplate(regex),Project.class)
+         .body(projectService.findByNameRegexQueryWithTemplate(regex),Project.class)
          .log();
 
 
@@ -285,7 +286,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.upsertCostWithCriteriaTemplate(id,Long.valueOf(cost)),Void.class)
+         .body(projectService.upsertCostWithCriteriaTemplate(id,Long.valueOf(cost)),Void.class)
          .log();
 
 
@@ -300,7 +301,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(IProjectService.deleteWithCriteriaTemplate(id),Void.class)
+         .body(projectService.deleteWithCriteriaTemplate(id),Void.class)
          .log();
 
 

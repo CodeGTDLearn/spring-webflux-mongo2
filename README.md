@@ -19,7 +19,8 @@
 3. Application.Yml:
     1. Importation of properties:
         1. "@Value" annotation
-    2. Yml filesystem
+        2. PropertySource
+    2. Yml filesystem-Format
     3. Custom Logging.pattern.console
 
 

@@ -1,20 +1,17 @@
-version: "3.4"
-
-x-common-variables:
-  &env-vars
-  PORT_API: 8080
-  MONGO_INITDB_DATABASE: mongo1
-  MONGO_INITDB_ROOT_USERNAME: admin
-  MONGO_INITDB_ROOT_PASSWORD: admin
-  DB_HOST: mongo1
-  DB_PORT: 27017
-  DB_AUTH_MAN: admin
+version: "3.9"
 
 services:
-  mongo1:
-    image: mongo:4.4.4
+  api-db-tc:
+    image: mongo:4.0
     restart: always
     ports:
-      - "27017:27017"
+      - 27017:27017
     environment:
-      *env-vars
+      PORT_API: 8080
+      MONGO_INITDB_DATABASE: api-db-tc
+      HOST: HOST:localhost
+      PORT: PORT:27017
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      AUTH_MAN: admin
+#      https://stackoverflow.com/questions/69767291/testcontainers-dockercomposecontainer-withenv

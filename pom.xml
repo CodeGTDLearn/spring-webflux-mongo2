@@ -48,7 +48,6 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-tools</artifactId>
-            <version>3.3.7.RELEASE</version>
         </dependency>
 
         <!--╔══════════════════════════════╗
@@ -84,7 +83,7 @@
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound</artifactId>
-            <version>1.0.3.RELEASE</version>
+            <version>1.0.6.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -155,14 +154,14 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.16.2</version>
+            <version>1.15.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>1.16.2</version>
+            <version>1.15.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

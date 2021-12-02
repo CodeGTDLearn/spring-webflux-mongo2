@@ -1,8 +1,9 @@
 package com.webflux.mongo2.project.handler;
 
+import com.webflux.mongo2.core.TestDbUtilsConfig;
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.service.ProjectService;
 import com.webflux.mongo2.task.Task;
-import config.TestDbConfig;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -32,17 +33,19 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.http.HttpStatus.OK;
 
-//@Import({
-//     TestDbConfig.class,
-//})
+@Import({
+     TestDbUtilsConfig.class,
+     ProjectService.class,
+     ProjectHandler.class
+})
 @DisplayName("ProjectHandlerTest")
 @MergedResource
 class ProjectHandlerTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
-//  @Container
-//  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
+  @Container
+  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -62,10 +65,10 @@ class ProjectHandlerTest {
   static void beforeAll(TestInfo testInfo) {
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(),"class-start");
-//    globalComposeServiceContainerMessage(compose,
-//                                         TC_COMPOSE_SERVICE,
-//                                         TC_COMPOSE_SERVICE_PORT
-//                                        );
+    globalComposeServiceContainerMessage(compose,
+                                         TC_COMPOSE_SERVICE,
+                                         TC_COMPOSE_SERVICE_PORT
+                                        );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080/");
