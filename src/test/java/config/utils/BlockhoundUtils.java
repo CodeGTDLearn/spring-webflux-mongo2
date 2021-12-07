@@ -51,7 +51,7 @@ public class BlockhoundUtils {
                                      );
 
 
-   public static void blockhoundInstallAllowAllCalls() {
+  public static void blockhoundInstallAllowAllCalls() {
     BlockHound.install(AllowedCalls);
   }
 
@@ -64,6 +64,7 @@ public class BlockhoundUtils {
                                        );
     BlockHound.install(allowedCalls);
   }
+
 
   public static void bhWorks() {
     try {

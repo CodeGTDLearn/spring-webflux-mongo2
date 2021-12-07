@@ -1,7 +1,7 @@
 package com.webflux.mongo2.task.repo;
 
 
-import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.entity.Task;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 

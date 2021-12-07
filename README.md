@@ -2,10 +2,14 @@
 
 1. WebFlux:
     1. Functional End-Points:
-        1. Handler:
+        1. **Router:**
+           1. Receive the messages from the client
+           2. Using the defined routes
+           3. Send the messages for Handler
+        2. **Handler:**
            1. Manage HTTP(Resquests/responses)
-        2. Router:
-            1. Define app routes
+           2. Receiving the message ROUTED from the Router
+           3. and, send this message for SERVICE
 
 
 2. MongoDB Strategy:
@@ -13,7 +17,7 @@
     2. Services:
         1. Embed Objects
         2. Referencing
-        3. "Assemble" full objects
+        3. _"Assemble"_ full objects
 
 
 3. Application.Yml:
@@ -25,26 +29,34 @@
 
 
 4. Application PROFILES:
-   1. Sufix:
-      1. Defining Application-sufix.Yml files
-   2. Annotations:
-      1. Selecting beans with specific Db properties
+    1. **Sufix:** Defining Application-sufix.Yml files
+    2. **Annotations:** Selecting beans with specific Db properties
+    3. **Groups:**
+        1. Active group using _active-profile property_
+        2. Grouping profiles [check link](https://www.baeldung.com/spring-profiles#4-profile-groups)
 
 
 5. Docker:
     1. Compose
-       1. Specific file:
-          1. dev-compose.yml
+        1. _Specific file:_ **dev-compose.yml**
     2. Dockerfile
-       1. Specific file:
-          1. Dockerfile-dev
+        1. _Specific file:_ **Dockerfile-dev**
     3. Bat Scripts:
-       1. Parametric-scripts (env_variables)
-          1. Parametric-scripts IDE execution
-       2. Reusing bat-scripts:
-          1. ex.: compose-up.bat using clean.bat
-    
+        1. Parametric-scripts (env_variables)
+            1. Parametric-scripts IDE execution
+        2. Reusing bat-scripts:
+            1. ex.: compose-up.bat using clean.bat
 
-4. Testcontainers
+
+4. Testcontainers:
     * Containers
-    * compose
+    * Compose
+   
+
+5. CRUD Strategy:
+   1. OPTIMISTIC-UPDATE:
+      1. Uses the 'VERSION-ANNOTATION' in the Entity
+      2. to prevent update-problems when happens 'CONCURRENT-UPDATES'
+      3. EXPLANATION:
+         1. The ENTITY-VERSION in the current OBJECT
+         2. Must be different than the ENTITY-VERSION in the previous object

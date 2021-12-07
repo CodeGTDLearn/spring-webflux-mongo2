@@ -1,3 +1,10 @@
+server:
+  port: ${PORT_API}
+
 spring:
   profiles:
-    active: dev,log
+    #    active will start the group, so the activation + group should have the same name
+    active: dev
+    group:
+      dev: dev, log
+      prod: prod, log

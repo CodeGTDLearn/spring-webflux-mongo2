@@ -34,6 +34,7 @@ public class RestAssureSpecs {
     return requestSpecs;
   }
 
+
   public static WebTestClientRequestSpecification requestSpecsSetPath(String fullBasePath) {
 
     WebTestClientRequestSpecification requestSpecs =

@@ -1,9 +1,0 @@
-spring:
-  data:
-    mongodb:
-      database: ${MONGO_INITDB_DATABASE}
-      host: ${HOST}
-      port: ${PORT}
-      username: ${MONGO_INITDB_ROOT_USERNAME}
-      password: ${MONGO_INITDB_ROOT_PASSWORD}
-      authentication-database: ${AUTH_MAN}

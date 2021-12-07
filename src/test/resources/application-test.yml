@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    group:
+      test-group: test, log

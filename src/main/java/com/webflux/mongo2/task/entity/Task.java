@@ -1,4 +1,4 @@
-package com.webflux.mongo2.project;
+package com.webflux.mongo2.task.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,30 +7,25 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.List;
-
 @Getter
 @Setter
-@Document(collection = "project")
-public class Project {
+@Document(collection = "task")
+public class Task {
+
   @Id
   private String _id;
 
-  private String name;
+  @Field("pid")
+  private String projectId;
 
-  private String code;
+  private String name;
 
   @Field("desc")
   private String description;
 
-  private String startDate;
+  private String ownername;
 
-  private String endDate;
-
-  @Field("cost")
-  private long estimatedCost;
-
-  private List<String> countryList;
+  private long cost;
 
   @Version
   private Long version;

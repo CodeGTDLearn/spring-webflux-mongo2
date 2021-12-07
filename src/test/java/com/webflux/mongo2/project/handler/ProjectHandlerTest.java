@@ -1,9 +1,8 @@
 package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.service.ProjectService;
-import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -17,27 +16,22 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.mongo2.config.Routes.PROJ_CREATE;
+import java.util.Arrays;
+
+import static com.webflux.mongo2.config.routes.ProjectRoutes.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.BlockhoundUtils.bhWorks;
-import static config.utils.RestAssureSpecs.requestSpecsSetPath;
-import static config.utils.RestAssureSpecs.responseSpecs;
+import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({
-     TestDbUtilsConfig.class,
-     ProjectService.class,
-     ProjectHandler.class
-})
+@Import({TestDbUtilsConfig.class})
 @DisplayName("ProjectHandlerTest")
 @MergedResource
 class ProjectHandlerTest {
@@ -57,7 +51,8 @@ class ProjectHandlerTest {
   @Autowired
   TestDbUtils dbUtils;
 
-  private Project project1;
+
+  private Project project1, project2;
   private Task task1;
 
 
@@ -101,8 +96,14 @@ class ProjectHandlerTest {
                              "2021-05-05",
                              1000L
                             ).create();
-    Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
-    dbUtils.countAndExecuteProjectFlux(projectFlux,1);
+
+    project2 = projectWithID("B",
+                             "2020-06-06",
+                             "2021-06-06",
+                             2000L
+                            ).create();
+    Flux<Project> projectFlux = dbUtils.saveProjectList(Arrays.asList(project1,project2));
+    dbUtils.countAndExecuteProjectFlux(projectFlux,2);
 
     task1 = taskWithID("3",
                        "Mark",
@@ -123,32 +124,6 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("CreateProject")
-  void CreateTask() {
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
-
-         .body(task1)
-
-         .when()
-         .post()
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id",containsStringIgnoringCase(task1.get_id()))
-         .body("projectId",containsStringIgnoringCase(task1.getProjectId()))
-         .body("cost",equalTo(task1.getCost()))
-         .body(matchesJsonSchemaInClasspath("contracts/task.json"))
-    ;
-  }
-
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("CreateTask")
   void CreateProject() {
     RestAssuredWebTestClient
          .given()
@@ -166,9 +141,138 @@ class ProjectHandlerTest {
          .statusCode(OK.value())
          .body("_id",equalTo(project1.get_id()))
          .body("name",equalTo(project1.getName()))
-         .body("countryList",hasItems(project1.getCountryList()))
+         .body("countryList",hasItems(
+              project1.getCountryList()
+                      .get(0),
+              project1.getCountryList()
+                      .get(1)
+                                     ))
 
-         .body(matchesJsonSchemaInClasspath("contracts/project.json"))
+         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindAll")
+  void FindAll() {
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(PROJ_ROOT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("size()",is(2))
+         .body("$",hasSize(2))
+         .body("name",hasItems(project1.getName(),project2.getName()))
+         .body("name",hasItem(project1.getName()))
+         .body("name",hasItem(project2.getName()))
+         .body("countryList[0]",hasItems(project1.getCountryList()
+                                                 .get(0),
+                                         project2.getCountryList()
+                                                 .get(1)
+                                        ))
+         .body(matchesJsonSchemaInClasspath("contracts/project/findAll.json"))
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindById")
+  void FindById() {
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(PROJ_ID,project1.get_id())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name",equalTo(project1.getName()))
+         .body("countryList",hasItems(
+              project1.getCountryList()
+                      .get(0),
+              project1.getCountryList()
+                      .get(1)
+                                     ))
+         .body(matchesJsonSchemaInClasspath("contracts/project/findbyid.json"))
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("Delete")
+  void Delete() {
+    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(PROJ_ID,project1.get_id())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateOptimistic")
+  void UpdateOptimistic() {
+    // OPTMISTIC-UPDATE:
+    // A) Uses the 'VERSION-ANNOTATION' in THE Entity
+    // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
+    // C) EXPLANATION:
+    //  C.1) The ENTITY-VERSION in the current OBJECT
+    //  C.2) must be different than the ENTITY-VERSION in the previous object
+    var previousName = project1.getName();
+    var initialOptmisticEntityVersion = project1.getVersion();
+    var updatedOptmisticEntityVersion = initialOptmisticEntityVersion + 1;
+
+
+    project1.setName("NewName");
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project1)
+
+         .when()
+         .put(PROJ_UPD)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name",equalTo(project1.getName()))
+         .body("name",not(equalTo(previousName)))
+         .body("version",hasToString (Long.toString(updatedOptmisticEntityVersion)))
+
+         .body(matchesJsonSchemaInClasspath("contracts/project/findById.json"))
     ;
   }
 

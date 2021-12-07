@@ -1,12 +1,10 @@
 package config.databuilders;
 
 import com.github.javafaker.Faker;
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.entity.Task;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
 import java.util.Locale;
 
 @Builder
@@ -15,6 +13,7 @@ public class TaskBuilder {
 
   private static final Faker faker = new Faker(new Locale("en-CA.yml"));
   private final Task task;
+
 
   public static String createFakeUniqueRandomId() {
     return faker.regexify("PP[a-z0-9]{24}");

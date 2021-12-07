@@ -1,4 +1,4 @@
-package com.webflux.mongo2.config;
+package com.webflux.mongo2.config.database;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
@@ -60,7 +60,7 @@ public class ProdConfigDb extends AbstractReactiveMongoConfiguration {
 
   @Override
   protected String getDatabaseName() {
-    // TODO Auto-generated method stub
+
     return database;
   }
 

@@ -1,7 +1,7 @@
 package config.databuilders;
 
 import com.github.javafaker.Faker;
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -42,7 +42,7 @@ public class ProjectBuilder {
     proj.setStartDate(startDate);
     proj.setEndDate(endDate);
     proj.setEstimatedCost(estimatedCost);
-    proj.setCountryList(List.of("UK","USA","Kenya","Nambia"));
+    proj.setCountryList(List.of("UK","USA"));
 
     return ProjectBuilder.builder()
                          .project(proj)

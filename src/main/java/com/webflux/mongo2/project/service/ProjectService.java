@@ -2,9 +2,9 @@ package com.webflux.mongo2.project.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.repo.IProjectRepo;
-import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.entity.Task;
 import com.webflux.mongo2.task.repo.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -21,11 +21,11 @@ import reactor.core.publisher.Mono;
 @Service("projectService")
 public class ProjectService implements IProjectService {
 
-//  @Autowired
-//  private ReactiveGridFsTemplate reactiveGridFsTemplate;
+  //  @Autowired
+  //  private ReactiveGridFsTemplate reactiveGridFsTemplate;
 
-//  @Autowired
-//  private ReactiveGridFsOperations reactiveGridFsOperations;
+  //  @Autowired
+  //  private ReactiveGridFsOperations reactiveGridFsOperations;
 
   @Autowired
   IProjectRepo projectRepo;
@@ -45,92 +45,82 @@ public class ProjectService implements IProjectService {
 
 
   @Override
-  public Mono<Task> createTask(Task task) {
-    // TODO Auto-generated method stub
-    return taskRepo.save(task);
-  }
-
-
-  @Override
   public Flux<Project> findAll() {
-    // TODO Auto-generated method stub
     return projectRepo.findAll();
   }
 
 
   @Override
   public Mono<Project> findById(String id) {
-    // TODO Auto-generated method stub
     return projectRepo.findById(id);
   }
 
 
   @Override
   public Mono<Void> deleteById(String id) {
-    // TODO Auto-generated method stub
     return projectRepo.deleteById(id);
   }
 
 
   @Override
   public Flux<Project> findByName(String name) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByName(name);
   }
 
 
   @Override
   public Flux<Project> findByNameNot(String name) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByNameNot(name);
   }
 
 
   @Override
   public Flux<Project> findByEstimatedCostGreaterThan(Long cost) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByEstimatedCostGreaterThan(cost);
   }
 
 
   @Override
   public Flux<Project> findByEstimatedCostBetween(Long from,Long to) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByEstimatedCostBetween(from,to);
   }
 
 
   @Override
   public Flux<Project> findByNameLike(String name) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByNameLike(name);
   }
 
 
   @Override
   public Flux<Project> findByNameRegex(String name) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByNameRegex(name);
   }
 
 
   @Override
   public Flux<Project> findProjectByNameQuery(String name) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findProjectByNameQuery(name);
   }
 
 
   @Override
   public Flux<Project> findProjectByNameAndCostQuery(String name,Long cost) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findProjectByNameAndCostQuery(name,cost);
   }
 
 
   @Override
   public Flux<Project> findByEstimatedCostBetweenQuery(Long from,Long to) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByEstimatedCostBetweenQuery(from,to,
                                                        Sort.by(Direction.DESC,"cost")
                                                       );
@@ -139,7 +129,7 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Flux<Project> findByNameRegexQuery(String regexp) {
-    // TODO Auto-generated method stub
+
     return projectRepo.findByNameRegexQuery(regexp);
   }
 
@@ -207,75 +197,73 @@ public class ProjectService implements IProjectService {
    * db.project.aggregate([{$match:{"cost" : {"$gt" : 2000}}},{ $count:
    * "costly_projects" }]);
    */
-//  @Override
-//  public Mono<Long> findNoOfProjectsCostGreaterThan(Long cost) {
-//    // TODO Auto-generated method stub
-//    MatchOperation matchStage = Aggregation.match(new Criteria("cost").gt(cost));
-//    CountOperation countStage = Aggregation.count()
-//                                           .as("costly_projects");
-//
-//    Aggregation aggregation = Aggregation.newAggregation(matchStage,countStage);
-//    Flux<ResultCount> output = reactiveMongoTemplate.aggregate(aggregation,"project",
-//                                                               ResultCount.class
-//                                                              );
-//    Flux<Long> resultc = output.map(result -> result.getCostly_projects())
-//                               .switchIfEmpty(Flux.just(0L));
-//    return resultc.take(1)
-//                  .single();
-//
-//  }
+  //  @Override
+  //  public Mono<Long> findNoOfProjectsCostGreaterThan(Long cost) {
+  //
+  //    MatchOperation matchStage = Aggregation.match(new Criteria("cost").gt(cost));
+  //    CountOperation countStage = Aggregation.count()
+  //                                           .as("costly_projects");
+  //
+  //    Aggregation aggregation = Aggregation.newAggregation(matchStage,countStage);
+  //    Flux<ResultCount> output = reactiveMongoTemplate.aggregate(aggregation,"project",
+  //                                                               ResultCount.class
+  //                                                              );
+  //    Flux<Long> resultc = output.map(result -> result.getCostly_projects())
+  //                               .switchIfEmpty(Flux.just(0L));
+  //    return resultc.take(1)
+  //                  .single();
+  //
+  //  }
 
 
   /**
    * db.project.aggregate([ {$match:{"cost" : {"$gt" : 100}}}, {$group: {
    * _id:"$startDate",total:{$sum:"$cost"} } }, {$sort: { "total": -1 } } ]);
    */
-//  @Override
-//  public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan
-//  (Long cost) {
-//
-//    MatchOperation filterCost = Aggregation.match(new Criteria("cost").gt(cost));
-//    GroupOperation groupByStartDateAndSumCost = Aggregation.group("startDate")
-//                                                           .sum("cost")
-//                                                           .as("total");
-//
-//    SortOperation sortByTotal = Aggregation.sort(Sort.by(Direction.DESC,"total"));
-//
-//    Aggregation aggregation = Aggregation.newAggregation(filterCost,groupByStartDateAndSumCost,
-//                                                         sortByTotal
-//                                                        );
-//    return reactiveMongoTemplate.aggregate(aggregation,"project",ResultByStartDateAndCost
-//         .class);
-//
-//  }
+  //  @Override
+  //  public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan
+  //  (Long cost) {
+  //
+  //    MatchOperation filterCost = Aggregation.match(new Criteria("cost").gt(cost));
+  //    GroupOperation groupByStartDateAndSumCost = Aggregation.group("startDate")
+  //                                                           .sum("cost")
+  //                                                           .as("total");
+  //
+  //    SortOperation sortByTotal = Aggregation.sort(Sort.by(Direction.DESC,"total"));
+  //
+  //    Aggregation aggregation = Aggregation.newAggregation(filterCost,groupByStartDateAndSumCost,
+  //                                                         sortByTotal
+  //                                                        );
+  //    return reactiveMongoTemplate.aggregate(aggregation,"project",ResultByStartDateAndCost
+  //         .class);
+  //
+  //  }
 
 
-//  @Override
-//  public Flux<ResultProjectTasks> findAllProjectTasks() {
-//
-//    LookupOperation lookupOperation = LookupOperation.newLookup()
-//                                                     .from("task")
-//                                                     .localField("_id")
-//                                                     .foreignField("pid")
-//                                                     .as("ProjectTasks");
-//    UnwindOperation unwindOperation = Aggregation.unwind("ProjectTasks");
-//    ProjectionOperation projectOpertaion = Aggregation.project()
-//                                                      .andExpression("_id")
-//                                                      .as("_id")
-//                                                      .andExpression("name")
-//                                                      .as("name")
-//                                                      .andExpression("ProjectTasks.name")
-//                                                      .as("taskName")
-//                                                      .andExpression("ProjectTasks.ownername")
-//                                                      .as("taskOwnerName");
-//    Aggregation aggregation = Aggregation.newAggregation(lookupOperation,unwindOperation,
-//                                                         projectOpertaion
-//                                                        );
-//    return reactiveMongoTemplate.aggregate(aggregation,"project",ResultProjectTasks.class);
-//
-//  }
-
-
+  //  @Override
+  //  public Flux<ResultProjectTasks> findAllProjectTasks() {
+  //
+  //    LookupOperation lookupOperation = LookupOperation.newLookup()
+  //                                                     .from("task")
+  //                                                     .localField("_id")
+  //                                                     .foreignField("pid")
+  //                                                     .as("ProjectTasks");
+  //    UnwindOperation unwindOperation = Aggregation.unwind("ProjectTasks");
+  //    ProjectionOperation projectOpertaion = Aggregation.project()
+  //                                                      .andExpression("_id")
+  //                                                      .as("_id")
+  //                                                      .andExpression("name")
+  //                                                      .as("name")
+  //                                                      .andExpression("ProjectTasks.name")
+  //                                                      .as("taskName")
+  //                                                      .andExpression("ProjectTasks.ownername")
+  //                                                      .as("taskOwnerName");
+  //    Aggregation aggregation = Aggregation.newAggregation(lookupOperation,unwindOperation,
+  //                                                         projectOpertaion
+  //                                                        );
+  //    return reactiveMongoTemplate.aggregate(aggregation,"project",ResultProjectTasks.class);
+  //
+  //  }
   @Override
   @Transactional
   public Mono<Void> saveProjectAndTask(Mono<Project> p,Mono<Task> t) {
@@ -288,21 +276,21 @@ public class ProjectService implements IProjectService {
   }
 
 
-//  @Override
-//  public Mono<Void> chunkAndSaveProject(Project p) {
-//    String s = serializetoJson(p);
-//    byte[] serialized = s.getBytes();
-//
-//    DBObject metaData = new BasicDBObject();
-//    metaData.put("projectId",p.get_id());
-//    DefaultDataBufferFactory factory = new DefaultDataBufferFactory();
-//    DefaultDataBuffer dataBuffer =
-//         factory.wrap(serialized);
-//    Flux<DataBuffer> body = Flux.just(dataBuffer);
-//    return reactiveGridFsTemplate.store(body,p.get_id(),metaData)
-//                                 .then();
-//
-//  }
+  //  @Override
+  //  public Mono<Void> chunkAndSaveProject(Project p) {
+  //    String s = serializetoJson(p);
+  //    byte[] serialized = s.getBytes();
+  //
+  //    DBObject metaData = new BasicDBObject();
+  //    metaData.put("projectId",p.get_id());
+  //    DefaultDataBufferFactory factory = new DefaultDataBufferFactory();
+  //    DefaultDataBuffer dataBuffer =
+  //         factory.wrap(serialized);
+  //    Flux<DataBuffer> body = Flux.just(dataBuffer);
+  //    return reactiveGridFsTemplate.store(body,p.get_id(),metaData)
+  //                                 .then();
+  //
+  //  }
 
 
   //  @Override
@@ -336,11 +324,11 @@ public class ProjectService implements IProjectService {
   //  }
 
 
-//  @Override
-//  public Mono<Void> deleteProjectFromGrid(String projectId) {
-//    return reactiveGridFsTemplate.delete(new Query(Criteria.where("metadata.projectId")
-//                                                           .is(projectId)));
-//  }
+  //  @Override
+  //  public Mono<Void> deleteProjectFromGrid(String projectId) {
+  //    return reactiveGridFsTemplate.delete(new Query(Criteria.where("metadata.projectId")
+  //                                                           .is(projectId)));
+  //  }
 
 
   private String serializetoJson(Project p) {

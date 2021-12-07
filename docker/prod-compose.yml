@@ -23,12 +23,12 @@ services:
     image: mongo:4.4.4
     restart: always
     command: mongod --replSet docker-rs --port 9042
-#    OPTION 01 - DO NOT REMOVE:
-#    command: >
-#      bash -c "chmod +x /scripts/rs-init.sh
-#      && sh /scripts/rs-init.sh"
-#    OPTION 02 - DO NOT REMOVE:
-#    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh"]
+    #    OPTION 01 - DO NOT REMOVE:
+    #    command: >
+    #      bash -c "chmod +x /scripts/rs-init.sh
+    #      && sh /scripts/rs-init.sh"
+    #    OPTION 02 - DO NOT REMOVE:
+    #    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh"]
     ports:
       - "9042:9042"
     networks:
@@ -36,7 +36,7 @@ services:
     volumes:
       - ~/mongors/data1:/data/db
       - ./rs-init.sh:/scripts/rs-init.sh
-      - api_vol:/data/db
+    #      - api_vol:/data/db
     environment:
       *env-vars
     depends_on:
@@ -86,7 +86,7 @@ services:
       - mongo-cluster
     environment:
       # PROFILES ARE MANAGED BY APPLICATION.YML - WEBAPP IS MANAGING AUTOMATICALLY THE PROFILES
-#      PROFILE: dev
+      #      PROFILE: dev
       PORT_DEBUG: 5005
       <<: *env-vars
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

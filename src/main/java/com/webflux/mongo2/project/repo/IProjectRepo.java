@@ -1,6 +1,6 @@
 package com.webflux.mongo2.project.repo;
 
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
@@ -19,16 +19,13 @@ public interface IProjectRepo extends ReactiveMongoRepository<Project, String> {
   Flux<Project> findByEstimatedCostGreaterThan(Long cost);
 
   //{"cost" : {"$gt" : from, "$lt" : to}}
-
   Flux<Project> findByEstimatedCostBetween(Long from,Long to);
 
   //{"name": /name/ }
   Flux<Project> findByNameLike(String name);
 
-
   //{"name" : {"$regex" : name }} =>/^Pro/
   Flux<Project> findByNameRegex(String name);
-
 
   @Query("{'name' : ?0}")
   Flux<Project> findProjectByNameQuery(String name);

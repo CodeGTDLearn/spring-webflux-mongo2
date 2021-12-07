@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "array",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": [],
+  "examples": [
+    [
+      {
+        "_id": "PP18mpw492jt2zk7o4r7y6k9wg",
+        "name": "Florencio Upton",
+        "code": "C",
+        "description": "Consectetur est voluptates ut iure vitae. Quo autem adipisci commodi maxime nam. Et qui autem culpa. Molestiae cum omnis voluptas aut qui ut qui.",
+        "startDate": "2020-05-05",
+        "endDate": "2021-05-05",
+        "estimatedCost": 1000,
+        "countryList": [
+          "UK",
+          "USA"
+        ],
+        "version": 0
+      },
+      {
+        "_id": "PPx926mctn70j44169fj8a1cvb",
+        "name": "Dusty Wisozk",
+        "code": "B",
+        "description": "Suscipit facere sequi minus quam occaecati magni commodi. Voluptatem quisquam qui recusandae corporis delectus eius nihil. Ut doloribus quis sunt eligendi.",
+        "startDate": "2020-06-06",
+        "endDate": "2021-06-06",
+        "estimatedCost": 2000,
+        "countryList": [
+          "UK",
+          "USA"
+        ],
+        "version": 0
+      }
+    ]
+  ],
+  "additionalItems": true,
+  "items": {
+    "$id": "#/items",
+    "anyOf": [
+      {
+        "$id": "#/items/anyOf/0",
+        "type": "object",
+        "title": "The first anyOf schema",
+        "description": "An explanation about the purpose of this instance.",
+        "default": {},
+        "examples": [
+          {
+            "_id": "PP18mpw492jt2zk7o4r7y6k9wg",
+            "name": "Florencio Upton",
+            "code": "C",
+            "description": "Consectetur est voluptates ut iure vitae. Quo autem adipisci commodi maxime nam. Et qui autem culpa. Molestiae cum omnis voluptas aut qui ut qui.",
+            "startDate": "2020-05-05",
+            "endDate": "2021-05-05",
+            "estimatedCost": 1000,
+            "countryList": [
+              "UK",
+              "USA"
+            ],
+            "version": 0
+          }
+        ],
+        "required": [
+          "_id",
+          "name",
+          "code",
+          "description",
+          "startDate",
+          "endDate",
+          "estimatedCost",
+          "countryList",
+          "version"
+        ],
+        "properties": {
+          "_id": {
+            "$id": "#/items/anyOf/0/properties/_id",
+            "type": "string",
+            "title": "The _id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "PP18mpw492jt2zk7o4r7y6k9wg"
+            ]
+          },
+          "name": {
+            "$id": "#/items/anyOf/0/properties/name",
+            "type": "string",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Florencio Upton"
+            ]
+          },
+          "code": {
+            "$id": "#/items/anyOf/0/properties/code",
+            "type": "string",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "C"
+            ]
+          },
+          "description": {
+            "$id": "#/items/anyOf/0/properties/description",
+            "type": "string",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Consectetur est voluptates ut iure vitae. Quo autem adipisci commodi maxime nam. Et qui autem culpa. Molestiae cum omnis voluptas aut qui ut qui."
+            ]
+          },
+          "startDate": {
+            "$id": "#/items/anyOf/0/properties/startDate",
+            "type": "string",
+            "title": "The startDate schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "2020-05-05"
+            ]
+          },
+          "endDate": {
+            "$id": "#/items/anyOf/0/properties/endDate",
+            "type": "string",
+            "title": "The endDate schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "2021-05-05"
+            ]
+          },
+          "estimatedCost": {
+            "$id": "#/items/anyOf/0/properties/estimatedCost",
+            "type": "integer",
+            "title": "The estimatedCost schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              1000
+            ]
+          },
+          "countryList": {
+            "$id": "#/items/anyOf/0/properties/countryList",
+            "type": "array",
+            "title": "The countryList schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+              [
+                "UK",
+                "USA"
+              ]
+            ],
+            "additionalItems": true,
+            "items": {
+              "$id": "#/items/anyOf/0/properties/countryList/items",
+              "anyOf": [
+                {
+                  "$id": "#/items/anyOf/0/properties/countryList/items/anyOf/0",
+                  "type": "string",
+                  "title": "The first anyOf schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "UK",
+                    "USA"
+                  ]
+                }
+              ]
+            }
+          },
+          "version": {
+            "$id": "#/items/anyOf/0/properties/version",
+            "type": "integer",
+            "title": "The version schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              0
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  }
+}

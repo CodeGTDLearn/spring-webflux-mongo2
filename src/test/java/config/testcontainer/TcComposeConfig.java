@@ -1,6 +1,5 @@
 package config.testcontainer;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -20,7 +19,6 @@ public class TcComposeConfig {
   final static public String TC_COMPOSE_SERVICE = "api-db-tc";
   final static private String TC_COMPOSE_PATH = "src/test/resources/tc-compose.yml";
 
-  
 
   //format 01: using a variable to create the tcContainerCompose
   private final DockerComposeContainer<?> tcCompose =
@@ -28,7 +26,7 @@ public class TcComposeConfig {
             new File(TC_COMPOSE_PATH))
             .withExposedService(
                  TC_COMPOSE_SERVICE,
-                 TC_COMPOSE_SERVICE_PORT
+                 TC_COMPOSE_SERVICE_PORT,
                  Wait.forListeningPort()
                      .withStartupTimeout(Duration.ofSeconds(TC_COMPOSE_STARTUP_TIMEOUT))
                                );
@@ -38,6 +36,7 @@ new DockerComposeContainer<>(new File("../docker-compose.yml"))
     .withLocalCompose(true)
     .start();
  */
+
 
   //format 02: using a getter/accessor to create the tcContainerCompose
   public DockerComposeContainer<?> getTcCompose() {

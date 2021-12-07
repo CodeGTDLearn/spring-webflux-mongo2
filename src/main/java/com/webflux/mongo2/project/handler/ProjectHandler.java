@@ -1,8 +1,7 @@
 package com.webflux.mongo2.project.handler;
 
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.service.IProjectService;
-import com.webflux.mongo2.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -10,10 +9,14 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 // HANDLER: Manage HTTP(Resquests/responses)
-@Component
+//HANDLER:
+// A) HANDLER receive the message from ROUTERED
+// B) and, send this message for SERVICE
+@Component("projectHandler")
 public class ProjectHandler {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
@@ -24,15 +27,16 @@ public class ProjectHandler {
 
   public Mono<ServerResponse> createProject(ServerRequest request) {
 
-    final Mono<Project> project = request.bodyToMono(Project.class); // convert/abstracting JSON to Entity
+    // convert/abstracting JSON to Entity
+    final Mono<Project> project = request.bodyToMono(Project.class);
 
     return
          project
               .flatMap(projectService::createProject)
               .flatMap(data ->
-                            ServerResponse.ok()
-                                          .contentType(JSON)
-                                          .bodyValue(data));/*.onErrorResume(error -> { if
+                            ok()
+                                 .contentType(JSON)
+                                 .bodyValue(data));/*.onErrorResume(error -> { if
                                                   (error instanceof
 								  OptimisticLockingFailureException){ return
 										  ServerResponse.status(HttpStatus.BAD_REQUEST).build(); 
@@ -42,25 +46,26 @@ public class ProjectHandler {
 
   }
 
+  public Mono<ServerResponse> update(ServerRequest request) {
 
-  public Mono<ServerResponse> createTask(ServerRequest request) {
-
-    final Mono<Task> task = request.bodyToMono(Task.class);
+    // convert/abstracting JSON to Entity
+    final Mono<Project> project = request.bodyToMono(Project.class);
 
     return
-         task
-              .flatMap(projectService::createTask)
+         project
+              .flatMap(projectService::createProject)
               .flatMap(data ->
-                            ServerResponse.ok()
-                                          .contentType(JSON)
-                                          .bodyValue(data));
+                            ok()
+                                 .contentType(JSON)
+                                 .bodyValue(data));
+
   }
 
-
   public Mono<ServerResponse> findAll(ServerRequest request) {
-    return ServerResponse.ok()
-                         .contentType(JSON)
-                         .body(projectService.findAll(),Project.class);
+    return
+         ok()
+              .contentType(JSON)
+              .body(projectService.findAll(),Project.class);
 
   }
 
@@ -69,12 +74,14 @@ public class ProjectHandler {
 
     String id = request.pathVariable("id");
 
-    return projectService.findById(id)
-                         .flatMap(data -> ServerResponse.ok()
-                                                         .contentType(JSON)
-                                                         .bodyValue(data))
-                         .switchIfEmpty(ServerResponse.notFound()
-                                                       .build());
+    return
+         projectService
+              .findById(id)
+              .flatMap(data -> ok()
+                   .contentType(JSON)
+                   .bodyValue(data))
+              .switchIfEmpty(notFound()
+                                  .build());
 
   }
 
@@ -82,13 +89,24 @@ public class ProjectHandler {
   public Mono<ServerResponse> delete(ServerRequest request) {
 
     String id = request.pathVariable("id");
+    // STYLE 01 - DELETE_BY_ID USING FLATMAP
+        return
+             projectService
+                  .deleteById(id)
+                  .flatMap(data -> ServerResponse.ok()
+                                                 .contentType(JSON)
+                                                 .bodyValue(data))
+                  .switchIfEmpty(ServerResponse.notFound()
+                                               .build());
 
-    return ok()
-
-         .contentType(JSON)
-
-         .body(projectService.deleteById(id),Void.class)
-         .log();
+    // STYLE 02 - DELETE_BY_ID BASICS
+//    return
+//         ok()
+//              .contentType(JSON)
+//              .body(
+//                   projectService.deleteById(id),Void.class
+//                   )
+//              .log();
 
   }
 

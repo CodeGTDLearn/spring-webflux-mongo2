@@ -4,7 +4,7 @@ x-common-variables:
   &env-vars
   PORT_API: 8080
   MONGO_INITDB_DATABASE: api-db
-  HOST: api-db
+  HOST: mongo1
   PORT: 27017
   MONGO_INITDB_ROOT_USERNAME: root
   MONGO_INITDB_ROOT_PASSWORD: root
@@ -17,8 +17,8 @@ networks:
   mongo-cluster:
 
 services:
-  api-db:
-    container_name: api-db
+  mongo1:
+    container_name: mongo1
     image: mongo:4.4.4
     restart: always
     ports:
@@ -48,8 +48,8 @@ services:
     networks:
       - mongo-cluster
     environment:
-# PROFILES ARE MANAGED BY APPLICATION.YML - WEBAPP IS MANAGING AUTOMATICALLY THE PROFILES
-#      PROFILE: dev
+      # PROFILES ARE MANAGED BY APPLICATION.YML - WEBAPP IS MANAGING AUTOMATICALLY THE PROFILES
+      #      PROFILE: dev
       PORT_DEBUG: 5005
       <<: *env-vars
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

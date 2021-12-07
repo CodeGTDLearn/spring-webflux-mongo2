@@ -1,6 +1,5 @@
-package com.webflux.mongo2.config;
+package com.webflux.mongo2.config.database;
 
-import com.mongodb.ConnectionString;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import lombok.Setter;
@@ -49,12 +48,14 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
     // TEMPLATE-URI: mongodb://test:pass@host1:port/?authSource=admin&authMechanism=SCRAM-SHA-1
 
     System.out.println("Connection --------------->  URI ---------------> :" + connectionURI);
-//    Caused by: java.lang.IllegalArgumentException: The connection string contains an invalid host '${HOST}:${PORT}'. The port '${PORT}' is not a valid, it must be an integer between 0 and 65535
-//    at com.mongodb.ConnectionString.validatePort(ConnectionString.java:1069)
-//    at com.mongodb.ConnectionString.parseHosts(ConnectionString.java:1049)
-//    at com.mongodb.ConnectionString.<init>(ConnectionString.java:350)
-//    at com.mongodb.reactivestreams.client.MongoClients.create(MongoClients.java:62)
-//    at com.webflux.mongo2.config.DevConfigDb.reactiveMongoClient(DevConfigDb.java:52)
+    //    Caused by: java.lang.IllegalArgumentException: The connection string contains an
+    //    invalid host '${HOST}:${PORT}'. The port '${PORT}' is not a valid, it must be an
+    //    integer between 0 and 65535
+    //    at com.mongodb.ConnectionString.validatePort(ConnectionString.java:1069)
+    //    at com.mongodb.ConnectionString.parseHosts(ConnectionString.java:1049)
+    //    at com.mongodb.ConnectionString.<init>(ConnectionString.java:350)
+    //    at com.mongodb.reactivestreams.client.MongoClients.create(MongoClients.java:62)
+    //    at com.webflux.mongo2.config.database.DevConfigDb.reactiveMongoClient(DevConfigDb.java:52)
 
     return MongoClients.create(connectionURI);
 
@@ -63,7 +64,7 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
 
   @Override
   protected String getDatabaseName() {
-    // TODO Auto-generated method stub
+
     return database;
   }
 
