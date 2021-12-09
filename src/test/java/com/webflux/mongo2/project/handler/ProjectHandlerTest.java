@@ -1,7 +1,8 @@
 package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.service.IProjectService;
 import com.webflux.mongo2.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
@@ -16,8 +17,6 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import java.util.Arrays;
-
 import static com.webflux.mongo2.config.routes.ProjectRoutes.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
@@ -27,6 +26,7 @@ import static config.utils.BlockhoundUtils.bhWorks;
 import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
@@ -51,15 +51,18 @@ class ProjectHandlerTest {
   @Autowired
   TestDbUtils dbUtils;
 
+  @Autowired
+  IProjectService projectService;
 
-  private Project project1, project2;
+
+  private Project project1, project2, project3;
   private Task task1;
 
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(),"class-start");
+    globalTestMessage(testInfo.getDisplayName(), "class-start");
     globalComposeServiceContainerMessage(compose,
                                          TC_COMPOSE_SERVICE,
                                          TC_COMPOSE_SERVICE_PORT
@@ -74,7 +77,7 @@ class ProjectHandlerTest {
   @AfterAll
   static void afterAll(TestInfo testInfo) {
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(),"class-end");
+    globalTestMessage(testInfo.getDisplayName(), "class-end");
   }
 
 
@@ -89,7 +92,7 @@ class ProjectHandlerTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(),"method-start");
+                              .toString(), "method-start");
 
     project1 = projectWithID("C",
                              "2020-05-05",
@@ -102,22 +105,30 @@ class ProjectHandlerTest {
                              "2021-06-06",
                              2000L
                             ).create();
-    Flux<Project> projectFlux = dbUtils.saveProjectList(Arrays.asList(project1,project2));
-    dbUtils.countAndExecuteProjectFlux(projectFlux,2);
+
+    project3 = projectWithID("B",
+                             "2020-07-07",
+                             "2021-07-07",
+                             3000L
+                            ).create();
+
+    Flux<Project> projectFlux = dbUtils.saveProjectList(asList(project1, project2));
+
+    dbUtils.countAndExecuteFlux(projectFlux, 2);
 
     task1 = taskWithID("3",
                        "Mark",
                        1000L
                       ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
-    dbUtils.countAndExecuteTaskFlux(taskFlux,1);
+    dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
 
 
   @AfterEach
   void tearDown(TestInfo testInfo) {
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(),"method-end");
+                              .toString(), "method-end");
   }
 
 
@@ -139,14 +150,14 @@ class ProjectHandlerTest {
          .everything()
 
          .statusCode(OK.value())
-         .body("_id",equalTo(project1.get_id()))
-         .body("name",equalTo(project1.getName()))
-         .body("countryList",hasItems(
+         .body("_id", equalTo(project1.get_id()))
+         .body("name", equalTo(project1.getName()))
+         .body("countryList", hasItems(
               project1.getCountryList()
                       .get(0),
               project1.getCountryList()
                       .get(1)
-                                     ))
+                                      ))
 
          .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
@@ -157,6 +168,13 @@ class ProjectHandlerTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindAll")
   void FindAll() {
+
+    dbUtils.checkFluxListElements(
+         projectService.findAll()
+                       .flatMap(Flux::just),
+         asList(project1, project2)
+                                 );
+
     RestAssuredWebTestClient
 
          .given()
@@ -170,16 +188,16 @@ class ProjectHandlerTest {
          .everything()
 
          .statusCode(OK.value())
-         .body("size()",is(2))
-         .body("$",hasSize(2))
-         .body("name",hasItems(project1.getName(),project2.getName()))
-         .body("name",hasItem(project1.getName()))
-         .body("name",hasItem(project2.getName()))
-         .body("countryList[0]",hasItems(project1.getCountryList()
-                                                 .get(0),
-                                         project2.getCountryList()
-                                                 .get(1)
-                                        ))
+         .body("size()", is(2))
+         .body("$", hasSize(2))
+         .body("name", hasItems(project1.getName(), project2.getName()))
+         .body("name", hasItem(project1.getName()))
+         .body("name", hasItem(project2.getName()))
+         .body("countryList[0]", hasItems(project1.getCountryList()
+                                                  .get(0),
+                                          project2.getCountryList()
+                                                  .get(1)
+                                         ))
          .body(matchesJsonSchemaInClasspath("contracts/project/findAll.json"))
     ;
   }
@@ -189,26 +207,27 @@ class ProjectHandlerTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindById")
   void FindById() {
+
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(PROJ_ID,project1.get_id())
+         .get(PROJ_ID, project1.get_id())
 
          .then()
          .log()
          .everything()
 
          .statusCode(OK.value())
-         .body("name",equalTo(project1.getName()))
-         .body("countryList",hasItems(
+         .body("name", equalTo(project1.getName()))
+         .body("countryList", hasItems(
               project1.getCountryList()
                       .get(0),
               project1.getCountryList()
                       .get(1)
-                                     ))
+                                      ))
          .body(matchesJsonSchemaInClasspath("contracts/project/findbyid.json"))
     ;
   }
@@ -226,7 +245,7 @@ class ProjectHandlerTest {
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(PROJ_ID,project1.get_id())
+         .get(PROJ_ID, project1.get_id())
 
          .then()
          .log()
@@ -240,18 +259,18 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("UpdateOptimistic")
-  void UpdateOptimistic() {
-    // OPTMISTIC-UPDATE:
+  void UpdateOptimisticLocking() {
+    // OPTMISTIC-LOCKING-UPDATE:
     // A) Uses the 'VERSION-ANNOTATION' in THE Entity
     // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
     // C) EXPLANATION:
-    //  C.1) The ENTITY-VERSION in the current OBJECT
-    //  C.2) must be different than the ENTITY-VERSION in the previous object
+    //  C.1) The ENTITY-VERSION in the UPDATING-OBJECT
+    //  C.2) must be the same ENTITY-VERSION than the DB-OBJECT
     var previousName = project1.getName();
-    var initialOptmisticEntityVersion = project1.getVersion();
-    var updatedOptmisticEntityVersion = initialOptmisticEntityVersion + 1;
+    var initialVersion = project1.getVersion();
+    var updatedVersion = initialVersion + 1;
 
-
+    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
     project1.setName("NewName");
 
     RestAssuredWebTestClient
@@ -268,11 +287,10 @@ class ProjectHandlerTest {
          .everything()
 
          .statusCode(OK.value())
-         .body("name",equalTo(project1.getName()))
-         .body("name",not(equalTo(previousName)))
-         .body("version",hasToString (Long.toString(updatedOptmisticEntityVersion)))
+         .body("name", not(equalTo(previousName)))
+         .body("version", hasToString(Long.toString(updatedVersion)))
 
-         .body(matchesJsonSchemaInClasspath("contracts/project/findById.json"))
+         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
 

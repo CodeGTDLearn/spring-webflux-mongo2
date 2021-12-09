@@ -1,4 +1,4 @@
-package com.webflux.mongo2.task.handler;
+package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
 import com.webflux.mongo2.project.Project;
@@ -16,23 +16,24 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.mongo2.config.routes.TaskRoutes.TASK_CREATE;
+import java.util.Arrays;
+
+import static com.webflux.mongo2.config.routes.ProjectRoutes.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.RestAssureSpecs.requestSpecsSetPath;
-import static config.utils.RestAssureSpecs.responseSpecs;
+import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ProjectHandlerTest")
+@DisplayName("ProjectHandlerExcTest")
 @MergedResource
-class TaskHandlerTest {
+class ProjectHandlerExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -49,7 +50,8 @@ class TaskHandlerTest {
   @Autowired
   TestDbUtils dbUtils;
 
-  private Project project1;
+
+  private Project project1, project2;
   private Task task1;
 
 
@@ -93,8 +95,14 @@ class TaskHandlerTest {
                              "2021-05-05",
                              1000L
                             ).create();
-    Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
-    dbUtils.countAndExecuteFlux(projectFlux, 1);
+
+    project2 = projectWithID("B",
+                             "2020-06-06",
+                             "2021-06-06",
+                             2000L
+                            ).create();
+    Flux<Project> projectFlux = dbUtils.saveProjectList(Arrays.asList(project1,project2));
+    dbUtils.countAndExecuteFlux(projectFlux, 2);
 
     task1 = taskWithID("3",
                        "Mark",
@@ -111,28 +119,40 @@ class TaskHandlerTest {
                               .toString(),"method-end");
   }
 
-
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("CreateTask")
-  void CreateTask() {
+  @DisplayName("UpdateOptimisticLockingExc")
+  void UpdateOptimisticLockingExc() {
+    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
+    project1.setName("NewName");
+    project1.setVersion(2L);
+
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
 
-         .body(task1)
+         .body(project1)
 
          .when()
-         .post(TASK_CREATE)
+         .put(PROJ_UPD)
 
          .then()
          .log()
          .everything()
 
-         .statusCode(OK.value())
-         .body("_id",containsStringIgnoringCase(task1.get_id()))
-         .body("projectId",containsStringIgnoringCase(task1.getProjectId()))
-         .body(matchesJsonSchemaInClasspath("contracts/task/task.json"))
+         .statusCode(BAD_REQUEST.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/UpdateOptLockExc.json"))
+
     ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("BHWorks")
+  void bHWorks() {
+    bhWorks();
   }
 }

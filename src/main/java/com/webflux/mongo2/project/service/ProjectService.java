@@ -2,8 +2,8 @@ package com.webflux.mongo2.project.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webflux.mongo2.project.entity.Project;
-import com.webflux.mongo2.project.repo.IProjectRepo;
+import com.webflux.mongo2.project.IProjectRepo;
+import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.task.entity.Task;
 import com.webflux.mongo2.task.repo.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,6 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Mono<Project> createProject(Project project) {
-
     return projectRepo.save(project);
   }
 

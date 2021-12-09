@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Configuration
 @EnableReactiveMongoRepositories(
      basePackages = {
-          "com.webflux.mongo2.project.repo",
+          "com.webflux.mongo2.project",
           "com.webflux.mongo2.task.repo"})
 public class ProdConfigDb extends AbstractReactiveMongoConfiguration {
 

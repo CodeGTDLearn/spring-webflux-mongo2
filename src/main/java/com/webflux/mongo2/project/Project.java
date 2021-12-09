@@ -1,4 +1,4 @@
-package com.webflux.mongo2.project.entity;
+package com.webflux.mongo2.project;
 
 import lombok.Getter;
 import lombok.Setter;

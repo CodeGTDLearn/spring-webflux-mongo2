@@ -1,6 +1,6 @@
-package com.webflux.mongo2.project.repo;
+package com.webflux.mongo2.project;
 
-import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.Project;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;

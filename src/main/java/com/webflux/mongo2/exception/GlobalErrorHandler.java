@@ -16,9 +16,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+//give a higher priority than the DefaultErrorWebExceptionHandler which is registered at @Order(-1).
 @Component
 @Order(-2)
-//give a higher priority than the DefaultErrorWebExceptionHandler which is registered at @Order(-1).
 public class GlobalErrorHandler extends AbstractErrorWebExceptionHandler {
 
 

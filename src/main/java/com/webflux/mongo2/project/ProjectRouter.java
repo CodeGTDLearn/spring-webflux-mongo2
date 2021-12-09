@@ -1,6 +1,6 @@
-package com.webflux.mongo2.project.router;
+package com.webflux.mongo2.project;
 
-import com.webflux.mongo2.project.handler.ProjectHandler;
+import com.webflux.mongo2.project.ProjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;

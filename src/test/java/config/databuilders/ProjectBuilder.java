@@ -1,7 +1,7 @@
 package config.databuilders;
 
 import com.github.javafaker.Faker;
-import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.Project;
 import lombok.Builder;
 import lombok.Getter;
 

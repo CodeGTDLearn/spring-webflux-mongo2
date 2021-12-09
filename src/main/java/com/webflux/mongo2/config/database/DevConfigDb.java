@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 
 
 // ========================== PropertySource + ConfigurationProperties =============================
-//Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
+// Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Setter are CRUCIAL for PropertySource + ConfigurationProperties works properly
 @PropertySource(value = "classpath:application-dev.yml", ignoreResourceNotFound = true)
 @ConfigurationProperties(prefix = "spring.data.mongodb")
@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Configuration
 @EnableReactiveMongoRepositories(
      basePackages = {
-          "com.webflux.mongo2.project.repo",
+          "com.webflux.mongo2.project",
           "com.webflux.mongo2.task.repo"})
 public class DevConfigDb extends AbstractReactiveMongoConfiguration {
   private String database;

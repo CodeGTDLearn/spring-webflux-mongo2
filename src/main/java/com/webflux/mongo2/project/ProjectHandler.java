@@ -1,14 +1,16 @@
-package com.webflux.mongo2.project.handler;
+package com.webflux.mongo2.project;
 
-import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -36,15 +38,19 @@ public class ProjectHandler {
               .flatMap(data ->
                             ok()
                                  .contentType(JSON)
-                                 .bodyValue(data));/*.onErrorResume(error -> { if
-                                                  (error instanceof
-								  OptimisticLockingFailureException){ return
-										  ServerResponse.status(HttpStatus.BAD_REQUEST).build(); 
-								}
-										 return
-										  ServerResponse.status(500).build(); });*/
+                                 .bodyValue(data))
+//              .onErrorResume(error -> {
+//                if (error instanceof OptimisticLockingFailureException) {
+//                  return ServerResponse.status(BAD_REQUEST)
+//                                       .build();
+//                }
+//                return ServerResponse.status(INTERNAL_SERVER_ERROR)
+//                                     .build();
+//              })
+         ;
 
   }
+
 
   public Mono<ServerResponse> update(ServerRequest request) {
 
@@ -57,15 +63,25 @@ public class ProjectHandler {
               .flatMap(data ->
                             ok()
                                  .contentType(JSON)
-                                 .bodyValue(data));
+                                 .bodyValue(data))
+//              .onErrorResume(error -> {
+//                if (error instanceof OptimisticLockingFailureException) {
+//                  return ServerResponse.status(BAD_REQUEST)
+//                                       .build();
+//                }
+//                return ServerResponse.status(INTERNAL_SERVER_ERROR)
+//                                     .build();
+//              })
+         ;
 
   }
+
 
   public Mono<ServerResponse> findAll(ServerRequest request) {
     return
          ok()
               .contentType(JSON)
-              .body(projectService.findAll(),Project.class);
+              .body(projectService.findAll(), Project.class);
 
   }
 
@@ -90,23 +106,23 @@ public class ProjectHandler {
 
     String id = request.pathVariable("id");
     // STYLE 01 - DELETE_BY_ID USING FLATMAP
-        return
-             projectService
-                  .deleteById(id)
-                  .flatMap(data -> ServerResponse.ok()
-                                                 .contentType(JSON)
-                                                 .bodyValue(data))
-                  .switchIfEmpty(ServerResponse.notFound()
-                                               .build());
+    return
+         projectService
+              .deleteById(id)
+              .flatMap(data -> ServerResponse.ok()
+                                             .contentType(JSON)
+                                             .bodyValue(data))
+              .switchIfEmpty(ServerResponse.notFound()
+                                           .build());
 
     // STYLE 02 - DELETE_BY_ID BASICS
-//    return
-//         ok()
-//              .contentType(JSON)
-//              .body(
-//                   projectService.deleteById(id),Void.class
-//                   )
-//              .log();
+    //    return
+    //         ok()
+    //              .contentType(JSON)
+    //              .body(
+    //                   projectService.deleteById(id),Void.class
+    //                   )
+    //              .log();
 
   }
 
@@ -119,7 +135,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByName(name),Project.class)
+         .body(projectService.findByName(name), Project.class)
          .log();
   }
 
@@ -132,7 +148,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByNameNot(name),Project.class)
+         .body(projectService.findByNameNot(name), Project.class)
          .log();
   }
 
@@ -145,7 +161,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByEstimatedCostGreaterThan(Long.valueOf(cost)),Project.class)
+         .body(projectService.findByEstimatedCostGreaterThan(Long.valueOf(cost)), Project.class)
          .log();
   }
 
@@ -159,7 +175,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByEstimatedCostBetween(Long.valueOf(from),Long.valueOf(to)),
+         .body(projectService.findByEstimatedCostBetween(Long.valueOf(from), Long.valueOf(to)),
                Project.class
               )
          .log();
@@ -174,7 +190,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByNameLike(name),Project.class)
+         .body(projectService.findByNameLike(name), Project.class)
          .log();
   }
 
@@ -187,7 +203,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByNameRegex(regex),Project.class)
+         .body(projectService.findByNameRegex(regex), Project.class)
          .log();
   }
 
@@ -200,7 +216,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findProjectByNameQuery(name),Project.class)
+         .body(projectService.findProjectByNameQuery(name), Project.class)
          .log();
   }
 
@@ -214,7 +230,8 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findProjectByNameAndCostQuery(name,Long.valueOf(cost)),Project.class)
+         .body(projectService.findProjectByNameAndCostQuery(name, Long.valueOf(cost)),
+               Project.class)
          .log();
   }
 
@@ -228,7 +245,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByEstimatedCostBetweenQuery(Long.valueOf(from),Long.valueOf(to)),
+         .body(projectService.findByEstimatedCostBetweenQuery(Long.valueOf(from), Long.valueOf(to)),
                Project.class
               )
          .log();
@@ -243,7 +260,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByNameRegexQuery(regex),Project.class)
+         .body(projectService.findByNameRegexQuery(regex), Project.class)
          .log();
   }
 
@@ -255,7 +272,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findProjectByNameQueryWithTemplate(name),Project.class)
+         .body(projectService.findProjectByNameQueryWithTemplate(name), Project.class)
          .log();
   }
 
@@ -288,7 +305,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByNameRegexQueryWithTemplate(regex),Project.class)
+         .body(projectService.findByNameRegexQueryWithTemplate(regex), Project.class)
          .log();
 
 
@@ -304,7 +321,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.upsertCostWithCriteriaTemplate(id,Long.valueOf(cost)),Void.class)
+         .body(projectService.upsertCostWithCriteriaTemplate(id, Long.valueOf(cost)), Void.class)
          .log();
 
 
@@ -319,7 +336,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.deleteWithCriteriaTemplate(id),Void.class)
+         .body(projectService.deleteWithCriteriaTemplate(id), Void.class)
          .log();
 
 

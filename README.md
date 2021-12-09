@@ -54,9 +54,9 @@
    
 
 5. CRUD Strategy:
-   1. OPTIMISTIC-UPDATE:
-      1. Uses the 'VERSION-ANNOTATION' in the Entity
-      2. to prevent update-problems when happens 'CONCURRENT-UPDATES'
+   1. OPTIMISTIC-LOCKING-UPDATE:
+      1. Uses the 'VERSION-ANNOTATION' in the Java-Entity
+      2. to prevent problems caused by 'CONCURRENT-UPDATES'
       3. EXPLANATION:
-         1. The ENTITY-VERSION in the current OBJECT
-         2. Must be different than the ENTITY-VERSION in the previous object
+         1. The ENTITY-VERSION in the UPDATING-OBJECT
+         2. must be the same ENTITY-VERSION as the DB-OBJECT
