@@ -10,9 +10,6 @@ x-common-variables:
   MONGO_INITDB_ROOT_PASSWORD: root
   AUTH_MAN: admin
 
-volumes:
-  api_vol:
-
 networks:
   mongo-cluster:
 
@@ -26,7 +23,7 @@ services:
     networks:
       - mongo-cluster
     volumes:
-      - api_vol:/data/db
+      - ../docker/mongo-data-db:/data/db
     environment:
       *env-vars
 
@@ -42,7 +39,7 @@ services:
       - "8080:8080"
       - "5005:5005"
     volumes:
-      - api_vol:/data/db
+      - ../docker/mongo-data-db:/data/db
     depends_on:
       - mongo1
     networks:

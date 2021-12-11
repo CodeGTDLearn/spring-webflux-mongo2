@@ -2,15 +2,12 @@ package com.webflux.mongo2.project;
 
 import com.webflux.mongo2.project.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -39,16 +36,15 @@ public class ProjectHandler {
                             ok()
                                  .contentType(JSON)
                                  .bodyValue(data))
-//              .onErrorResume(error -> {
-//                if (error instanceof OptimisticLockingFailureException) {
-//                  return ServerResponse.status(BAD_REQUEST)
-//                                       .build();
-//                }
-//                return ServerResponse.status(INTERNAL_SERVER_ERROR)
-//                                     .build();
-//              })
+         //              .onErrorResume(error -> {
+         //                if (error instanceof OptimisticLockingFailureException) {
+         //                  return ServerResponse.status(BAD_REQUEST)
+         //                                       .build();
+         //                }
+         //                return ServerResponse.status(INTERNAL_SERVER_ERROR)
+         //                                     .build();
+         //              })
          ;
-
   }
 
 
@@ -64,16 +60,15 @@ public class ProjectHandler {
                             ok()
                                  .contentType(JSON)
                                  .bodyValue(data))
-//              .onErrorResume(error -> {
-//                if (error instanceof OptimisticLockingFailureException) {
-//                  return ServerResponse.status(BAD_REQUEST)
-//                                       .build();
-//                }
-//                return ServerResponse.status(INTERNAL_SERVER_ERROR)
-//                                     .build();
-//              })
+         //              .onErrorResume(error -> {
+         //                if (error instanceof OptimisticLockingFailureException) {
+         //                  return ServerResponse.status(BAD_REQUEST)
+         //                                       .build();
+         //                }
+         //                return ServerResponse.status(INTERNAL_SERVER_ERROR)
+         //                                     .build();
+         //              })
          ;
-
   }
 
 
@@ -82,7 +77,6 @@ public class ProjectHandler {
          ok()
               .contentType(JSON)
               .body(projectService.findAll(), Project.class);
-
   }
 
 
@@ -98,7 +92,6 @@ public class ProjectHandler {
                    .bodyValue(data))
               .switchIfEmpty(notFound()
                                   .build());
-
   }
 
 
@@ -123,7 +116,6 @@ public class ProjectHandler {
     //                   projectService.deleteById(id),Void.class
     //                   )
     //              .log();
-
   }
 
 
@@ -135,7 +127,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByName(name), Project.class)
+         .body(projectService.findByName(name),Project.class)
          .log();
   }
 
@@ -145,10 +137,11 @@ public class ProjectHandler {
                          .get();
 
     return ok()
-
          .contentType(JSON)
-
-         .body(projectService.findByNameNot(name), Project.class)
+         .body(
+              projectService.findByNameNot(name),
+              Project.class
+              )
          .log();
   }
 
@@ -158,10 +151,10 @@ public class ProjectHandler {
                          .get();
 
     return ok()
-
          .contentType(JSON)
-
-         .body(projectService.findByEstimatedCostGreaterThan(Long.valueOf(cost)), Project.class)
+         .body(
+              projectService.
+                   findByEstimatedCostGreaterThan(Long.valueOf(cost)), Project.class)
          .log();
   }
 
@@ -172,10 +165,9 @@ public class ProjectHandler {
     String to = request.queryParam("to")
                        .get();
     return ok()
-
          .contentType(JSON)
-
-         .body(projectService.findByEstimatedCostBetween(Long.valueOf(from), Long.valueOf(to)),
+         .body(projectService.
+                    findByEstimatedCostBetween(Long.valueOf(from), Long.valueOf(to)),
                Project.class
               )
          .log();
@@ -187,9 +179,7 @@ public class ProjectHandler {
                          .get();
 
     return ok()
-
          .contentType(JSON)
-
          .body(projectService.findByNameLike(name), Project.class)
          .log();
   }
@@ -198,11 +188,11 @@ public class ProjectHandler {
   public Mono<ServerResponse> findByNameRegex(ServerRequest request) {
     String name = request.queryParam("name")
                          .get();
+
     String regex = "^" + name + "";
+
     return ok()
-
          .contentType(JSON)
-
          .body(projectService.findByNameRegex(regex), Project.class)
          .log();
   }
@@ -213,9 +203,7 @@ public class ProjectHandler {
                          .get();
 
     return ok()
-
          .contentType(JSON)
-
          .body(projectService.findProjectByNameQuery(name), Project.class)
          .log();
   }
@@ -226,12 +214,12 @@ public class ProjectHandler {
                          .get();
     String cost = request.queryParam("cost")
                          .get();
+
     return ok()
-
          .contentType(JSON)
-
          .body(projectService.findProjectByNameAndCostQuery(name, Long.valueOf(cost)),
-               Project.class)
+               Project.class
+              )
          .log();
   }
 

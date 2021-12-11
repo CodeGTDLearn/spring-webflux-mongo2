@@ -2,7 +2,7 @@ package com.webflux.mongo2.project.service;
 
 
 import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.task.entity.Task;
+import com.webflux.mongo2.task.Task;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

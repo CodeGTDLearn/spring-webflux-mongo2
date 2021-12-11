@@ -1,6 +1,5 @@
-package com.webflux.mongo2.task.router;
+package com.webflux.mongo2.task;
 
-import com.webflux.mongo2.task.handler.TaskHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -25,8 +24,8 @@ public class TaskRouter {
 
 
   @Bean
-  public RouterFunction<ServerResponse> taskRoutes(TaskHandler taskHandler) {
+  public RouterFunction<ServerResponse> taskRoutes(TaskHandler handler) {
     return RouterFunctions
-         .route(POST(TASK_CREATE).and(accept(JSON)),taskHandler::createTask);
+         .route(POST(TASK_CREATE).and(accept(JSON)),handler::createTask);
   }
 }

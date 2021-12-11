@@ -1,8 +1,7 @@
-package com.webflux.mongo2.project.handler;
+package com.webflux.mongo2.project;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.task.entity.Task;
+import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -49,6 +48,9 @@ class ProjectHandlerExcTest {
 
   @Autowired
   TestDbUtils dbUtils;
+
+//  @Autowired
+//  CustomExceptionsProperties exceptions;
 
 
   private Project project1, project2;
@@ -144,6 +146,10 @@ class ProjectHandlerExcTest {
 
          .statusCode(BAD_REQUEST.value())
          .body(matchesJsonSchemaInClasspath("contracts/exceptions/UpdateOptLockExc.json"))
+
+//         .statusCode(NOT_FOUND.value())
+//         .body("detail",equalTo(customExceptions.getPostNotFoundMessage()))
+//         .body(matchesJsonSchemaInClasspath("contracts/exceptions/postNotFound.json"))
 
     ;
   }

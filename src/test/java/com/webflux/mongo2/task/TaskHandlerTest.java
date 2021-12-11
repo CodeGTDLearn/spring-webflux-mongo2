@@ -1,8 +1,8 @@
-package com.webflux.mongo2.task.handler;
+package com.webflux.mongo2.task;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
 import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.task.entity.Task;
+import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -30,7 +30,7 @@ import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ProjectHandlerTest")
+@DisplayName("TaskHandlerTest")
 @MergedResource
 class TaskHandlerTest {
 

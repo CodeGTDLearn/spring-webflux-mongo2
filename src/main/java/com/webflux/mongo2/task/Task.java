@@ -1,4 +1,4 @@
-package com.webflux.mongo2.task.entity;
+package com.webflux.mongo2.task;
 
 import lombok.Getter;
 import lombok.Setter;

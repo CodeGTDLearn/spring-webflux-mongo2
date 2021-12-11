@@ -1,0 +1,17 @@
+# GLOBAL-EXCEPTION:
+global:
+  exception:
+    developerAttribute: Global-Dev-Atribbute
+    developerMessage: Global-Dev-Message
+    globalAttribute: Global-General-Atribute
+    globalMessage: Global-General-Message
+
+
+# CUSTOM-EXCEPTION:
+custom:
+  exception:
+    userNotFoundMessage: User not found
+    usersNotFoundMessage: Users not found
+    postNotFoundMessage: Post not found
+    commentNotFoundMessage: Comment not found
+    authorNotFoundMessage: Author not found

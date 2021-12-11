@@ -1,9 +1,8 @@
-package com.webflux.mongo2.project.handler;
+package com.webflux.mongo2.project;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.project.service.IProjectService;
-import com.webflux.mongo2.task.entity.Task;
+import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -53,7 +52,6 @@ class ProjectHandlerTest {
 
   @Autowired
   IProjectService projectService;
-
 
   private Project project1, project2, project3;
   private Task task1;
@@ -135,7 +133,7 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("CreateProject")
-  void CreateProject() {
+  public void CreateProject() {
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
@@ -167,7 +165,7 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindAll")
-  void FindAll() {
+  public void FindAll() {
 
     dbUtils.checkFluxListElements(
          projectService.findAll()
@@ -206,7 +204,7 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindById")
-  void FindById() {
+  public void FindById() {
 
     RestAssuredWebTestClient
 
@@ -236,7 +234,7 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("Delete")
-  void Delete() {
+  public void Delete() {
     RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
 
     RestAssuredWebTestClient
@@ -259,7 +257,7 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("UpdateOptimistic")
-  void UpdateOptimisticLocking() {
+  public void UpdateOptimisticLocking() {
     // OPTMISTIC-LOCKING-UPDATE:
     // A) Uses the 'VERSION-ANNOTATION' in THE Entity
     // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
@@ -298,7 +296,37 @@ class ProjectHandlerTest {
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("BHWorks")
-  void bHWorks() {
+  public void bHWorks() {
     bhWorks();
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindByName")
+  public void FindByName() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(PROJ_BYNAME + "/{name}", project1.getName())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+//         .body("name", equalTo(project1.getName()))
+    //         .body("countryList", hasItems(
+    //              project1.getCountryList()
+    //                      .get(0),
+    //              project1.getCountryList()
+    //                      .get(1)
+    //                                      ))
+    //         .body(matchesJsonSchemaInClasspath("contracts/project/findbyname.json"))
+    ;
   }
 }

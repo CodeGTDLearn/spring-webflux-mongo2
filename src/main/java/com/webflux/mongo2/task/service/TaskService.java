@@ -1,7 +1,7 @@
 package com.webflux.mongo2.task.service;
 
-import com.webflux.mongo2.task.entity.Task;
-import com.webflux.mongo2.task.repo.ITaskRepo;
+import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

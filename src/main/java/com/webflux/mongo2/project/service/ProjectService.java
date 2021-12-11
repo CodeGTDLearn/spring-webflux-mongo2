@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.mongo2.project.IProjectRepo;
 import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.task.entity.Task;
-import com.webflux.mongo2.task.repo.ITaskRepo;
+import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -63,7 +63,6 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Flux<Project> findByName(String name) {
-
     return projectRepo.findByName(name);
   }
 
@@ -83,9 +82,9 @@ public class ProjectService implements IProjectService {
 
 
   @Override
-  public Flux<Project> findByEstimatedCostBetween(Long from,Long to) {
+  public Flux<Project> findByEstimatedCostBetween(Long from, Long to) {
 
-    return projectRepo.findByEstimatedCostBetween(from,to);
+    return projectRepo.findByEstimatedCostBetween(from, to);
   }
 
 
@@ -102,7 +101,7 @@ public class ProjectService implements IProjectService {
     return projectRepo.findByNameRegex(name);
   }
 
-
+//---------------------------------------
   @Override
   public Flux<Project> findProjectByNameQuery(String name) {
 
@@ -111,17 +110,17 @@ public class ProjectService implements IProjectService {
 
 
   @Override
-  public Flux<Project> findProjectByNameAndCostQuery(String name,Long cost) {
+  public Flux<Project> findProjectByNameAndCostQuery(String name, Long cost) {
 
-    return projectRepo.findProjectByNameAndCostQuery(name,cost);
+    return projectRepo.findProjectByNameAndCostQuery(name, cost);
   }
 
 
   @Override
-  public Flux<Project> findByEstimatedCostBetweenQuery(Long from,Long to) {
+  public Flux<Project> findByEstimatedCostBetweenQuery(Long from, Long to) {
 
-    return projectRepo.findByEstimatedCostBetweenQuery(from,to,
-                                                       Sort.by(Direction.DESC,"cost")
+    return projectRepo.findByEstimatedCostBetweenQuery(from, to,
+                                                       Sort.by(Direction.DESC, "cost")
                                                       );
   }
 
@@ -139,20 +138,20 @@ public class ProjectService implements IProjectService {
     Query query = new Query();
     query.addCriteria(Criteria.where("name")
                               .is(name));
-    return reactiveMongoTemplate.find(query,Project.class);
+    return reactiveMongoTemplate.find(query, Project.class);
 
   }
 
 
   @Override
-  public Flux<Project> findByEstimatedCostBetweenQueryWithTemplate(Long from,Long to) {
+  public Flux<Project> findByEstimatedCostBetweenQueryWithTemplate(Long from, Long to) {
 
     Query query = new Query();
-    query.with(Sort.by(Direction.ASC,"cost"));
+    query.with(Sort.by(Direction.ASC, "cost"));
     query.addCriteria(Criteria.where("cost")
                               .lt(to)
                               .gt(from));
-    return reactiveMongoTemplate.find(query,Project.class);
+    return reactiveMongoTemplate.find(query, Project.class);
 
   }
 
@@ -163,19 +162,19 @@ public class ProjectService implements IProjectService {
     Query query = new Query();
     query.addCriteria(Criteria.where("name")
                               .regex(regexp));
-    return reactiveMongoTemplate.find(query,Project.class);
+    return reactiveMongoTemplate.find(query, Project.class);
 
   }
 
 
   @Override
-  public Mono<Void> upsertCostWithCriteriaTemplate(String id,Long cost) {
+  public Mono<Void> upsertCostWithCriteriaTemplate(String id, Long cost) {
     Query query = new Query();
     query.addCriteria(Criteria.where("_id")
                               .is(id));
     Update update = new Update();
-    update.set("cost",cost);
-    return reactiveMongoTemplate.upsert(query,update,Project.class)
+    update.set("cost", cost);
+    return reactiveMongoTemplate.upsert(query, update, Project.class)
                                 .then();
 
   }
@@ -186,7 +185,7 @@ public class ProjectService implements IProjectService {
     Query query = new Query();
     query.addCriteria(Criteria.where("_id")
                               .is(id));
-    return reactiveMongoTemplate.remove(query,Project.class)
+    return reactiveMongoTemplate.remove(query, Project.class)
                                 .then();
 
   }
@@ -265,7 +264,7 @@ public class ProjectService implements IProjectService {
   //  }
   @Override
   @Transactional
-  public Mono<Void> saveProjectAndTask(Mono<Project> p,Mono<Task> t) {
+  public Mono<Void> saveProjectAndTask(Mono<Project> p, Mono<Task> t) {
 
     return p.flatMap(projectRepo::save)
             .then(t)
@@ -349,9 +348,9 @@ public class ProjectService implements IProjectService {
     try {
 
       ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+      objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-      p = objectMapper.readValue(json,Project.class);
+      p = objectMapper.readValue(json, Project.class);
     } catch (Exception i) {
 
       throw new RuntimeException(i);

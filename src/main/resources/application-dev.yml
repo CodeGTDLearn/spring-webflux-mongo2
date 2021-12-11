@@ -1,4 +1,7 @@
 spring:
+  devtools:
+    remote:
+      secret: mysecret
   data:
     mongodb:
       database: ${MONGO_INITDB_DATABASE}
