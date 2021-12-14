@@ -6,7 +6,7 @@ import com.webflux.mongo2.task.Task;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface IProjectService {
+public interface IServiceRepo {
   Mono<Project> createProject(Project project);
 
   Flux<Project> findAll();
@@ -34,16 +34,6 @@ public interface IProjectService {
   Flux<Project> findByEstimatedCostBetweenQuery(Long from,Long to);
 
   Flux<Project> findByNameRegexQuery(String regexp);
-
-  Flux<Project> findProjectByNameQueryWithTemplate(String name);
-
-  Flux<Project> findByEstimatedCostBetweenQueryWithTemplate(Long from,Long to);
-
-  Flux<Project> findByNameRegexQueryWithTemplate(String regexp);
-
-  Mono<Void> upsertCostWithCriteriaTemplate(String id,Long cost);
-
-  Mono<Void> deleteWithCriteriaTemplate(String id);
 
   //  public Mono<Long> findNoOfProjectsCostGreaterThan(Long cost);
 

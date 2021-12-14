@@ -14,6 +14,9 @@
 
 2. MongoDB Strategy:
     1. Reactive SpringDataMongoDB
+       1. Crud
+       2. Repo
+       3. Template
     2. Services:
         1. Embed Objects
         2. Referencing

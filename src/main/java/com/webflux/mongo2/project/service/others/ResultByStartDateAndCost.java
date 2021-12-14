@@ -1,4 +1,4 @@
-package com.webflux.mongo2.project.service;
+package com.webflux.mongo2.project.service.others;
 
 public class ResultByStartDateAndCost {
   private String _id;

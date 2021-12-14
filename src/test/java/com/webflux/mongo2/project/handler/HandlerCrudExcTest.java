@@ -1,6 +1,7 @@
-package com.webflux.mongo2.project;
+package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
+import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
@@ -17,7 +18,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 
-import static com.webflux.mongo2.config.routes.ProjectRoutes.*;
+import static com.webflux.mongo2.config.routes.project.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
@@ -30,9 +31,9 @@ import static java.util.Collections.singletonList;
 import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ProjectHandlerExcTest")
+@DisplayName("HandlerCrudExcTest")
 @MergedResource
-class ProjectHandlerExcTest {
+class HandlerCrudExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -138,7 +139,7 @@ class ProjectHandlerExcTest {
          .body(project1)
 
          .when()
-         .put(PROJ_UPD)
+         .put(CRUD_UPD)
 
          .then()
          .log()

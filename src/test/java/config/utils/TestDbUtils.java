@@ -1,6 +1,6 @@
 package config.utils;
 
-import com.webflux.mongo2.project.IProjectRepo;
+import com.webflux.mongo2.project.repo.IRepo;
 import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.task.Task;
 import com.webflux.mongo2.task.ITaskRepo;
@@ -16,7 +16,7 @@ import java.util.List;
 public class TestDbUtils {
 
   @Autowired
-  IProjectRepo projectRepo;
+  IRepo projectRepo;
 
   @Autowired
   ITaskRepo taskRepo;

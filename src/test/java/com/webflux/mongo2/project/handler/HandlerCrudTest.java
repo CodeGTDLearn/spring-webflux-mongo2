@@ -1,7 +1,8 @@
-package com.webflux.mongo2.project;
+package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.service.IProjectService;
+import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.service.IServiceCrud;
 import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
@@ -16,7 +17,9 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.mongo2.config.routes.ProjectRoutes.*;
+import java.util.List;
+
+import static com.webflux.mongo2.config.routes.project.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
@@ -31,9 +34,9 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ProjectHandlerTest")
+@DisplayName("HandlerCrudTest")
 @MergedResource
-class ProjectHandlerTest {
+class HandlerCrudTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -51,14 +54,16 @@ class ProjectHandlerTest {
   TestDbUtils dbUtils;
 
   @Autowired
-  IProjectService projectService;
+  IServiceCrud serviceCrud;
 
   private Project project1, project2, project3;
   private Task task1;
+  private List<Project> projectList;
 
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
+
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
     globalComposeServiceContainerMessage(compose,
@@ -74,6 +79,7 @@ class ProjectHandlerTest {
 
   @AfterAll
   static void afterAll(TestInfo testInfo) {
+
     globalAfterAll();
     globalTestMessage(testInfo.getDisplayName(), "class-end");
   }
@@ -82,9 +88,9 @@ class ProjectHandlerTest {
   @BeforeEach
   void beforeEach(TestInfo testInfo) {
 
-    //REAL-SERVER INJECTED IN WEB-TEST-CLIENT(non-blocking client)'
-    //SHOULD BE USED WHEN 'DOCKER-COMPOSE' UP A REAL-WEB-SERVER
-    //BECAUSE THERE IS 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
+    // REAL-SERVER INJECTED IN WEB-TEST-CLIENT(non-blocking client)'
+    // SHOULD BE USED WHEN 'DOCKER-COMPOSE' UP A REAL-WEB-SERVER
+    // BECAUSE THERE IS 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
     // realWebClient = WebTestClient.bindToServer()
     //                      .baseUrl("http://localhost:8080/customer")
     //                      .build();
@@ -110,7 +116,8 @@ class ProjectHandlerTest {
                              3000L
                             ).create();
 
-    Flux<Project> projectFlux = dbUtils.saveProjectList(asList(project1, project2));
+    projectList = asList(project1, project2);
+    Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
 
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
@@ -125,6 +132,7 @@ class ProjectHandlerTest {
 
   @AfterEach
   void tearDown(TestInfo testInfo) {
+
     globalTestMessage(testInfo.getTestMethod()
                               .toString(), "method-end");
   }
@@ -134,6 +142,7 @@ class ProjectHandlerTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("CreateProject")
   public void CreateProject() {
+
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
@@ -141,7 +150,7 @@ class ProjectHandlerTest {
          .body(project1)
 
          .when()
-         .post(PROJ_CREATE)
+         .post(CRUD_CREATE)
 
          .then()
          .log()
@@ -168,8 +177,8 @@ class ProjectHandlerTest {
   public void FindAll() {
 
     dbUtils.checkFluxListElements(
-         projectService.findAll()
-                       .flatMap(Flux::just),
+         serviceCrud.findAll()
+                    .flatMap(Flux::just),
          asList(project1, project2)
                                  );
 
@@ -179,7 +188,7 @@ class ProjectHandlerTest {
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(PROJ_ROOT)
+         .get(CRUD_ROOT)
 
          .then()
          .log()
@@ -196,7 +205,7 @@ class ProjectHandlerTest {
                                           project2.getCountryList()
                                                   .get(1)
                                          ))
-         .body(matchesJsonSchemaInClasspath("contracts/project/findAll.json"))
+         .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
     ;
   }
 
@@ -212,7 +221,7 @@ class ProjectHandlerTest {
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(PROJ_ID, project1.get_id())
+         .get(CRUD_ID, project1.get_id())
 
          .then()
          .log()
@@ -235,6 +244,7 @@ class ProjectHandlerTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("Delete")
   public void Delete() {
+
     RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
 
     RestAssuredWebTestClient
@@ -243,7 +253,7 @@ class ProjectHandlerTest {
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(PROJ_ID, project1.get_id())
+         .get(CRUD_ID, project1.get_id())
 
          .then()
          .log()
@@ -278,7 +288,7 @@ class ProjectHandlerTest {
          .body(project1)
 
          .when()
-         .put(PROJ_UPD)
+         .put(CRUD_UPD)
 
          .then()
          .log()
@@ -297,36 +307,7 @@ class ProjectHandlerTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("BHWorks")
   public void bHWorks() {
+
     bhWorks();
-  }
-
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByName")
-  public void FindByName() {
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-
-         .when()
-         .get(PROJ_BYNAME + "/{name}", project1.getName())
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-//         .body("name", equalTo(project1.getName()))
-    //         .body("countryList", hasItems(
-    //              project1.getCountryList()
-    //                      .get(0),
-    //              project1.getCountryList()
-    //                      .get(1)
-    //                                      ))
-    //         .body(matchesJsonSchemaInClasspath("contracts/project/findbyname.json"))
-    ;
   }
 }

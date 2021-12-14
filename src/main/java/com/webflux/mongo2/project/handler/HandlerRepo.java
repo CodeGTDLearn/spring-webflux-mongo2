@@ -1,6 +1,7 @@
-package com.webflux.mongo2.project;
+package com.webflux.mongo2.project.handler;
 
-import com.webflux.mongo2.project.service.IProjectService;
+import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.service.IServiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,110 +16,17 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 //HANDLER:
 // A) HANDLER receive the message from ROUTERED
 // B) and, send this message for SERVICE
-@Component("projectHandler")
-public class ProjectHandler {
+@Component("handlerRepo")
+public class HandlerRepo {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  IProjectService projectService;
+  IServiceRepo serviceRepo;
 
-
-  public Mono<ServerResponse> createProject(ServerRequest request) {
-
-    // convert/abstracting JSON to Entity
-    final Mono<Project> project = request.bodyToMono(Project.class);
-
-    return
-         project
-              .flatMap(projectService::createProject)
-              .flatMap(data ->
-                            ok()
-                                 .contentType(JSON)
-                                 .bodyValue(data))
-         //              .onErrorResume(error -> {
-         //                if (error instanceof OptimisticLockingFailureException) {
-         //                  return ServerResponse.status(BAD_REQUEST)
-         //                                       .build();
-         //                }
-         //                return ServerResponse.status(INTERNAL_SERVER_ERROR)
-         //                                     .build();
-         //              })
-         ;
-  }
-
-
-  public Mono<ServerResponse> update(ServerRequest request) {
-
-    // convert/abstracting JSON to Entity
-    final Mono<Project> project = request.bodyToMono(Project.class);
-
-    return
-         project
-              .flatMap(projectService::createProject)
-              .flatMap(data ->
-                            ok()
-                                 .contentType(JSON)
-                                 .bodyValue(data))
-         //              .onErrorResume(error -> {
-         //                if (error instanceof OptimisticLockingFailureException) {
-         //                  return ServerResponse.status(BAD_REQUEST)
-         //                                       .build();
-         //                }
-         //                return ServerResponse.status(INTERNAL_SERVER_ERROR)
-         //                                     .build();
-         //              })
-         ;
-  }
-
-
-  public Mono<ServerResponse> findAll(ServerRequest request) {
-    return
-         ok()
-              .contentType(JSON)
-              .body(projectService.findAll(), Project.class);
-  }
-
-
-  public Mono<ServerResponse> findById(ServerRequest request) {
-
-    String id = request.pathVariable("id");
-
-    return
-         projectService
-              .findById(id)
-              .flatMap(data -> ok()
-                   .contentType(JSON)
-                   .bodyValue(data))
-              .switchIfEmpty(notFound()
-                                  .build());
-  }
-
-
-  public Mono<ServerResponse> delete(ServerRequest request) {
-
-    String id = request.pathVariable("id");
-    // STYLE 01 - DELETE_BY_ID USING FLATMAP
-    return
-         projectService
-              .deleteById(id)
-              .flatMap(data -> ServerResponse.ok()
-                                             .contentType(JSON)
-                                             .bodyValue(data))
-              .switchIfEmpty(ServerResponse.notFound()
-                                           .build());
-
-    // STYLE 02 - DELETE_BY_ID BASICS
-    //    return
-    //         ok()
-    //              .contentType(JSON)
-    //              .body(
-    //                   projectService.deleteById(id),Void.class
-    //                   )
-    //              .log();
-  }
-
-
+  /*╔══════════════════════════════╗
+    ║    AUTO-GENERATED-QUERIES    ║
+    ╚══════════════════════════════╝*/
   public Mono<ServerResponse> findByName(ServerRequest request) {
     String name = request.queryParam("name")
                          .get();
@@ -127,7 +35,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByName(name),Project.class)
+         .body(serviceRepo.findByName(name), Project.class)
          .log();
   }
 
@@ -139,7 +47,7 @@ public class ProjectHandler {
     return ok()
          .contentType(JSON)
          .body(
-              projectService.findByNameNot(name),
+              serviceRepo.findByNameNot(name),
               Project.class
               )
          .log();
@@ -153,7 +61,7 @@ public class ProjectHandler {
     return ok()
          .contentType(JSON)
          .body(
-              projectService.
+              serviceRepo.
                    findByEstimatedCostGreaterThan(Long.valueOf(cost)), Project.class)
          .log();
   }
@@ -166,7 +74,7 @@ public class ProjectHandler {
                        .get();
     return ok()
          .contentType(JSON)
-         .body(projectService.
+         .body(serviceRepo.
                     findByEstimatedCostBetween(Long.valueOf(from), Long.valueOf(to)),
                Project.class
               )
@@ -180,7 +88,7 @@ public class ProjectHandler {
 
     return ok()
          .contentType(JSON)
-         .body(projectService.findByNameLike(name), Project.class)
+         .body(serviceRepo.findByNameLike(name), Project.class)
          .log();
   }
 
@@ -193,18 +101,21 @@ public class ProjectHandler {
 
     return ok()
          .contentType(JSON)
-         .body(projectService.findByNameRegex(regex), Project.class)
+         .body(serviceRepo.findByNameRegex(regex), Project.class)
          .log();
   }
 
 
+  /*╔══════════════════════════════╗
+    ║        ANNOTATED-QUERY       ║
+    ╚══════════════════════════════╝*/
   public Mono<ServerResponse> findByNameQuery(ServerRequest request) {
     String name = request.queryParam("name")
                          .get();
 
     return ok()
          .contentType(JSON)
-         .body(projectService.findProjectByNameQuery(name), Project.class)
+         .body(serviceRepo.findProjectByNameQuery(name), Project.class)
          .log();
   }
 
@@ -217,7 +128,7 @@ public class ProjectHandler {
 
     return ok()
          .contentType(JSON)
-         .body(projectService.findProjectByNameAndCostQuery(name, Long.valueOf(cost)),
+         .body(serviceRepo.findProjectByNameAndCostQuery(name, Long.valueOf(cost)),
                Project.class
               )
          .log();
@@ -233,7 +144,7 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByEstimatedCostBetweenQuery(Long.valueOf(from), Long.valueOf(to)),
+         .body(serviceRepo.findByEstimatedCostBetweenQuery(Long.valueOf(from), Long.valueOf(to)),
                Project.class
               )
          .log();
@@ -248,88 +159,9 @@ public class ProjectHandler {
 
          .contentType(JSON)
 
-         .body(projectService.findByNameRegexQuery(regex), Project.class)
+         .body(serviceRepo.findByNameRegexQuery(regex), Project.class)
          .log();
   }
-
-
-  public Mono<ServerResponse> findProjByNameQueryTempl(ServerRequest request) {
-    String name = request.queryParam("name")
-                         .get();
-    return ok()
-
-         .contentType(JSON)
-
-         .body(projectService.findProjectByNameQueryWithTemplate(name), Project.class)
-         .log();
-  }
-
-
-  public Mono<ServerResponse> findByEstCostBetQueryTempl(ServerRequest request) {
-    String from = request.queryParam("from")
-                         .get();
-    String to = request.queryParam("to")
-                       .get();
-    return ok()
-
-         .contentType(JSON)
-
-         .body(projectService.findByEstimatedCostBetweenQueryWithTemplate(Long.parseLong(from),
-                                                                          Long.parseLong(to)
-                                                                         ),
-               Project.class
-              )
-         .log();
-
-
-  }
-
-
-  public Mono<ServerResponse> findByNameRegexQueryTempl(ServerRequest request) {
-    String name = request.queryParam("name")
-                         .get();
-    String regex = "^" + name + "";
-    return ok()
-
-         .contentType(JSON)
-
-         .body(projectService.findByNameRegexQueryWithTemplate(regex), Project.class)
-         .log();
-
-
-  }
-
-
-  public Mono<ServerResponse> upsertCostWithCritTempl(ServerRequest request) {
-    String id = request.queryParam("id")
-                       .get();
-    String cost = request.queryParam("cost")
-                         .get();
-    return ok()
-
-         .contentType(JSON)
-
-         .body(projectService.upsertCostWithCriteriaTemplate(id, Long.valueOf(cost)), Void.class)
-         .log();
-
-
-  }
-
-
-  public Mono<ServerResponse> deleteCriteriaTempl(ServerRequest request) {
-    String id = request.queryParam("id")
-                       .get();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(projectService.deleteWithCriteriaTemplate(id), Void.class)
-         .log();
-
-
-  }
-
 
   //  public Mono<ServerResponse> findNoOfProjectsCostGreaterThan(ServerRequest request) {
   //    String cost = request.queryParam("cost")

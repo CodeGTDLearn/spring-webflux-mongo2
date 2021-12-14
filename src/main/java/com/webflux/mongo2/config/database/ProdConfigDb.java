@@ -3,9 +3,11 @@ package com.webflux.mongo2.config.database;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 @Profile("prod")
@@ -60,17 +62,16 @@ public class ProdConfigDb extends AbstractReactiveMongoConfiguration {
 
   @Override
   protected String getDatabaseName() {
-
     return database;
   }
 
 
-  //  @Bean
-  //  public ReactiveMongoTemplate reactiveMongoTemplate() {
-  //    return new ReactiveMongoTemplate(reactiveMongoClient(),getDatabaseName());
-  //  }
-  //
-  //
+  @Bean
+  public ReactiveMongoTemplate reactiveRepoTemplate() {
+    return new ReactiveMongoTemplate(reactiveMongoClient(), getDatabaseName());
+  }
+
+
   //  @Bean
   //  ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
   //    return new ReactiveMongoTransactionManager(factory);
