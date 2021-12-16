@@ -2,7 +2,6 @@ package com.webflux.mongo2.config.routes.project;
 
 public final class RoutesRepo {
   public static final String REPO_ROOT = "/project";
-  public static final String REPO_BYNAME = REPO_ROOT + "/find/ByName";
   public static final String REPO_BYNAME_NOT = REPO_ROOT + "/find/ByNameNot";
   public static final String REPO_COST_GREATER = REPO_ROOT + "/find/ByEstimCostGreatThan";
   public static final String REPO_COST_BETW = REPO_ROOT + "/find/ByEstimatedCostBetween";

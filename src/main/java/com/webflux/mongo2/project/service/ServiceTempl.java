@@ -16,24 +16,21 @@ public class ServiceTempl implements IServiceTempl {
   /*╔══════════════════════════════════╗
    ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
    ╚══════════════════════════════════╝*/
-  @Override
-  public Flux<Project> findProjectByNameQueryWithTemplate(String name) {
+  public Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String name) {
 
-    return templ.findProjectByNameQueryWithTemplate(name);
+    return templ.findProjectByNameQueryWithCriteriaTemplate(name);
   }
 
 
-  @Override
-  public Flux<Project> findByEstimatedCostBetweenQueryWithTemplate(Long from, Long to) {
+  public Flux<Project> findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long from, Long to) {
 
-    return templ.findByEstimatedCostBetweenQueryWithTemplate(from, to);
+    return templ.findByEstimatedCostBetweenQueryWithCriteriaTemplate(from, to);
   }
 
 
-  @Override
-  public Flux<Project> findByNameRegexQueryWithTemplate(String regexp) {
+  public Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexp) {
 
-    return templ.findByNameRegexQueryWithTemplate(regexp);
+    return templ.findByNameRegexQueryWithCriteriaTemplate(regexp);
   }
 
 
@@ -48,5 +45,11 @@ public class ServiceTempl implements IServiceTempl {
   public Mono<Void> deleteWithCriteriaTemplate(String id) {
 
     return templ.deleteWithCriteriaTemplate(id);
+  }
+
+  @Override
+  public Mono<Void> deleteWithCriteriaTemplateMult(String id) {
+
+    return templ.deleteWithCriteriaTemplateMult(id);
   }
 }

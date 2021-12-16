@@ -12,8 +12,6 @@ public interface IRepo extends ReactiveMongoRepository<Project, String> {
   /*╔══════════════════════════════╗
     ║     AUTO-GENERATED QUERY     ║
     ╚══════════════════════════════╝*/
-  //{"name" : name}
-  Flux<Project> findByName(String name);
 
   //{"name" : {"$ne" : name}}
   Flux<Project> findByNameNot(String name);

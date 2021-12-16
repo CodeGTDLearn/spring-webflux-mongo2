@@ -14,4 +14,6 @@ public interface IServiceCrud {
   Mono<Project> findById(String id);
 
   Mono<Void> deleteById(String id);
+
+  Flux<Project> findByName(String name);
 }

@@ -2,8 +2,10 @@ package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.service.IServiceCrud;
 import com.webflux.mongo2.project.service.IServiceTempl;
 import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.service.IServiceTask;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -53,7 +55,10 @@ class HandlerTemplTest {
   TestDbUtils dbUtils;
 
   @Autowired
-  IServiceTempl serviceTempl;
+  IServiceCrud serviceCrud;
+
+  @Autowired
+  IServiceTask serviceTask;
 
   private Project project1, project2, project3;
   private Task task1;
@@ -139,8 +144,8 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindProjByNameQueryTempl")
-  public void FindProjByNameQueryTempl() {
+  @DisplayName("FindProjByNameQueryCritTempl")
+  public void FindProjByNameQueryCritTempl() {
 
     RestAssuredWebTestClient
 
@@ -169,8 +174,8 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByEstCostBetQueryTempl")
-  public void FindByEstCostBetQueryTempl() {
+  @DisplayName("FindByEstCostBetQueryCritTempl")
+  public void FindByEstCostBetQueryCritTempl() {
     RestAssuredWebTestClient
 
          .given()
@@ -198,8 +203,8 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameRegexQueryTempl")
-  public void FindByNameRegexQueryTempl() {
+  @DisplayName("FindByNameRegexQueryCritTempl")
+  public void FindByNameRegexQueryCritTempl() {
     RestAssuredWebTestClient
 
          .given()
@@ -249,8 +254,8 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCriteriaTempl")
-  public void DeleteCriteriaTempl() {
+  @DisplayName("DeleteCritTempl")
+  public void DeleteCritTempl() {
     RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
 
     RestAssuredWebTestClient
@@ -268,5 +273,33 @@ class HandlerTemplTest {
 
          .statusCode(OK.value())
     ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(),1);
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("DeleteCritTemplMult")
+  public void DeleteCritTemplMult() {
+    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1.get_id())
+
+         .when()
+         .delete(TEMPL_DEL_CRIT_MULT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(),1);
+    dbUtils.countAndExecuteFlux(serviceTask.findAll(),0);
   }
 }

@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "array",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": [],
+  "examples": [
+    [
+      {
+        "_id": "PPu46kj8u5mv467t296f7rab8m",
+        "projectId": "3",
+        "name": "Rachell Jacobs",
+        "description": "Molestiae eum ex ad eos rerum. Impedit tempore impedit quam est fugit exercitationem quod.",
+        "ownername": "Mark",
+        "cost": 1000,
+        "version": 0
+      }
+    ]
+  ],
+  "additionalItems": true,
+  "items": {
+    "$id": "#/items",
+    "anyOf": [
+      {
+        "$id": "#/items/anyOf/0",
+        "type": "object",
+        "title": "The first anyOf schema",
+        "description": "An explanation about the purpose of this instance.",
+        "default": {},
+        "examples": [
+          {
+            "_id": "PPu46kj8u5mv467t296f7rab8m",
+            "projectId": "3",
+            "name": "Rachell Jacobs",
+            "description": "Molestiae eum ex ad eos rerum. Impedit tempore impedit quam est fugit exercitationem quod.",
+            "ownername": "Mark",
+            "cost": 1000,
+            "version": 0
+          }
+        ],
+        "required": [
+          "_id",
+          "projectId",
+          "name",
+          "description",
+          "ownername",
+          "cost",
+          "version"
+        ],
+        "properties": {
+          "_id": {
+            "$id": "#/items/anyOf/0/properties/_id",
+            "type": "string",
+            "title": "The _id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "PPu46kj8u5mv467t296f7rab8m"
+            ]
+          },
+          "projectId": {
+            "$id": "#/items/anyOf/0/properties/projectId",
+            "type": "string",
+            "title": "The projectId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "3"
+            ]
+          },
+          "name": {
+            "$id": "#/items/anyOf/0/properties/name",
+            "type": "string",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Rachell Jacobs"
+            ]
+          },
+          "description": {
+            "$id": "#/items/anyOf/0/properties/description",
+            "type": "string",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Molestiae eum ex ad eos rerum. Impedit tempore impedit quam est fugit exercitationem quod."
+            ]
+          },
+          "ownername": {
+            "$id": "#/items/anyOf/0/properties/ownername",
+            "type": "string",
+            "title": "The ownername schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Mark"
+            ]
+          },
+          "cost": {
+            "$id": "#/items/anyOf/0/properties/cost",
+            "type": "integer",
+            "title": "The cost schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              1000
+            ]
+          },
+          "version": {
+            "$id": "#/items/anyOf/0/properties/version",
+            "type": "integer",
+            "title": "The version schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              0
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  }
+}

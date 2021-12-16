@@ -21,6 +21,9 @@
         1. Embed Objects
         2. Referencing
         3. _"Assemble"_ full objects
+    3. Example Sources - :
+       1. [Spring Project](https://github.com/spring-projects/spring-data-examples)
+       2. Spring DataMongo
 
 
 3. Application.Yml:
@@ -63,3 +66,27 @@
       3. EXPLANATION:
          1. The ENTITY-VERSION in the UPDATING-OBJECT
          2. must be the same ENTITY-VERSION as the DB-OBJECT
+
+
+6. Architectural Strategy:
+    * SOLID
+    * Screaming Architecture
+    * CDC: Contract driven development
+    * Testability:
+      * TDD/CDC: Controllers
+      * Confirmation: Service
+      * 8. Reactive Queries
+      
+ 
+7. Spring Data  (findPostsByAuthor_Id)
+    1. Queries
+       1. Derivade:
+           1. Simple
+           2. Relationships
+       2. Parameter
+       3. Native
+       4. Criteria
+    2. Examples:
+       1. [SpringaData Project](https://github.com/spring-projects/spring-data-examples)
+       2. [MongoDB](https://github.com/spring-projects/spring-data-examples/tree/main/mongodb)
+       3. [Reactive MongoDB](https://github.com/spring-projects/spring-data-examples/tree/main/mongodb/reactive)

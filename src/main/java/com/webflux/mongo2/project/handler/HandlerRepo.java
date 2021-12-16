@@ -24,22 +24,6 @@ public class HandlerRepo {
   @Autowired
   IServiceRepo serviceRepo;
 
-  /*╔══════════════════════════════╗
-    ║    AUTO-GENERATED-QUERIES    ║
-    ╚══════════════════════════════╝*/
-  public Mono<ServerResponse> findByName(ServerRequest request) {
-    String name = request.queryParam("name")
-                         .get();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(serviceRepo.findByName(name), Project.class)
-         .log();
-  }
-
-
   public Mono<ServerResponse> findByNameNot(ServerRequest request) {
     String name = request.queryParam("name")
                          .get();

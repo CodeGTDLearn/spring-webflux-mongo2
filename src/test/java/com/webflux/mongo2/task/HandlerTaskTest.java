@@ -15,7 +15,8 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.mongo2.config.routes.RoutesTask.TASK_CREATE;
+import static com.webflux.mongo2.config.routes.project.RoutesCrud.PROJ_ROOT;
+import static com.webflux.mongo2.config.routes.task.RoutesTask.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
@@ -24,14 +25,16 @@ import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("TaskHandlerTest")
+@DisplayName("HandlerTaskTest")
 @MergedResource
-class TaskHandlerTest {
+class HandlerTaskTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -48,7 +51,6 @@ class TaskHandlerTest {
   @Autowired
   TestDbUtils dbUtils;
 
-  private Project project1;
   private Task task1;
 
 
@@ -87,11 +89,11 @@ class TaskHandlerTest {
     globalTestMessage(testInfo.getTestMethod()
                               .toString(),"method-start");
 
-    project1 = projectWithID("C",
-                             "2020-05-05",
-                             "2021-05-05",
-                             1000L
-                            ).create();
+    Project project1 = projectWithID("C",
+                                     "2020-05-05",
+                                     "2021-05-05",
+                                     1000L
+                                    ).create();
     Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
     dbUtils.countAndExecuteFlux(projectFlux, 1);
 
@@ -132,6 +134,31 @@ class TaskHandlerTest {
          .body("_id",containsStringIgnoringCase(task1.get_id()))
          .body("projectId",containsStringIgnoringCase(task1.getProjectId()))
          .body(matchesJsonSchemaInClasspath("contracts/task/task.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindAllTask")
+  void FindAllTask() {
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(TASK_FIND_ALL)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("size()", is(1))
+         .body("$", hasSize(1))
+         .body("name", hasItems(task1.getName()))
+
+         .body(matchesJsonSchemaInClasspath("contracts/task/tasks.json"))
     ;
   }
 }

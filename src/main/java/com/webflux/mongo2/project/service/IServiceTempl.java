@@ -7,13 +7,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IServiceTempl {
-  Flux<Project> findProjectByNameQueryWithTemplate(String name);
+  Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String name);
 
-  Flux<Project> findByEstimatedCostBetweenQueryWithTemplate(Long from,Long to);
+  Flux<Project> findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long from, Long to);
 
-  Flux<Project> findByNameRegexQueryWithTemplate(String regexp);
+  Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexp);
 
   Mono<Void> upsertCostWithCriteriaTemplate(String id,Long cost);
 
   Mono<Void> deleteWithCriteriaTemplate(String id);
+
+  Mono<Void> deleteWithCriteriaTemplateMult(String id);
 }

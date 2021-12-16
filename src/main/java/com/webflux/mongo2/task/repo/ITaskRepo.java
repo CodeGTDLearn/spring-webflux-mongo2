@@ -1,4 +1,4 @@
-package com.webflux.mongo2.task;
+package com.webflux.mongo2.task.repo;
 
 
 import com.webflux.mongo2.task.Task;

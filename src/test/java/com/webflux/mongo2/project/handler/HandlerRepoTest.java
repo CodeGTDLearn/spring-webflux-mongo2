@@ -143,36 +143,6 @@ class HandlerRepoTest {
     bhWorks();
   }
 
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByName")
-  public void FindByName() {
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName())
-
-         .when()
-         .get(REPO_BYNAME)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project1.getName()))
-         .body("countryList[0]", hasItems(
-              project1.getCountryList()
-                      .get(0)
-              , project1.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameNot")

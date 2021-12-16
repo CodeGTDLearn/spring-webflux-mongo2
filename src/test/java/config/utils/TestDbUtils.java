@@ -3,7 +3,7 @@ package config.utils;
 import com.webflux.mongo2.project.repo.IRepo;
 import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.task.Task;
-import com.webflux.mongo2.task.ITaskRepo;
+import com.webflux.mongo2.task.repo.ITaskRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;

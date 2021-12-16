@@ -30,6 +30,7 @@ public class Project {
   @Field("cost")
   private long estimatedCost;
 
+  
   private List<String> countryList;
 
   @Version

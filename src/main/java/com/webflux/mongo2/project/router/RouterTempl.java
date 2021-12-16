@@ -24,19 +24,24 @@ public class RouterTempl {
 
     return RouterFunctions
          .route(GET(TEMPL_BYNAME).and(accept(JSON)),
-                handler::findProjByNameQueryTempl
+                handler::findProjByNameQueryCritTempl
                )
          .andRoute(GET(TEMPL_EST_COST_BET).and(accept(JSON)),
-                   handler::findByEstCostBetQueryTempl
+                   handler::findByEstCostBetQueryCritTempl
                   )
          .andRoute(GET(TEMPL_BYNAME_REG).and(accept(JSON)),
-                   handler::findByNameRegexQueryTempl
+                   handler::findByNameRegexQueryCritTempl
                   )
          .andRoute(PUT(TEMPL_UPSERT_CRIT).and(accept(JSON)),
                    handler::upsertCostWithCritTempl
                   )
          .andRoute(DELETE(TEMPL_DEL_CRIT).and(accept(JSON)),
-                   handler::deleteCriteriaTempl
-                  );
+                   handler::deleteCritTempl
+                  )
+         .andRoute(DELETE(TEMPL_DEL_CRIT_MULT).and(accept(JSON)),
+                   handler::deleteCritTemplMult
+                  )
+
+         ;
   }
 }

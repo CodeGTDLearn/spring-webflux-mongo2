@@ -9,5 +9,9 @@ import reactor.core.publisher.Flux;
 
 @Repository("crud")
 public interface ICrud extends ReactiveCrudRepository<Project, String> {
-
+  /*╔══════════════════════════════╗
+    ║     AUTO-GENERATED QUERY     ║
+    ╚══════════════════════════════╝*/
+  //{"name" : name}
+  Flux<Project> findByName(String name);
 }

@@ -1,6 +1,8 @@
 package com.webflux.mongo2.project.repo;
 
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.repo.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -18,11 +20,14 @@ public class Templ {
   @Autowired
   ReactiveMongoTemplate template;
 
+  @Autowired
+  ITaskRepo taskRepo;
+
   /*╔══════════════════════════════════╗
     ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
     ╚══════════════════════════════════╝*/
 
-  public Flux<Project> findProjectByNameQueryWithTemplate(String name) {
+  public Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String name) {
 
     Query query = new Query();
     query.addCriteria(Criteria.where("name")
@@ -33,7 +38,7 @@ public class Templ {
   }
 
 
-  public Flux<Project> findByEstimatedCostBetweenQueryWithTemplate(Long from, Long to) {
+  public Flux<Project> findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long from, Long to) {
 
     Query query = new Query();
 
@@ -47,7 +52,7 @@ public class Templ {
   }
 
 
-  public Flux<Project> findByNameRegexQueryWithTemplate(String regexp) {
+  public Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexp) {
 
     Query query = new Query();
     query.addCriteria(Criteria.where("name")
@@ -81,5 +86,25 @@ public class Templ {
 
     return template.remove(query, Project.class)
                    .then();
+  }
+
+
+  public Mono<Void> deleteWithCriteriaTemplateMult(String id) {
+
+    Query projectDocument = new Query();
+    projectDocument.addCriteria(Criteria.where("_id")
+                                             .is(id));
+
+    Query taskDocument = new Query();
+    taskDocument.addCriteria(Criteria.where("projectId")
+                                          .is(id));
+
+
+    return template
+         .remove(projectDocument, Project.class)
+         .then()
+         .then(template.remove(taskDocument, Task.class))
+         .then()
+         ;
   }
 }

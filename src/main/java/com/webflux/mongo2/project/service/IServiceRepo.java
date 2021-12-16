@@ -15,8 +15,6 @@ public interface IServiceRepo {
 
   Mono<Void> deleteById(String id);
 
-  Flux<Project> findByName(String name);
-
   Flux<Project> findByNameNot(String name);
 
   Flux<Project> findByEstimatedCostGreaterThan(Long cost);

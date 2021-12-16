@@ -23,7 +23,7 @@ public class HandlerTempl {
   @Autowired
   IServiceTempl serviceTempl;
 
-  public Mono<ServerResponse> findProjByNameQueryTempl(ServerRequest request) {
+  public Mono<ServerResponse> findProjByNameQueryCritTempl(ServerRequest request) {
 
     String name = request.queryParam("name")
                          .get();
@@ -31,12 +31,12 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.findProjectByNameQueryWithTemplate(name), Project.class)
+         .body(serviceTempl.findProjectByNameQueryWithCriteriaTemplate(name), Project.class)
          .log();
   }
 
 
-  public Mono<ServerResponse> findByEstCostBetQueryTempl(ServerRequest request) {
+  public Mono<ServerResponse> findByEstCostBetQueryCritTempl(ServerRequest request) {
 
     String from = request.queryParam("from")
                          .get();
@@ -46,9 +46,9 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.findByEstimatedCostBetweenQueryWithTemplate(Long.parseLong(from),
-                                                                        Long.parseLong(to)
-                                                                       ),
+         .body(serviceTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long.parseLong(from),
+                                                                                Long.parseLong(to)
+                                                                               ),
                Project.class
               )
          .log();
@@ -57,19 +57,18 @@ public class HandlerTempl {
   }
 
 
-  public Mono<ServerResponse> findByNameRegexQueryTempl(ServerRequest request) {
+  public Mono<ServerResponse> findByNameRegexQueryCritTempl(ServerRequest request) {
 
     String name = request.queryParam("name")
                          .get();
+
     String regex = "^" + name + "";
     return ok()
 
          .contentType(JSON)
 
-         .body(serviceTempl.findByNameRegexQueryWithTemplate(regex), Project.class)
+         .body(serviceTempl.findByNameRegexQueryWithCriteriaTemplate(regex), Project.class)
          .log();
-
-
   }
 
 
@@ -94,7 +93,7 @@ public class HandlerTempl {
   }
 
 
-  public Mono<ServerResponse> deleteCriteriaTempl(ServerRequest request) {
+  public Mono<ServerResponse> deleteCritTempl(ServerRequest request) {
 
     String id = request.queryParam("id")
                        .get();
@@ -108,4 +107,21 @@ public class HandlerTempl {
 
 
   }
+
+  public Mono<ServerResponse> deleteCritTemplMult(ServerRequest request) {
+
+    String id = request.queryParam("id")
+                       .get();
+
+    return ok()
+
+         .contentType(JSON)
+
+         .body(serviceTempl.deleteWithCriteriaTemplateMult(id), Void.class)
+         .log();
+
+
+  }
+
+
 }

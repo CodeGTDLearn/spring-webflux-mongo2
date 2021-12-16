@@ -9,7 +9,12 @@ logging:
   level:
     org:
       springframework:
+        cache: TRACE
         web: DEBUG
+        data:
+          mongodb:
+            core:
+              ReactiveMongoTemplates: DEBUG
   pattern:
     console: >
       %clr(%d{yyyy-MM-dd }){magenta}

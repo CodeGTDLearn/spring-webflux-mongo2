@@ -24,10 +24,11 @@ public class RouterCrud {
 
     return RouterFunctions
          .route(POST(CRUD_CREATE).and(accept(JSON)), handler::createProject)
-         .andRoute(GET(CRUD_ROOT).and(accept(JSON)), handler::findAll)
+         .andRoute(GET(PROJ_ROOT).and(accept(JSON)), handler::findAll)
          .andRoute(GET(CRUD_ID).and(accept(JSON)), handler::findById)
          .andRoute(DELETE(CRUD_ID).and(accept(JSON)), handler::delete)
          .andRoute(PUT(CRUD_UPD).and(accept(JSON)), handler::update)
+         .andRoute(GET(CRUD_BYNAME).and(accept(JSON)), handler::findByName)
          ;
   }
 }

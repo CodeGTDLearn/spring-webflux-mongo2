@@ -24,8 +24,7 @@ public class RouterRepo {
   public RouterFunction<ServerResponse> routesRepo(HandlerRepo handler) {
 
     return RouterFunctions
-         .route(GET(REPO_BYNAME).and(accept(JSON)), handler::findByName)
-         .andRoute(GET(REPO_BYNAME_NOT).and(accept(JSON)), handler::findByNameNot)
+         .route(GET(REPO_BYNAME_NOT).and(accept(JSON)), handler::findByNameNot)
          .andRoute(GET(REPO_COST_GREATER).and(accept(JSON)),
                    handler::findByEstimCostGreatThan
                   )
