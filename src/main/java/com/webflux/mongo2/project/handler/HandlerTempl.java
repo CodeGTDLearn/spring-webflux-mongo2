@@ -1,6 +1,7 @@
 package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.ProjectChild;
 import com.webflux.mongo2.project.service.IServiceTempl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -35,7 +36,6 @@ public class HandlerTempl {
          .log();
   }
 
-
   public Mono<ServerResponse> findByEstCostBetQueryCritTempl(ServerRequest request) {
 
     String from = request.queryParam("from")
@@ -46,16 +46,16 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long.parseLong(from),
-                                                                                Long.parseLong(to)
-                                                                               ),
-               Project.class
+         .body(
+              serviceTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long.parseLong(from),
+                                                                               Long.parseLong(to)
+                                                                              ),
+              Project.class
               )
          .log();
 
 
   }
-
 
   public Mono<ServerResponse> findByNameRegexQueryCritTempl(ServerRequest request) {
 
@@ -71,8 +71,7 @@ public class HandlerTempl {
          .log();
   }
 
-
-  public Mono<ServerResponse> upsertCostWithCritTempl(ServerRequest request) {
+  public Mono<ServerResponse> UpdateCostWithCritTemplUpsert(ServerRequest request) {
 
     String id = request.queryParam("id")
                        .get();
@@ -84,7 +83,7 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.upsertCostWithCriteriaTemplate(id, Long.valueOf(cost)),
+         .body(serviceTempl.UpdateCostWithCritTemplUpsert(id, Long.valueOf(cost)),
                Void.class
               )
          .log();
@@ -92,6 +91,45 @@ public class HandlerTempl {
 
   }
 
+  public Mono<ServerResponse> UpdateCountryListWithCritTemplUpsertArray(ServerRequest request) {
+
+    String id = request.queryParam("id")
+                       .get();
+
+    String country = request.queryParam("country")
+                            .get();
+
+    return ok()
+
+         .contentType(JSON)
+
+         .body(serviceTempl.UpdateCountryListWithCritTemplUpsertArray(id, country),
+               Project.class
+              )
+         .log();
+
+
+  }
+
+  public Mono<ServerResponse> UpdateCountryListWithCritTemplUpsertChild(ServerRequest request) {
+
+    String id = request.queryParam("id")
+                       .get();
+
+    String ownername = request.queryParam("ownername")
+                            .get();
+
+    return ok()
+
+         .contentType(JSON)
+
+         .body(serviceTempl.UpdateCountryListWithCritTemplUpsertChild(id, ownername),
+               ProjectChild.class
+              )
+         .log();
+
+
+  }
 
   public Mono<ServerResponse> deleteCritTempl(ServerRequest request) {
 

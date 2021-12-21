@@ -33,7 +33,13 @@ public class RouterTempl {
                    handler::findByNameRegexQueryCritTempl
                   )
          .andRoute(PUT(TEMPL_UPSERT_CRIT).and(accept(JSON)),
-                   handler::upsertCostWithCritTempl
+                   handler::UpdateCostWithCritTemplUpsert
+                  )
+         .andRoute(PUT(TEMPL_UPSERT_ARRAY_CRIT).and(accept(JSON)),
+                   handler::UpdateCountryListWithCritTemplUpsertArray
+                  )
+         .andRoute(PUT(TEMPL_UPSERT_CHILD_CRIT).and(accept(JSON)),
+                   handler::UpdateCountryListWithCritTemplUpsertChild
                   )
          .andRoute(DELETE(TEMPL_DEL_CRIT).and(accept(JSON)),
                    handler::deleteCritTempl

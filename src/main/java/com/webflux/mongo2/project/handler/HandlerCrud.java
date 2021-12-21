@@ -35,7 +35,7 @@ public class HandlerCrud {
 
     return
          project
-              .flatMap(serviceCrud::createProject)
+              .flatMap(serviceCrud::save)
               .flatMap(data ->
                             ok()
                                  .contentType(JSON)
@@ -59,7 +59,7 @@ public class HandlerCrud {
 
     return
          project
-              .flatMap(serviceCrud::createProject)
+              .flatMap(serviceCrud::save)
               .flatMap(data ->
                             ok()
                                  .contentType(JSON)

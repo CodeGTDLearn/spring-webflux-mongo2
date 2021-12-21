@@ -140,8 +140,8 @@ class HandlerCrudTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("CreateProject")
-  public void CreateProject() {
+  @DisplayName("save")
+  public void save() {
 
     RestAssuredWebTestClient
          .given()

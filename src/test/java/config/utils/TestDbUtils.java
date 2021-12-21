@@ -1,7 +1,9 @@
 package config.utils;
 
+import com.webflux.mongo2.project.ProjectChild;
 import com.webflux.mongo2.project.repo.IRepo;
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.repo.IRepoProjectChild;
 import com.webflux.mongo2.task.Task;
 import com.webflux.mongo2.task.repo.ITaskRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +21,10 @@ public class TestDbUtils {
   IRepo projectRepo;
 
   @Autowired
-  ITaskRepo taskRepo;
+  IRepoProjectChild repoChild;
 
+  @Autowired
+  ITaskRepo taskRepo;
 
   public <E> void countAndExecuteFlux(Flux<E> flux, int totalElements) {
     StepVerifier
@@ -29,7 +33,6 @@ public class TestDbUtils {
          .expectNextCount(totalElements)
          .verifyComplete();
   }
-
 
   public Flux<Project> saveProjectList(List<Project> projectList) {
     return projectRepo.deleteAll()
@@ -40,6 +43,14 @@ public class TestDbUtils {
                            "\n--> Saved 'Project' in DB: \n    --> " + item.toString() + "\n"));
   }
 
+  public Flux<ProjectChild> saveProjectChildList(List<ProjectChild> projectList) {
+    return repoChild.deleteAll()
+                      .thenMany(Flux.fromIterable(projectList))
+                      .flatMap(repoChild::save)
+                      .doOnNext(item -> repoChild.findAll())
+                      .doOnNext(item -> System.out.println(
+                           "\n--> Saved 'ProjectChild' in DB: \n    --> " + item.toString() + "\n"));
+  }
 
   public Flux<Task> saveTaskList(List<Task> taskList) {
     return taskRepo.deleteAll()
@@ -51,7 +62,6 @@ public class TestDbUtils {
          ;
   }
 
-
   public <E> void checkFluxListElements(Flux<E> listFlux, List<E> listCompare) {
     StepVerifier.create(listFlux)
                 .recordWith(ArrayList::new)
@@ -59,7 +69,6 @@ public class TestDbUtils {
                 .thenConsumeWhile(listCompare::equals)
                 .verifyComplete();
   }
-
 
   public void cleanTestDb() {
     StepVerifier

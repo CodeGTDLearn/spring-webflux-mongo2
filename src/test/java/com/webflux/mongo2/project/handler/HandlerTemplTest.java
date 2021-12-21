@@ -2,11 +2,12 @@ package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
 import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.ProjectChild;
 import com.webflux.mongo2.project.service.IServiceCrud;
-import com.webflux.mongo2.project.service.IServiceTempl;
 import com.webflux.mongo2.task.Task;
 import com.webflux.mongo2.task.service.IServiceTask;
 import config.annotations.MergedResource;
+import config.databuilders.ProjectChildBuilder;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -19,6 +20,7 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.webflux.mongo2.config.routes.project.RoutesTempl.*;
@@ -61,8 +63,10 @@ class HandlerTemplTest {
   IServiceTask serviceTask;
 
   private Project project1, project2, project3;
-  private Task task1;
+  private Task task1, task2;
+  private ProjectChild project1Child;
   private List<Project> projectList;
+  private List<ProjectChild> projectChildList;
 
 
   @BeforeAll
@@ -129,8 +133,23 @@ class HandlerTemplTest {
                        "Mark",
                        1000L
                       ).create();
+    task2 = taskWithID("4",
+                       "Mark Zuck",
+                       7000L
+                      ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
+
     dbUtils.countAndExecuteFlux(taskFlux, 1);
+
+    project1Child = ProjectChildBuilder.projectChildWithID("D",
+                                                           "2022-07-07",
+                                                           "2023-07-07",
+                                                           4000L,
+                                                           Arrays.asList(task1,task2)).create();
+    projectChildList = List.of(project1Child);
+    Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
+    dbUtils.countAndExecuteFlux(projectChildFlux, 1);
+
   }
 
 
@@ -176,6 +195,7 @@ class HandlerTemplTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByEstCostBetQueryCritTempl")
   public void FindByEstCostBetQueryCritTempl() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -205,11 +225,13 @@ class HandlerTemplTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameRegexQueryCritTempl")
   public void FindByNameRegexQueryCritTempl() {
+
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName().substring(0,3))
+         .queryParam("name", project1.getName()
+                                     .substring(0, 3))
 
          .when()
          .get(TEMPL_BYNAME_REG)
@@ -231,8 +253,9 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpsertCostWithCritTempl")
-  public void UpsertCostWithCritTempl() {
+  @DisplayName("UpdateCostWithCritTemplUpsert")
+  public void UpdateCostWithCritTemplUpsert() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -254,9 +277,80 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateCountryListWithCritTemplUpsertArray")
+  public void UpdateCountryListWithCritTemplUpsertArray() {
+
+    var newCountry = "BR";
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1.get_id())
+         .queryParam("country", newCountry)
+         .body(project1)
+
+         .when()
+         .put(TEMPL_UPSERT_ARRAY_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id", containsStringIgnoringCase(project1.get_id()))
+         .body("countryList", hasItems(
+              project1.getCountryList()
+                      .get(0)
+              , project1.getCountryList()
+                        .get(1)
+              , newCountry))
+         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateCountryListWithCritTemplUpsertChild")
+  public void UpdateCountryListWithCritTemplUpsertChild() {
+
+    var ownername = "Pauleta";
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1Child.get_id())
+         .queryParam("ownername", ownername)
+         .body(project1Child)
+
+         .when()
+         .put(TEMPL_UPSERT_CHILD_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id", containsStringIgnoringCase(project1Child.get_id()))
+//         .body("countryList", hasItems(
+//              project1.getCountryList()
+//                      .get(0)
+//              , project1.getCountryList()
+//                        .get(1)
+//              , ownername))
+//         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("DeleteCritTempl")
   public void DeleteCritTempl() {
+
     RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
 
     RestAssuredWebTestClient
 
@@ -274,14 +368,18 @@ class HandlerTemplTest {
          .statusCode(OK.value())
     ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(),1);
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
   }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("DeleteCritTemplMult")
   public void DeleteCritTemplMult() {
+
     RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(serviceTask.findAll(), 1);
 
     RestAssuredWebTestClient
 
@@ -299,7 +397,7 @@ class HandlerTemplTest {
          .statusCode(OK.value())
     ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(),1);
-    dbUtils.countAndExecuteFlux(serviceTask.findAll(),0);
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
+    //    dbUtils.countAndExecuteFlux(serviceTask.findAll(),0);
   }
 }

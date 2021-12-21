@@ -80,7 +80,7 @@
  
 7. Spring Data  (findPostsByAuthor_Id)
     1. Queries
-       1. Derivade:
+       1. Derived:
            1. Simple
            2. Relationships
        2. Parameter

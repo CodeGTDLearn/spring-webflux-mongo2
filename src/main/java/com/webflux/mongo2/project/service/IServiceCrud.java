@@ -7,7 +7,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IServiceCrud {
-  Mono<Project> createProject(Project project);
+  Mono<Project> save(Project project);
+
+  Mono<Project> update(Project project);
 
   Flux<Project> findAll();
 

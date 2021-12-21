@@ -18,11 +18,16 @@ public class ServiceCrud implements IServiceCrud {
     ║   REACTIVE-MONGO-REPOSITORY  ║
     ╚══════════════════════════════╝*/
   @Override
-  public Mono<Project> createProject(Project project) {
+  public Mono<Project> save(Project project) {
 
     return crud.save(project);
   }
 
+  @Override
+  public Mono<Project> update(Project project) {
+
+    return crud.save(project);
+  }
 
   @Override
   public Flux<Project> findAll() {
