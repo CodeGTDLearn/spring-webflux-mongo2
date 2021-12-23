@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.util.annotation.NonNull;
 
-import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 // HANDLER: Manage HTTP(Resquests/responses)
@@ -24,7 +24,9 @@ public class HandlerRepo {
   @Autowired
   IServiceRepo serviceRepo;
 
+  @NonNull
   public Mono<ServerResponse> findByNameNot(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
 
@@ -37,8 +39,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByEstimCostGreatThan(ServerRequest request) {
+
     String cost = request.queryParam("cost")
                          .get();
 
@@ -50,8 +53,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByEstimatedCostBetween(ServerRequest request) {
+
     String from = request.queryParam("from")
                          .get();
     String to = request.queryParam("to")
@@ -65,8 +69,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByNameLike(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
 
@@ -76,8 +81,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByNameRegex(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
 
@@ -93,7 +99,9 @@ public class HandlerRepo {
   /*╔══════════════════════════════╗
     ║        ANNOTATED-QUERY       ║
     ╚══════════════════════════════╝*/
+  @NonNull
   public Mono<ServerResponse> findByNameQuery(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
 
@@ -103,8 +111,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByNameAndCostQuery(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
     String cost = request.queryParam("cost")
@@ -118,8 +127,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByEstCostBetwQuery(ServerRequest request) {
+
     String from = request.queryParam("from")
                          .get();
     String to = request.queryParam("to")
@@ -134,8 +144,9 @@ public class HandlerRepo {
          .log();
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findByNameRegexQuery(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
     String regex = "^" + name + "";

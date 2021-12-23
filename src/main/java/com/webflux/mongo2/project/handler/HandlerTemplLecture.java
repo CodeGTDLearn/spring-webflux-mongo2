@@ -1,14 +1,14 @@
 package com.webflux.mongo2.project.handler;
 
 import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.ProjectChild;
-import com.webflux.mongo2.project.service.IServiceTempl;
+import com.webflux.mongo2.project.service.IServiceTemplLecture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.util.annotation.NonNull;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -16,14 +16,15 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 //HANDLER:
 // A) HANDLER receive the message from ROUTERED
 // B) and, send this message for SERVICE
-@Component("handlerTempl")
-public class HandlerTempl {
+@Component("handlerTemplLecture")
+public class HandlerTemplLecture {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  IServiceTempl serviceTempl;
+  IServiceTemplLecture serviceTemplLecture;
 
+  @NonNull
   public Mono<ServerResponse> findProjByNameQueryCritTempl(ServerRequest request) {
 
     String name = request.queryParam("name")
@@ -32,10 +33,11 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.findProjectByNameQueryWithCriteriaTemplate(name), Project.class)
+         .body(serviceTemplLecture.findProjectByNameQueryWithCriteriaTemplate(name), Project.class)
          .log();
   }
 
+  @NonNull
   public Mono<ServerResponse> findByEstCostBetQueryCritTempl(ServerRequest request) {
 
     String from = request.queryParam("from")
@@ -47,9 +49,10 @@ public class HandlerTempl {
          .contentType(JSON)
 
          .body(
-              serviceTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long.parseLong(from),
-                                                                               Long.parseLong(to)
-                                                                              ),
+              serviceTemplLecture.findByEstimatedCostBetweenQueryWithCriteriaTemplate(
+                   Long.parseLong(from),
+                   Long.parseLong(to)
+                                                                                     ),
               Project.class
               )
          .log();
@@ -57,6 +60,7 @@ public class HandlerTempl {
 
   }
 
+  @NonNull
   public Mono<ServerResponse> findByNameRegexQueryCritTempl(ServerRequest request) {
 
     String name = request.queryParam("name")
@@ -67,10 +71,11 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.findByNameRegexQueryWithCriteriaTemplate(regex), Project.class)
+         .body(serviceTemplLecture.findByNameRegexQueryWithCriteriaTemplate(regex), Project.class)
          .log();
   }
 
+  @NonNull
   public Mono<ServerResponse> UpdateCostWithCritTemplUpsert(ServerRequest request) {
 
     String id = request.queryParam("id")
@@ -83,7 +88,7 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.UpdateCostWithCritTemplUpsert(id, Long.valueOf(cost)),
+         .body(serviceTemplLecture.UpdateCostWithCritTemplUpsert(id, Long.valueOf(cost)),
                Void.class
               )
          .log();
@@ -91,46 +96,7 @@ public class HandlerTempl {
 
   }
 
-  public Mono<ServerResponse> UpdateCountryListWithCritTemplUpsertArray(ServerRequest request) {
-
-    String id = request.queryParam("id")
-                       .get();
-
-    String country = request.queryParam("country")
-                            .get();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(serviceTempl.UpdateCountryListWithCritTemplUpsertArray(id, country),
-               Project.class
-              )
-         .log();
-
-
-  }
-
-  public Mono<ServerResponse> UpdateCountryListWithCritTemplUpsertChild(ServerRequest request) {
-
-    String id = request.queryParam("id")
-                       .get();
-
-    String ownername = request.queryParam("ownername")
-                            .get();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(serviceTempl.UpdateCountryListWithCritTemplUpsertChild(id, ownername),
-               ProjectChild.class
-              )
-         .log();
-
-
-  }
-
+  @NonNull
   public Mono<ServerResponse> deleteCritTempl(ServerRequest request) {
 
     String id = request.queryParam("id")
@@ -140,26 +106,9 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTempl.deleteWithCriteriaTemplate(id), Void.class)
+         .body(serviceTemplLecture.deleteWithCriteriaTemplate(id), Void.class)
          .log();
 
 
   }
-
-  public Mono<ServerResponse> deleteCritTemplMult(ServerRequest request) {
-
-    String id = request.queryParam("id")
-                       .get();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(serviceTempl.deleteWithCriteriaTemplateMult(id), Void.class)
-         .log();
-
-
-  }
-
-
 }

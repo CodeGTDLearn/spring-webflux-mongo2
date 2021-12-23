@@ -28,7 +28,35 @@ public class ProjectBuilder {
        String code,
        String startDate,
        String endDate,
-       Long estimatedCost) {
+       Long estimatedCost,
+      List<String> countryList) {
+
+    Project proj = new Project();
+
+//    proj.set_id(createFakeUniqueRandomId());
+    proj.setName(faker.name()
+                      .fullName());
+
+    proj.setCode(faker.letterify(code));
+    proj.setDescription(faker.lorem()
+                             .paragraph(2));
+    proj.setStartDate(startDate);
+    proj.setEndDate(endDate);
+    proj.setEstimatedCost(estimatedCost);
+    proj.setCountryList(countryList);
+//    proj.setVersion(0L);
+
+    return ProjectBuilder.builder()
+                         .project(proj)
+                         .build();
+  }
+
+  public static ProjectBuilder projectNoID(
+       String code,
+       String startDate,
+       String endDate,
+       Long estimatedCost,
+       List<String> countryList) {
 
     Project proj = new Project();
 
@@ -42,7 +70,8 @@ public class ProjectBuilder {
     proj.setStartDate(startDate);
     proj.setEndDate(endDate);
     proj.setEstimatedCost(estimatedCost);
-    proj.setCountryList(List.of("UK","USA"));
+    proj.setCountryList(countryList);
+//    proj.setVersion(0L);
 
     return ProjectBuilder.builder()
                          .project(proj)

@@ -30,6 +30,7 @@ import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static java.util.List.of;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -98,19 +99,22 @@ class HandlerRepoTest {
     project1 = projectWithID("C",
                              "2020-05-05",
                              "2021-05-05",
-                             1000L
+                             1000L,
+                             of("UK", "USA")
                             ).create();
 
     project2 = projectWithID("B",
                              "2020-06-06",
                              "2021-06-06",
-                             2000L
+                             2000L,
+                             of("UK", "USA")
                             ).create();
 
     project3 = projectWithID("B",
                              "2020-07-07",
                              "2021-07-07",
-                             3000L
+                             3000L,
+                             of("UK", "USA")
                             ).create();
 
     projectList = asList(project1, project2);

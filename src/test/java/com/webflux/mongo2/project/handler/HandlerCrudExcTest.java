@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.webflux.mongo2.config.routes.project.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
@@ -28,6 +29,7 @@ import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
+import static java.util.List.*;
 import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
@@ -96,13 +98,15 @@ class HandlerCrudExcTest {
     project1 = projectWithID("C",
                              "2020-05-05",
                              "2021-05-05",
-                             1000L
+                             1000L,
+                             of("UK", "USA")
                             ).create();
 
     project2 = projectWithID("B",
                              "2020-06-06",
                              "2021-06-06",
-                             2000L
+                             2000L,
+                             of("UK", "USA")
                             ).create();
     Flux<Project> projectFlux = dbUtils.saveProjectList(Arrays.asList(project1,project2));
     dbUtils.countAndExecuteFlux(projectFlux, 2);

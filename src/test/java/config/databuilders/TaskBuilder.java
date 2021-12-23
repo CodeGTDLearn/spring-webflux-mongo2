@@ -36,6 +36,7 @@ public class TaskBuilder {
                              .paragraph(2));
     task.setOwnername(ownerName);
     task.setCost(cost);
+//    task.setVersion(0L);
 
     return TaskBuilder.builder()
                       .task(task)

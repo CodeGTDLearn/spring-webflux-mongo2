@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.util.annotation.NonNull;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.notFound;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -28,6 +29,7 @@ public class HandlerCrud {
   /*╔══════════════════════════════╗
     ║   REACTIVE-MONGO-REPOSITORY  ║
     ╚══════════════════════════════╝*/
+  @NonNull
   public Mono<ServerResponse> createProject(ServerRequest request) {
 
     // convert/abstracting JSON to Entity
@@ -51,7 +53,7 @@ public class HandlerCrud {
          ;
   }
 
-
+  @NonNull
   public Mono<ServerResponse> update(ServerRequest request) {
 
     // convert/abstracting JSON to Entity
@@ -75,15 +77,16 @@ public class HandlerCrud {
          ;
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findAll(ServerRequest request) {
+
     return
          ok()
               .contentType(JSON)
               .body(serviceCrud.findAll(), Project.class);
   }
 
-
+  @NonNull
   public Mono<ServerResponse> findById(ServerRequest request) {
 
     String id = request.pathVariable("id");
@@ -98,7 +101,7 @@ public class HandlerCrud {
                                   .build());
   }
 
-
+  @NonNull
   public Mono<ServerResponse> delete(ServerRequest request) {
 
     String id = request.pathVariable("id");
@@ -125,7 +128,9 @@ public class HandlerCrud {
   /*╔══════════════════════════════╗
   ║    AUTO-GENERATED-QUERIES    ║
   ╚══════════════════════════════╝*/
+  @NonNull
   public Mono<ServerResponse> findByName(ServerRequest request) {
+
     String name = request.queryParam("name")
                          .get();
 

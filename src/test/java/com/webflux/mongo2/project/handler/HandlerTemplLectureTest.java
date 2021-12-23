@@ -33,13 +33,14 @@ import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static java.util.List.of;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("HandlerTemplTest")
+@DisplayName("HandlerTemplLectureTest")
 @MergedResource
-class HandlerTemplTest {
+class HandlerTemplLectureTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -109,19 +110,22 @@ class HandlerTemplTest {
     project1 = projectWithID("C",
                              "2020-05-05",
                              "2021-05-05",
-                             1000L
+                             1000L,
+                             of("UK", "USA")
                             ).create();
 
     project2 = projectWithID("B",
                              "2020-06-06",
                              "2021-06-06",
-                             2000L
+                             2000L,
+                             of("UK", "USA")
                             ).create();
 
     project3 = projectWithID("B",
                              "2020-07-07",
                              "2021-07-07",
-                             3000L
+                             3000L,
+                             of("UK", "USA")
                             ).create();
 
     projectList = asList(project1, project2);
@@ -145,7 +149,9 @@ class HandlerTemplTest {
                                                            "2022-07-07",
                                                            "2023-07-07",
                                                            4000L,
-                                                           Arrays.asList(task1,task2)).create();
+                                                           Arrays.asList(task1, task2)
+                                                          )
+                                       .create();
     projectChildList = List.of(project1Child);
     Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
     dbUtils.countAndExecuteFlux(projectChildFlux, 1);
@@ -277,74 +283,6 @@ class HandlerTemplTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateCountryListWithCritTemplUpsertArray")
-  public void UpdateCountryListWithCritTemplUpsertArray() {
-
-    var newCountry = "BR";
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
-         .queryParam("country", newCountry)
-         .body(project1)
-
-         .when()
-         .put(TEMPL_UPSERT_ARRAY_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1.get_id()))
-         .body("countryList", hasItems(
-              project1.getCountryList()
-                      .get(0)
-              , project1.getCountryList()
-                        .get(1)
-              , newCountry))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateCountryListWithCritTemplUpsertChild")
-  public void UpdateCountryListWithCritTemplUpsertChild() {
-
-    var ownername = "Pauleta";
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1Child.get_id())
-         .queryParam("ownername", ownername)
-         .body(project1Child)
-
-         .when()
-         .put(TEMPL_UPSERT_CHILD_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1Child.get_id()))
-//         .body("countryList", hasItems(
-//              project1.getCountryList()
-//                      .get(0)
-//              , project1.getCountryList()
-//                        .get(1)
-//              , ownername))
-//         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("DeleteCritTempl")
   public void DeleteCritTempl() {
 
@@ -371,33 +309,4 @@ class HandlerTemplTest {
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
   }
 
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCritTemplMult")
-  public void DeleteCritTemplMult() {
-
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(serviceTask.findAll(), 1);
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
-
-         .when()
-         .delete(TEMPL_DEL_CRIT_MULT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-    ;
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
-    //    dbUtils.countAndExecuteFlux(serviceTask.findAll(),0);
-  }
 }

@@ -27,6 +27,7 @@ import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
@@ -92,7 +93,8 @@ class HandlerTaskTest {
     Project project1 = projectWithID("C",
                                      "2020-05-05",
                                      "2021-05-05",
-                                     1000L
+                                     1000L,
+                                     of("UK", "USA")
                                     ).create();
     Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
     dbUtils.countAndExecuteFlux(projectFlux, 1);

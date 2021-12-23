@@ -1,6 +1,6 @@
 package com.webflux.mongo2.project.router;
 
-import com.webflux.mongo2.project.handler.HandlerTempl;
+import com.webflux.mongo2.project.handler.HandlerTemplLecture;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -15,12 +15,12 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 // A) Define app routes/end-points
 // B) EventLoop read this Router, and send the Message for the Handler
 @Configuration
-public class RouterTempl {
+public class RouterTemplLecture {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Bean
-  public RouterFunction<ServerResponse> routesTempl(HandlerTempl handler) {
+  public RouterFunction<ServerResponse> routesLecture(HandlerTemplLecture handler) {
 
     return RouterFunctions
          .route(GET(TEMPL_BYNAME).and(accept(JSON)),
@@ -35,19 +35,9 @@ public class RouterTempl {
          .andRoute(PUT(TEMPL_UPSERT_CRIT).and(accept(JSON)),
                    handler::UpdateCostWithCritTemplUpsert
                   )
-         .andRoute(PUT(TEMPL_UPSERT_ARRAY_CRIT).and(accept(JSON)),
-                   handler::UpdateCountryListWithCritTemplUpsertArray
-                  )
-         .andRoute(PUT(TEMPL_UPSERT_CHILD_CRIT).and(accept(JSON)),
-                   handler::UpdateCountryListWithCritTemplUpsertChild
-                  )
          .andRoute(DELETE(TEMPL_DEL_CRIT).and(accept(JSON)),
                    handler::deleteCritTempl
                   )
-         .andRoute(DELETE(TEMPL_DEL_CRIT_MULT).and(accept(JSON)),
-                   handler::deleteCritTemplMult
-                  )
-
          ;
   }
 }
