@@ -23,8 +23,17 @@ public class RouterTemplAdvanced {
   public RouterFunction<ServerResponse> routesAdvanced(HandlerTemplAdvanced handler) {
 
     return RouterFunctions
-         .route(PUT(TEMPL_UPD_ARRAY_CRIT).and(accept(JSON)),
-                   handler::UpdateCritTemplArray
+         .route(PUT(TEMPL_ADD_ARRAY_CRIT).and(accept(JSON)),
+                handler::AddCritTemplArray
+               )
+         .andRoute(PUT(TEMPL_UPD_ARRAY_CRIT).and(accept(JSON)),
+                   handler::updateCritTemplArray
+                  )
+         .andRoute(PUT(TEMPL_DEL_ARRAY_CRIT).and(accept(JSON)),
+                   handler::DeleteCritTemplArray
+                  )
+         .andRoute(PUT(TEMPL_ADD_CHILD_CRIT).and(accept(JSON)),
+                   handler::AddCritTemplChild
                   )
          .andRoute(PUT(TEMPL_UPD_CHILD_CRIT).and(accept(JSON)),
                    handler::UpdateCritTemplChild
@@ -32,11 +41,14 @@ public class RouterTemplAdvanced {
          .andRoute(DELETE(TEMPL_DEL_CHILD_CRIT).and(accept(JSON)),
                    handler::DeleteCritTemplChild
                   )
-         .andRoute(DELETE(TEMPL_DEL_CRIT_MULT).and(accept(JSON)),
-                   handler::deleteCritTemplMult
+         .andRoute(DELETE(TEMPL_DEL_CRIT_MULT_COL).and(accept(JSON)),
+                   handler::DeleteCritTemplMultCollections
                   )
-         .andRoute(PUT(TEMPL_DEL_ARRAY_CRIT).and(accept(JSON)),
-                   handler::DeleteCritTemplArray
+         .andRoute(DELETE(TEMPL_CLEAN_DB_CRIT_COL).and(accept(JSON)),
+                   handler::deleteAllCollectionsTemplate
+                  )
+         .andRoute(DELETE(TEMPL_CHECK_DB_CRIT_COL).and(accept(JSON)),
+                   handler::checkCollectionsTemplate
                   )
          ;
   }

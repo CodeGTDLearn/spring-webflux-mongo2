@@ -28,7 +28,7 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByNameNot(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
 
     return ok()
          .contentType(JSON)
@@ -43,7 +43,7 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByEstimCostGreatThan(ServerRequest request) {
 
     String cost = request.queryParam("cost")
-                         .get();
+                         .orElseThrow();
 
     return ok()
          .contentType(JSON)
@@ -57,9 +57,9 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByEstimatedCostBetween(ServerRequest request) {
 
     String from = request.queryParam("from")
-                         .get();
+                         .orElseThrow();
     String to = request.queryParam("to")
-                       .get();
+                       .orElseThrow();
     return ok()
          .contentType(JSON)
          .body(serviceRepo.
@@ -73,7 +73,7 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByNameLike(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
 
     return ok()
          .contentType(JSON)
@@ -85,7 +85,7 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByNameRegex(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
 
     String regex = "^" + name + "";
 
@@ -103,7 +103,7 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByNameQuery(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
 
     return ok()
          .contentType(JSON)
@@ -115,9 +115,9 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByNameAndCostQuery(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
     String cost = request.queryParam("cost")
-                         .get();
+                         .orElseThrow();
 
     return ok()
          .contentType(JSON)
@@ -131,9 +131,9 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByEstCostBetwQuery(ServerRequest request) {
 
     String from = request.queryParam("from")
-                         .get();
+                         .orElseThrow();
     String to = request.queryParam("to")
-                       .get();
+                       .orElseThrow();
     return ok()
 
          .contentType(JSON)
@@ -148,7 +148,7 @@ public class HandlerRepo {
   public Mono<ServerResponse> findByNameRegexQuery(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
     String regex = "^" + name + "";
     return ok()
 
@@ -160,7 +160,7 @@ public class HandlerRepo {
 
   //  public Mono<ServerResponse> findNoOfProjectsCostGreaterThan(ServerRequest request) {
   //    String cost = request.queryParam("cost")
-  //                         .get();
+  //                         .orElseThrow();
   //    return ok()
   //
   //         .contentType(JSON)
@@ -174,7 +174,7 @@ public class HandlerRepo {
   //  public Mono<ServerResponse> findCostsGroupByStartDateForProjectsCostGreaterThan
   //  (ServerRequest request) {
   //    String cost = request.queryParam("cost")
-  //                         .get();
+  //                         .orElseThrow();
   //    return ok()
   //
   //         .contentType(JSON)
@@ -235,7 +235,7 @@ public class HandlerRepo {
 
   //  public Mono<ServerResponse> loadProjectFromGrid(ServerRequest request) {
   //    String pid = request.queryParam("pid")
-  //                        .get();
+  //                        .orElseThrow();
   //
   //
   //    return ok()
@@ -249,7 +249,7 @@ public class HandlerRepo {
 
   //  public Mono<ServerResponse> deleteProjectFromGrid(ServerRequest request) {
   //    String pid = request.queryParam("pid")
-  //                        .get();
+  //                        .orElseThrow();
   //
   //
   //    return ok()

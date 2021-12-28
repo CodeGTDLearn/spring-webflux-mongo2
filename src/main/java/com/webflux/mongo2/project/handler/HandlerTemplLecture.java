@@ -28,7 +28,7 @@ public class HandlerTemplLecture {
   public Mono<ServerResponse> findProjByNameQueryCritTempl(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
     return ok()
 
          .contentType(JSON)
@@ -41,9 +41,9 @@ public class HandlerTemplLecture {
   public Mono<ServerResponse> findByEstCostBetQueryCritTempl(ServerRequest request) {
 
     String from = request.queryParam("from")
-                         .get();
+                         .orElseThrow();
     String to = request.queryParam("to")
-                       .get();
+                       .orElseThrow();
     return ok()
 
          .contentType(JSON)
@@ -64,7 +64,7 @@ public class HandlerTemplLecture {
   public Mono<ServerResponse> findByNameRegexQueryCritTempl(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
 
     String regex = "^" + name + "";
     return ok()
@@ -79,10 +79,10 @@ public class HandlerTemplLecture {
   public Mono<ServerResponse> UpdateCostWithCritTemplUpsert(ServerRequest request) {
 
     String id = request.queryParam("id")
-                       .get();
+                       .orElseThrow();
 
     String cost = request.queryParam("cost")
-                         .get();
+                         .orElseThrow();
 
     return ok()
 
@@ -100,7 +100,7 @@ public class HandlerTemplLecture {
   public Mono<ServerResponse> deleteCritTempl(ServerRequest request) {
 
     String id = request.queryParam("id")
-                       .get();
+                       .orElseThrow();
 
     return ok()
 

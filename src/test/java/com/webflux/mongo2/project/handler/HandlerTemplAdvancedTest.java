@@ -1,5 +1,6 @@
 package com.webflux.mongo2.project.handler;
 
+import com.github.javafaker.Faker;
 import com.webflux.mongo2.core.TestDbUtilsConfig;
 import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.project.ProjectChild;
@@ -169,21 +170,21 @@ class HandlerTemplAdvancedTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateCritTemplArray")
-  public void UpdateCritTemplArray() {
+  @DisplayName("AddCritTemplArray")
+  public void AddCritTemplArray() {
 
-    var additionCountryInsertedInTheArray = "BR";
+    var countryAdded = "BR";
 
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
          .queryParam("id", project1.get_id())
-         .queryParam("country", additionCountryInsertedInTheArray)
+         .queryParam("country", countryAdded)
          .body(project1)
 
          .when()
-         .put(TEMPL_UPD_ARRAY_CRIT)
+         .put(TEMPL_ADD_ARRAY_CRIT)
 
          .then()
          .log()
@@ -196,7 +197,108 @@ class HandlerTemplAdvancedTest {
                       .get(0)
               , project1.getCountryList()
                         .get(1)
-              , additionCountryInsertedInTheArray))
+              , countryAdded))
+         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateCritTemplArray")
+  public void UpdateCritTemplArray() {
+
+
+    var previousCountry = project1.getCountryList()
+                                  .get(0);
+    var newCountry = Faker.instance()
+                          .country()
+                          .countryCode2()
+                          .toUpperCase();
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1.get_id())
+         .queryParam("country", previousCountry)
+         .queryParam("newcountry", newCountry)
+         .body(project1)
+
+         .when()
+         .put(TEMPL_UPD_ARRAY_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id", containsStringIgnoringCase(project1.get_id()))
+         .body("countryList", hasItems(
+              newCountry
+              , project1.getCountryList()
+                        .get(1)))
+         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("DeleteCritTemplArray")
+  public void DeleteCritTemplArray() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1.get_id())
+         .queryParam("country", project1.getCountryList()
+                                        .get(1))
+         .body(project1)
+
+         .when()
+         .put(TEMPL_DEL_ARRAY_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id", containsStringIgnoringCase(project1.get_id()))
+         .body("countryList", hasItems(
+              project1.getCountryList()
+                      .get(0)))
+         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("AddCritTemplChild")
+  public void AddCritTemplChild() {
+
+    var taskToAdd = taskWithID("4444",
+                               "Mark ZuckLoki",
+                               7000L
+                              ).create();
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .queryParam("id", project1Child.get_id())
+         .body(taskToAdd)
+
+         .when()
+         .put(TEMPL_ADD_CHILD_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("_id", containsStringIgnoringCase(project1Child.get_id()))
+         .body("tasks._id", hasItem(taskToAdd.get_id()))
          .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
     ;
   }
@@ -273,52 +375,22 @@ class HandlerTemplAdvancedTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCritTemplArray")
-  public void DeleteCritTemplArray() {
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
-         .queryParam("country", project1.getCountryList()
-                                        .get(1))
-         .body(project1)
-
-         .when()
-         .put(TEMPL_DEL_ARRAY_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1.get_id()))
-         .body("countryList", hasItems(
-              project1.getCountryList()
-                      .get(0)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCritTemplMult")
-  public void DeleteCritTemplMult() {
+  @DisplayName("DeleteCritTemplMultCollections")
+  public void DeleteCritTemplMultCollections() {
 
     RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(serviceTask.findAll(), 1);
 
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
+         .queryParam("idProject", project1Child.get_id())
+         .queryParam("idTask", task1.get_id())
 
          .when()
-         .delete(TEMPL_DEL_CRIT_MULT)
+         .delete(TEMPL_DEL_CRIT_MULT_COL)
 
          .then()
          .log()
@@ -327,7 +399,50 @@ class HandlerTemplAdvancedTest {
          .statusCode(OK.value())
     ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
-//    dbUtils.countAndExecuteFlux(serviceTask.findAll(), 0);
+    dbUtils.countAndExecuteFlux(serviceTask.findAll(), 0);
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("deleteAllColletionsTemplate")
+  public void deleteAllColletionsTemplate() {
+
+    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .delete(TEMPL_CLEAN_DB_CRIT_COL)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("checkCollectionsTemplate")
+  public void checkCollectionsTemplate() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .delete(TEMPL_CHECK_DB_CRIT_COL)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
   }
 }

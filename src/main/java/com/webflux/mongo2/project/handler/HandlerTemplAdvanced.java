@@ -3,6 +3,7 @@ package com.webflux.mongo2.project.handler;
 import com.webflux.mongo2.project.Project;
 import com.webflux.mongo2.project.ProjectChild;
 import com.webflux.mongo2.project.service.IServiceTemplAdvanced;
+import com.webflux.mongo2.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -26,19 +27,43 @@ public class HandlerTemplAdvanced {
   IServiceTemplAdvanced serviceTemplAdvanced;
 
   @NonNull
-  public Mono<ServerResponse> UpdateCritTemplArray(ServerRequest request) {
+  public Mono<ServerResponse> AddCritTemplArray(ServerRequest request) {
 
     String id = request.queryParam("id")
-                       .get();
+                       .orElseThrow();
 
     String country = request.queryParam("country")
-                            .get();
+                            .orElseThrow();
 
     return ok()
 
          .contentType(JSON)
 
-         .body(serviceTemplAdvanced.UpdateCritTemplArray(id, country),
+         .body(serviceTemplAdvanced.AddCritTemplArray(id, country),
+               Project.class
+              )
+         .log();
+
+
+  }
+
+  @NonNull
+  public Mono<ServerResponse> updateCritTemplArray(ServerRequest request) {
+
+    String id = request.queryParam("id")
+                       .orElseThrow();
+
+    String country = request.queryParam("country")
+                            .orElseThrow();
+
+    String newcountry = request.queryParam("newcountry")
+                               .orElseThrow();
+
+    return ok()
+
+         .contentType(JSON)
+
+         .body(serviceTemplAdvanced.updateCritTemplArray(id, country, newcountry),
                Project.class
               )
          .log();
@@ -50,10 +75,10 @@ public class HandlerTemplAdvanced {
   public Mono<ServerResponse> DeleteCritTemplArray(ServerRequest request) {
 
     String id = request.queryParam("id")
-                       .get();
+                       .orElseThrow();
 
     String country = request.queryParam("country")
-                            .get();
+                            .orElseThrow();
 
     return ok()
 
@@ -67,18 +92,38 @@ public class HandlerTemplAdvanced {
 
   }
 
+
+  @NonNull
+  public Mono<ServerResponse> AddCritTemplChild(ServerRequest request) {
+
+    String id = request.queryParam("id")
+                       .orElseThrow();
+
+    final Mono<Task> task = request.bodyToMono(Task.class);
+
+    return ok()
+
+         .contentType(JSON)
+
+         .body(serviceTemplAdvanced.AddCritTemplChild(id, task),
+               ProjectChild.class
+              )
+         .log();
+
+  }
+
   @NonNull
   public Mono<ServerResponse> UpdateCritTemplChild(ServerRequest request) {
 
     String id = request.queryParam("id")
-                       .get();
+                       .orElseThrow();
 
     String idch = request.queryParam("idch")
-                         .get();
+                         .orElseThrow();
 
 
     String ownername = request.queryParam("ownername")
-                              .get();
+                              .orElseThrow();
 
     return ok()
 
@@ -93,29 +138,13 @@ public class HandlerTemplAdvanced {
   }
 
   @NonNull
-  public Mono<ServerResponse> deleteCritTemplMult(ServerRequest request) {
-
-    String id = request.queryParam("id")
-                       .get();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(serviceTemplAdvanced.deleteWithCriteriaTemplateMult(id), Void.class)
-         .log();
-
-
-  }
-
-  @NonNull
   public Mono<ServerResponse> DeleteCritTemplChild(ServerRequest request) {
 
     String id = request.queryParam("id")
-                       .get();
+                       .orElseThrow();
 
     String idch = request.queryParam("idch")
-                         .get();
+                         .orElseThrow();
 
     return ok()
 
@@ -126,4 +155,45 @@ public class HandlerTemplAdvanced {
               )
          .log();
   }
+
+  @NonNull
+  public Mono<ServerResponse> DeleteCritTemplMultCollections(ServerRequest request) {
+
+    String idProject = request.queryParam("idProject")
+                              .orElseThrow();
+
+    String idTask = request.queryParam("idTask")
+                           .orElseThrow();
+
+    return ok()
+
+         .contentType(JSON)
+
+         .body(serviceTemplAdvanced
+                    .DeleteCritTemplMultCollections(idProject, idTask),
+               ProjectChild.class
+              )
+         .log();
+
+
+  }
+
+  @NonNull
+  public Mono<ServerResponse> deleteAllCollectionsTemplate(ServerRequest request) {
+
+    return serviceTemplAdvanced
+         .deleteAllCollectionsTemplate()
+         .flatMap(s -> ServerResponse.ok()
+                                     .bodyValue(Mono.just(Void.class)));
+  }
+
+  @NonNull
+  public Mono<ServerResponse> checkCollectionsTemplate(ServerRequest request) {
+
+    return ok()
+         .contentType(JSON)
+         .body(serviceTemplAdvanced.checkCollectionsTemplate(), String.class)
+         .log();
+  }
+
 }

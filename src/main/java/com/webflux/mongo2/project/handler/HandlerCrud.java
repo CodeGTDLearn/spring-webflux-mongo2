@@ -132,7 +132,7 @@ public class HandlerCrud {
   public Mono<ServerResponse> findByName(ServerRequest request) {
 
     String name = request.queryParam("name")
-                         .get();
+                         .orElseThrow();
 
     return ok()
 
