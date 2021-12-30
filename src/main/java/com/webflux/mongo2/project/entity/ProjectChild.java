@@ -1,5 +1,6 @@
-package com.webflux.mongo2.project;
+package com.webflux.mongo2.project.entity;
 
+import com.webflux.mongo2.task.Task;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -11,8 +12,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@Document(collection = "project")
-public class Project {
+@Document(collection = "projectchild")
+public class ProjectChild {
   @Id
   private String _id;
 
@@ -30,8 +31,9 @@ public class Project {
   @Field("cost")
   private long estimatedCost;
 
-  
   private List<String> countryList;
+
+  private List<Task> tasks;
 
   @Version
   private Long version;

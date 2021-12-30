@@ -1,8 +1,8 @@
-package com.webflux.mongo2.project.handler;
+package com.webflux.mongo2.project.handler.template;
 
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.ProjectChild;
-import com.webflux.mongo2.project.service.IServiceTemplAdvanced;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.entity.ProjectChild;
+import com.webflux.mongo2.project.service.template.IServiceTemplChildArray;
 import com.webflux.mongo2.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,13 +18,13 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 //HANDLER:
 // A) HANDLER receive the message from ROUTERED
 // B) and, send this message for SERVICE
-@Component("handlerTemplAdvanced")
-public class HandlerTemplAdvanced {
+@Component("handlerTemplChildArray")
+public class HandlerTemplChildArray {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  IServiceTemplAdvanced serviceTemplAdvanced;
+  IServiceTemplChildArray serviceTemplAdvanced;
 
   @NonNull
   public Mono<ServerResponse> AddCritTemplArray(ServerRequest request) {
@@ -153,46 +153,6 @@ public class HandlerTemplAdvanced {
          .body(serviceTemplAdvanced.DeleteCritTemplChild(id, idch),
                ProjectChild.class
               )
-         .log();
-  }
-
-  @NonNull
-  public Mono<ServerResponse> DeleteCritTemplMultCollections(ServerRequest request) {
-
-    String idProject = request.queryParam("idProject")
-                              .orElseThrow();
-
-    String idTask = request.queryParam("idTask")
-                           .orElseThrow();
-
-    return ok()
-
-         .contentType(JSON)
-
-         .body(serviceTemplAdvanced
-                    .DeleteCritTemplMultCollections(idProject, idTask),
-               ProjectChild.class
-              )
-         .log();
-
-
-  }
-
-  @NonNull
-  public Mono<ServerResponse> deleteAllCollectionsTemplate(ServerRequest request) {
-
-    return serviceTemplAdvanced
-         .deleteAllCollectionsTemplate()
-         .flatMap(s -> ServerResponse.ok()
-                                     .bodyValue(Mono.just(Void.class)));
-  }
-
-  @NonNull
-  public Mono<ServerResponse> checkCollectionsTemplate(ServerRequest request) {
-
-    return ok()
-         .contentType(JSON)
-         .body(serviceTemplAdvanced.checkCollectionsTemplate(), String.class)
          .log();
   }
 

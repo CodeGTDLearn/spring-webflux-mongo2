@@ -1,8 +1,8 @@
 package config.utils;
 
-import com.webflux.mongo2.project.ProjectChild;
+import com.webflux.mongo2.project.entity.ProjectChild;
 import com.webflux.mongo2.project.repo.IRepo;
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.repo.IRepoProjectChild;
 import com.webflux.mongo2.task.Task;
 import com.webflux.mongo2.task.repo.ITaskRepo;

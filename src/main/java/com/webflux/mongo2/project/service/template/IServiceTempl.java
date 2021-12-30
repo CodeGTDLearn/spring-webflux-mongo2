@@ -1,11 +1,11 @@
-package com.webflux.mongo2.project.service;
+package com.webflux.mongo2.project.service.template;
 
 
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface IServiceTemplLecture {
+public interface IServiceTempl {
   Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String name);
 
 

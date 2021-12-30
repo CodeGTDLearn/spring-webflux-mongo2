@@ -1,8 +1,7 @@
-package com.webflux.mongo2.project.repo;
+package com.webflux.mongo2.project.repo.template;
 
-import com.mongodb.client.result.DeleteResult;
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.ProjectChild;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.entity.ProjectChild;
 import com.webflux.mongo2.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -14,8 +13,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Repository("templAdvanced")
-public class TemplAdvanced {
+@Repository("templChildArray")
+public class TemplChildArray {
 
   @Autowired
   ReactiveMongoTemplate template;
@@ -26,18 +25,18 @@ public class TemplAdvanced {
 
   public Mono<Project> AddCritTemplArray(String id, String country) {
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("_id")
-                              .is(id));
+    Query project = new Query();
+    project.addCriteria(Criteria.where("_id")
+                                .is(id));
 
-    Update update = new Update();
-    update.push("countryList", country);
+    Update updateCountryList = new Update();
+    updateCountryList.push("countryList", country);
 
     return template
          // findAndModify:
          // Find/modify/get the "new object" from a single operation.
          .findAndModify(
-              query, update,
+              project, updateCountryList,
               new FindAndModifyOptions().returnNew(true), Project.class
                        );
 
@@ -45,22 +44,22 @@ public class TemplAdvanced {
 
   public Mono<Project> updateCritTemplArray(String id, String country, String newcountry) {
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("_id")
-                              .is(id));
+    Query project = new Query();
+    project.addCriteria(Criteria.where("_id")
+                                .is(id));
 
-    Update updatePull = new Update();
-    updatePull.pull("countryList", country);
+    Update updateCountryList = new Update();
+    updateCountryList.pull("countryList", country);
 
-    Update updatePush = new Update();
-    updatePush.push("countryList", newcountry);
+    Update updateCountryListPush = new Update();
+    updateCountryListPush.push("countryList", newcountry);
 
     return template
-         .findAndModify(query, updatePull, Project.class)
+         .findAndModify(project, updateCountryList, Project.class)
          .then(
               template
                    .findAndModify(
-                        query, updatePush,
+                        project, updateCountryListPush,
                         new FindAndModifyOptions().returnNew(true), Project.class
                                  ))
          ;
@@ -68,18 +67,18 @@ public class TemplAdvanced {
 
   public Mono<Project> DeleteCritTemplArray(String id, String country) {
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("_id")
-                              .is(id));
+    Query project = new Query();
+    project.addCriteria(Criteria.where("_id")
+                                .is(id));
 
-    Update update = new Update();
-    update.pull("countryList", country);
+    Update updateCountryList = new Update();
+    updateCountryList.pull("countryList", country);
 
     return template
          // findAndModify:
          // Find/modify/get the "new object" from a single operation.
          .findAndModify(
-              query, update,
+              project, updateCountryList,
               new FindAndModifyOptions().returnNew(true), Project.class
                        );
 
@@ -87,49 +86,40 @@ public class TemplAdvanced {
 
   public Mono<ProjectChild> AddCritTemplChild(String id, Mono<Task> task) {
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("_id")
-                              .is(id));
+    Query project = new Query();
+    project.addCriteria(Criteria.where("_id")
+                                .is(id));
 
     return task.flatMap(item -> {
-      Update update = new Update();
-      update.push("tasks", item);
+      Update pushItem = new Update();
+      pushItem.push("tasks", item);
       return template
            // findAndModify:
            // Find/modify/get the "new object" from a single operation.
            .findAndModify(
-                query, update,
+                project, pushItem,
                 new FindAndModifyOptions().returnNew(true), ProjectChild.class
                          );
     });
-//
-//    return template
-//         // findAndModify:
-//         // Find/modify/get the "new object" from a single operation.
-//         .findAndModify(
-//              query, update,
-//              new FindAndModifyOptions().returnNew(true), ProjectChild.class
-//                       );
-
   }
 
   public Mono<ProjectChild> UpdateCritTemplChild(
        String id, String idch, String ownername) {
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("_id")
-                              .is(id));
-    query.addCriteria(Criteria.where("tasks._id")
-                              .is(idch));
+    Query project = new Query();
+    project.addCriteria(Criteria.where("_id")
+                                .is(id));
+    project.addCriteria(Criteria.where("tasks._id")
+                                .is(idch));
 
-    Update update = new Update();
-    update.set("tasks.$.ownername", ownername);
+    Update updateTasksList = new Update();
+    updateTasksList.set("tasks.$.ownername", ownername);
 
     return template
          // findAndModify:
          // Find/modify/get the "new object" from a single operation.
          .findAndModify(
-              query, update,
+              project, updateTasksList,
               new FindAndModifyOptions().returnNew(true), ProjectChild.class
                        )
          ;
@@ -154,51 +144,9 @@ public class TemplAdvanced {
          .then(template.findById(projectId, ProjectChild.class));
   }
 
-  public Mono<ProjectChild> DeleteCritTemplMultCollections(
-       String projectId,
-       String taskId) {
-
-    Query project = Query.query(Criteria.where("_id")
-                                        .in(projectId));
-
-    Query taskToDelete = Query.query(Criteria.where("_id")
-                                             .in(taskId));
-
-    Update deleteTaskInProjectCollection = new Update();
-    deleteTaskInProjectCollection.pull("tasks", taskToDelete);
-
-    Mono<DeleteResult> removeTaskInTaskCollection =
-         template.remove(taskToDelete, Task.class);
-
-    return template
-         .updateMulti(project, deleteTaskInProjectCollection, "projectchild")
-         .then(removeTaskInTaskCollection)
-         .then(template.findById(projectId, ProjectChild.class));
-  }
-
-  public Flux<ProjectChild> findAllTemplate() {
+  public Flux<ProjectChild> findAllTemplProjectChild() {
 
     return template.findAll(ProjectChild.class);
-  }
-
-  public Mono<Void> deleteAllCollectionsTemplate() {
-
-    Flux<String> collections = template.getCollectionNames();
-
-    return collections
-         .map(item -> template.dropCollection(item + ".class"))
-         .then();
-  }
-
-
-  public Flux<String> checkCollectionsTemplate() {
-
-    Flux<String> collections = template.getCollectionNames();
-
-    return collections
-         .map(item -> template.dropCollection(item + ".class"))
-         .thenMany(collections)
-         .map(item -> item + "\n");
   }
 
 }

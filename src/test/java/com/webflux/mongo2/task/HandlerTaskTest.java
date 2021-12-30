@@ -1,7 +1,7 @@
 package com.webflux.mongo2.task;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -15,7 +15,6 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.mongo2.config.routes.project.RoutesCrud.PROJ_ROOT;
 import static com.webflux.mongo2.config.routes.task.RoutesTask.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
@@ -25,7 +24,6 @@ import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;

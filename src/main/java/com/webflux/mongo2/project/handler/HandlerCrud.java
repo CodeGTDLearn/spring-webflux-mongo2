@@ -1,6 +1,6 @@
 package com.webflux.mongo2.project.handler;
 
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.service.IServiceCrud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,7 +30,7 @@ public class HandlerCrud {
     ║   REACTIVE-MONGO-REPOSITORY  ║
     ╚══════════════════════════════╝*/
   @NonNull
-  public Mono<ServerResponse> createProject(ServerRequest request) {
+  public Mono<ServerResponse> create(ServerRequest request) {
 
     // convert/abstracting JSON to Entity
     final Mono<Project> project = request.bodyToMono(Project.class);

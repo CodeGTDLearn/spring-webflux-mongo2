@@ -1,17 +1,17 @@
-package com.webflux.mongo2.project.service;
+package com.webflux.mongo2.project.service.template;
 
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.repo.TemplLecture;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.repo.template.Templ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service("serviceTemplLecture")
-public class ServiceTemplLecture implements IServiceTemplLecture {
+@Service("serviceTempl")
+public class ServiceTempl implements IServiceTempl {
 
   @Autowired
-  TemplLecture templLecture;
+  Templ templ;
 
   /*╔══════════════════════════════════╗
     ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
@@ -19,31 +19,31 @@ public class ServiceTemplLecture implements IServiceTemplLecture {
   @Override
   public Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String name) {
 
-    return templLecture.findProjectByNameQueryWithCriteriaTemplate(name);
+    return templ.findProjectByNameQueryWithCriteriaTemplate(name);
   }
 
   @Override
   public Flux<Project> findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long from, Long to) {
 
-    return templLecture.findByEstimatedCostBetweenQueryWithCriteriaTemplate(from, to);
+    return templ.findByEstimatedCostBetweenQueryWithCriteriaTemplate(from, to);
   }
 
   @Override
   public Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexp) {
 
-    return templLecture.findByNameRegexQueryWithCriteriaTemplate(regexp);
+    return templ.findByNameRegexQueryWithCriteriaTemplate(regexp);
   }
 
   @Override
   public Mono<Void> UpdateCostWithCritTemplUpsert(String id, Long cost) {
 
-    return templLecture.UpdateCostWithCritTemplUpsert(id, cost);
+    return templ.UpdateCostWithCritTemplUpsert(id, cost);
   }
 
   @Override
   public Mono<Void> deleteWithCriteriaTemplate(String id) {
 
-    return templLecture.deleteWithCriteriaTemplate(id);
+    return templ.deleteWithCriteriaTemplate(id);
   }
 
 }

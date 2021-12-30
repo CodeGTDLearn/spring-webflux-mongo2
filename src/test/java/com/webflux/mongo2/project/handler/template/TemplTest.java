@@ -1,9 +1,12 @@
-package com.webflux.mongo2.project.handler;
+package com.webflux.mongo2.project.handler.template;
 
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.entity.ProjectChild;
+import com.webflux.mongo2.project.service.IServiceCrud;
 import com.webflux.mongo2.task.Task;
 import config.annotations.MergedResource;
+import config.databuilders.ProjectChildBuilder;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -16,28 +19,28 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static com.webflux.mongo2.config.routes.project.RoutesRepo.*;
+import static com.webflux.mongo2.config.routes.project.RoutesTempl.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
-import static config.utils.RestAssureSpecs.requestSpecsSetPath;
-import static config.utils.RestAssureSpecs.responseSpecs;
+import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("HandlerRepoTest")
+@DisplayName("TemplTest")
 @MergedResource
-class HandlerRepoTest {
+class TemplTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -54,9 +57,14 @@ class HandlerRepoTest {
   @Autowired
   TestDbUtils dbUtils;
 
+  @Autowired
+  IServiceCrud serviceCrud;
+
   private Project project1, project2, project3;
-  private Task task1;
+  private Task task1, task2;
+  private ProjectChild project1Child;
   private List<Project> projectList;
+  private List<ProjectChild> projectChildList;
 
 
   @BeforeAll
@@ -126,8 +134,25 @@ class HandlerRepoTest {
                        "Mark",
                        1000L
                       ).create();
+    task2 = taskWithID("4",
+                       "Mark Zuck",
+                       7000L
+                      ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
+
     dbUtils.countAndExecuteFlux(taskFlux, 1);
+
+    project1Child = ProjectChildBuilder.projectChildWithID("D",
+                                                           "2022-07-07",
+                                                           "2023-07-07",
+                                                           4000L,
+                                                           Arrays.asList(task1, task2)
+                                                          )
+                                       .create();
+    projectChildList = List.of(project1Child);
+    Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
+    dbUtils.countAndExecuteFlux(projectChildFlux, 1);
+
   }
 
 
@@ -141,181 +166,8 @@ class HandlerRepoTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("BHWorks")
-  public void bHWorks() {
-
-    bhWorks();
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameNot")
-  public void FindByNameNot() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName())
-
-         .when()
-         .get(REPO_BYNAME_NOT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project2.getName()))
-         .body("countryList[0]", hasItems(
-              project2.getCountryList()
-                      .get(0)
-              , project2.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByEstimCostGreatThan")
-  public void FindByEstimCostGreatThan() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("cost", project2.getEstimatedCost() - 100)
-
-         .when()
-         .get(REPO_COST_GREATER)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project2.getName()))
-         .body("countryList[0]", hasItems(
-              project2.getCountryList()
-                      .get(0)
-              , project2.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByEstimatedCostBetween")
-  public void FindByEstimatedCostBetween() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("from", 500)
-         .queryParam("to", 1200)
-
-         .when()
-         .get(REPO_COST_BETW)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project1.getName()))
-         .body("countryList[0]", hasItems(
-              project1.getCountryList()
-                      .get(0)
-              , project1.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByEstimatedCostBetween")
-  public void FindByEstimatedCostBetweenList() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("from", 500)
-         .queryParam("to", 2100)
-
-         .when()
-         .get(REPO_COST_BETW)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", hasItems(project1.getName(),project2.getName()))
-         .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameLike")
-  public void FindByNameLike() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName().substring(0,3))
-
-         .when()
-         .get(REPO_BYNAME_LIKE)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project1.getName()))
-         .body("countryList[0]", hasItems(
-              project1.getCountryList()
-                      .get(0)
-              , project1.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameRegex")
-  public void FindByNameRegex() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName().substring(0,3))
-
-         .when()
-         .get(REPO_BYNAME_REGEX)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project1.getName()))
-         .body("countryList[0]", hasItems(
-              project1.getCountryList()
-                      .get(0)
-              , project1.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameQuery")
-  public void FindByNameQuery() {
+  @DisplayName("FindProjByNameQueryCritTempl")
+  public void FindProjByNameQueryCritTempl() {
 
     RestAssuredWebTestClient
 
@@ -324,7 +176,7 @@ class HandlerRepoTest {
          .queryParam("name", project1.getName())
 
          .when()
-         .get(REPO_QUERY_BYNAME)
+         .get(TEMPL_BYNAME)
 
          .then()
          .log()
@@ -339,78 +191,23 @@ class HandlerRepoTest {
                         .get(1)))
          .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
     ;
+
   }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameAndCostQuery")
-  public void FindByNameAndCostQuery() {
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName())
-         .queryParam("cost", project1.getEstimatedCost())
-
-         .when()
-         .get(REPO_QUERY_BYNAME_COST)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", containsInAnyOrder(project1.getName()))
-         .body("countryList[0]", hasItems(
-              project1.getCountryList()
-                      .get(0)
-              , project1.getCountryList()
-                        .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByEstCostBetwQuery")
-  public void FindByEstCostBetwQuery() {
+  @DisplayName("FindByEstCostBetQueryCritTempl")
+  public void FindByEstCostBetQueryCritTempl() {
 
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
          .queryParam("from", 500)
-         .queryParam("to", 2200)
+         .queryParam("to", 1500)
 
          .when()
-         .get(REPO_QUERY_EST_COST_BET)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("name", hasItems(project2.getName(), project1.getName()))
-         .body("estimatedCost[0]", equalTo((int)project2.getEstimatedCost()))
-         .body("estimatedCost[1]", equalTo((int)project1.getEstimatedCost()))
-
-         .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("FindByNameRegexQuery")
-  public void FindByNameRegexQuery() {
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("name", project1.getName().substring(0,3))
-
-         .when()
-         .get(REPO_QUERY_NYNAME_REGEX)
+         .get(TEMPL_EST_COST_BET)
 
          .then()
          .log()
@@ -418,9 +215,95 @@ class HandlerRepoTest {
 
          .statusCode(OK.value())
          .body("name", containsInAnyOrder(project1.getName()))
-         .body("estimatedCost", hasItem((int)project1.getEstimatedCost()))
-
-         .body(matchesJsonSchemaInClasspath("contracts/project/projectOnlyNameAndCost.json"))
+         .body("countryList[0]", hasItems(
+              project1.getCountryList()
+                      .get(0)
+              , project1.getCountryList()
+                        .get(1)))
+         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
     ;
   }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindByNameRegexQueryCritTempl")
+  public void FindByNameRegexQueryCritTempl() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("name", project1.getName()
+                                     .substring(0, 3))
+
+         .when()
+         .get(TEMPL_BYNAME_REG)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name", containsInAnyOrder(project1.getName()))
+         .body("countryList[0]", hasItems(
+              project1.getCountryList()
+                      .get(0)
+              , project1.getCountryList()
+                        .get(1)))
+         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateCostWithCritTemplUpsert")
+  public void UpdateCostWithCritTemplUpsert() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1.get_id())
+         .queryParam("cost", 5000)
+         .body(project1)
+
+         .when()
+         .put(TEMPL_UPSERT_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("DeleteCritTempl")
+  public void DeleteCritTempl() {
+
+    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("id", project1.get_id())
+
+         .when()
+         .delete(TEMPL_DEL_CRIT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
+  }
+
 }

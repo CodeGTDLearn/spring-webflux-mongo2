@@ -1,7 +1,7 @@
-package com.webflux.mongo2.project.handler;
+package com.webflux.mongo2.project.handler.template;
 
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.service.IServiceTemplLecture;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.service.template.IServiceTempl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -16,13 +16,13 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 //HANDLER:
 // A) HANDLER receive the message from ROUTERED
 // B) and, send this message for SERVICE
-@Component("handlerTemplLecture")
-public class HandlerTemplLecture {
+@Component("handlerTempl")
+public class HandlerTempl {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  IServiceTemplLecture serviceTemplLecture;
+  IServiceTempl serviceTemplLecture;
 
   @NonNull
   public Mono<ServerResponse> findProjByNameQueryCritTempl(ServerRequest request) {

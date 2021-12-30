@@ -75,7 +75,7 @@
     * Testability:
       * TDD/CDC: Controllers
       * Confirmation: Service
-      * 8. Reactive Queries
+      * Reactive Queries
       
  
 7. Spring Data  (findPostsByAuthor_Id)
@@ -90,3 +90,16 @@
        1. [SpringaData Project](https://github.com/spring-projects/spring-data-examples)
        2. [MongoDB](https://github.com/spring-projects/spring-data-examples/tree/main/mongodb)
        3. [Reactive MongoDB](https://github.com/spring-projects/spring-data-examples/tree/main/mongodb/reactive)
+       
+
+8. Project Organization:
+   1. Crud (ReactiveCrudRepository)
+   2. Repo (ReactiveMongoRepository) 
+   3. Template (ReactiveMongoTemplate):
+      1. Templ
+      2. Aggregations
+      3. TemplChildArrays
+         1. Element Arrays
+         2. Child Objects Lists
+      4. TemplCollections
+         1. Operations in multiple collections

@@ -1,10 +1,11 @@
-package com.webflux.mongo2.project.repo;
+package com.webflux.mongo2.project.repo.template;
 
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Repository("templLecture")
-public class TemplLecture {
+@Repository("templ")
+public class Templ {
 
   @Autowired
   ReactiveMongoTemplate template;
@@ -85,4 +86,12 @@ public class TemplLecture {
     return template.remove(query, Project.class)
                    .then();
   }
+
+    public <T> Flux<T> aggreg(
+         Aggregation aggregation,
+         String collection,
+         Class<T> classe) {
+
+      return template.aggregate(aggregation, collection, classe);
+    }
 }

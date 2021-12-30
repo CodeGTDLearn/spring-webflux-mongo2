@@ -23,7 +23,7 @@ public class RouterCrud {
   public RouterFunction<ServerResponse> routesCrud(HandlerCrud handler) {
 
     return RouterFunctions
-         .route(POST(CRUD_CREATE).and(accept(JSON)), handler::createProject)
+         .route(POST(CRUD_CREATE).and(accept(JSON)), handler::create)
          .andRoute(GET(PROJ_ROOT).and(accept(JSON)), handler::findAll)
          .andRoute(GET(CRUD_ID).and(accept(JSON)), handler::findById)
          .andRoute(DELETE(CRUD_ID).and(accept(JSON)), handler::delete)

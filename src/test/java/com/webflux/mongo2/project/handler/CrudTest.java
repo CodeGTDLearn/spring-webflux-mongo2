@@ -1,14 +1,10 @@
 package com.webflux.mongo2.project.handler;
 
-import com.github.javafaker.Faker;
 import com.webflux.mongo2.core.TestDbUtilsConfig;
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.ProjectChild;
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.service.IServiceCrud;
 import com.webflux.mongo2.task.Task;
-import com.webflux.mongo2.task.service.IServiceTask;
 import config.annotations.MergedResource;
-import config.databuilders.ProjectChildBuilder;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -21,14 +17,14 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.webflux.mongo2.config.routes.project.RoutesTempl.*;
+import static com.webflux.mongo2.config.routes.project.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
+import static config.utils.BlockhoundUtils.bhWorks;
 import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -39,9 +35,9 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("HandlerTemplAdvancedTest")
+@DisplayName("CrudTest")
 @MergedResource
-class HandlerTemplAdvancedTest {
+class CrudTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -61,14 +57,9 @@ class HandlerTemplAdvancedTest {
   @Autowired
   IServiceCrud serviceCrud;
 
-  @Autowired
-  IServiceTask serviceTask;
-
-  private Project project1, project2, project3;
-  private Task task1, task2;
-  private ProjectChild project1Child;
+  private Project project1, project2, project3, projetoNoId;
+  private Task task1;
   private List<Project> projectList;
-  private List<ProjectChild> projectChildList;
 
 
   @BeforeAll
@@ -128,6 +119,12 @@ class HandlerTemplAdvancedTest {
                              3000L,
                              of("UK", "USA")
                             ).create();
+    projetoNoId = projectWithID("C",
+                             "2020-05-05",
+                             "2021-05-05",
+                             1000L,
+                             of("HOL", "CAN")
+                            ).create();
 
     projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -138,25 +135,8 @@ class HandlerTemplAdvancedTest {
                        "Mark",
                        1000L
                       ).create();
-    task2 = taskWithID("4",
-                       "Mark Zuck",
-                       7000L
-                      ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
-
     dbUtils.countAndExecuteFlux(taskFlux, 1);
-
-    project1Child = ProjectChildBuilder.projectChildWithID("D",
-                                                           "2022-07-07",
-                                                           "2023-07-07",
-                                                           4000L,
-                                                           Arrays.asList(task1, task2)
-                                                          )
-                                       .create();
-    projectChildList = List.of(project1Child);
-    Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
-    dbUtils.countAndExecuteFlux(projectChildFlux, 1);
-
   }
 
 
@@ -170,279 +150,234 @@ class HandlerTemplAdvancedTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("AddCritTemplArray")
-  public void AddCritTemplArray() {
-
-    var countryAdded = "BR";
+  @DisplayName("saveWithID")
+  public void saveWithID() {
 
     RestAssuredWebTestClient
-
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
-         .queryParam("country", countryAdded)
+
          .body(project1)
 
          .when()
-         .put(TEMPL_ADD_ARRAY_CRIT)
+         .post(CRUD_CREATE)
 
          .then()
          .log()
          .everything()
 
          .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1.get_id()))
+         .body("_id", equalTo(project1.get_id()))
+         .body("name", equalTo(project1.getName()))
          .body("countryList", hasItems(
+              project1.getCountryList()
+                      .get(0),
+              project1.getCountryList()
+                      .get(1)
+                                      ))
+
+         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("saveNoID")
+  public void saveNoID() {
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(projetoNoId)
+
+         .when()
+         .post(CRUD_CREATE)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name", equalTo(projetoNoId.getName()))
+         .body("countryList", hasItems(
+              projetoNoId.getCountryList()
+                      .get(0),
+              projetoNoId.getCountryList()
+                      .get(1)
+                                      ))
+
+         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindAll")
+  public void FindAll() {
+
+    dbUtils.checkFluxListElements(
+         serviceCrud.findAll()
+                    .flatMap(Flux::just),
+         asList(project1, project2)
+                                 );
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(PROJ_ROOT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("size()", is(2))
+         .body("$", hasSize(2))
+         .body("name", hasItems(project1.getName(), project2.getName()))
+         .body("name", hasItem(project1.getName()))
+         .body("name", hasItem(project2.getName()))
+         .body("countryList[0]", hasItems(project1.getCountryList()
+                                                  .get(0),
+                                          project2.getCountryList()
+                                                  .get(1)
+                                         ))
+         .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindById")
+  public void FindById() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(CRUD_ID, project1.get_id())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name", equalTo(project1.getName()))
+         .body("countryList", hasItems(
+              project1.getCountryList()
+                      .get(0),
+              project1.getCountryList()
+                      .get(1)
+                                      ))
+         .body(matchesJsonSchemaInClasspath("contracts/project/findbyid.json"))
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("Delete")
+  public void Delete() {
+
+    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .get(CRUD_ID, project1.get_id())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+    ;
+  }
+
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateOptimistic")
+  public void UpdateOptimisticLocking() {
+    // OPTMISTIC-LOCKING-UPDATE:
+    // A) Uses the 'VERSION-ANNOTATION' in THE Entity
+    // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
+    // C) EXPLANATION:
+    //  C.1) The ENTITY-VERSION in the UPDATING-OBJECT
+    //  C.2) must be the same ENTITY-VERSION than the DB-OBJECT
+    var previousName = project1.getName();
+    var initialVersion = project1.getVersion();
+    var updatedVersion = initialVersion + 1;
+
+    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
+    project1.setName("NewName");
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project1)
+
+         .when()
+         .put(CRUD_UPD)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name", not(equalTo(previousName)))
+         .body("version", hasToString(Long.toString(updatedVersion)))
+
+         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindByName")
+  public void FindByName() {
+
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("name", project1.getName())
+
+         .when()
+         .get(CRUD_BYNAME)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(OK.value())
+         .body("name", containsInAnyOrder(project1.getName()))
+         .body("countryList[0]", hasItems(
               project1.getCountryList()
                       .get(0)
               , project1.getCountryList()
-                        .get(1)
-              , countryAdded))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateCritTemplArray")
-  public void UpdateCritTemplArray() {
-
-
-    var previousCountry = project1.getCountryList()
-                                  .get(0);
-    var newCountry = Faker.instance()
-                          .country()
-                          .countryCode2()
-                          .toUpperCase();
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
-         .queryParam("country", previousCountry)
-         .queryParam("newcountry", newCountry)
-         .body(project1)
-
-         .when()
-         .put(TEMPL_UPD_ARRAY_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1.get_id()))
-         .body("countryList", hasItems(
-              newCountry
-              , project1.getCountryList()
                         .get(1)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
     ;
   }
 
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCritTemplArray")
-  public void DeleteCritTemplArray() {
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1.get_id())
-         .queryParam("country", project1.getCountryList()
-                                        .get(1))
-         .body(project1)
-
-         .when()
-         .put(TEMPL_DEL_ARRAY_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1.get_id()))
-         .body("countryList", hasItems(
-              project1.getCountryList()
-                      .get(0)))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("AddCritTemplChild")
-  public void AddCritTemplChild() {
+  @DisplayName("BHWorks")
+  public void bHWorks() {
 
-    var taskToAdd = taskWithID("4444",
-                               "Mark ZuckLoki",
-                               7000L
-                              ).create();
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-
-         .queryParam("id", project1Child.get_id())
-         .body(taskToAdd)
-
-         .when()
-         .put(TEMPL_ADD_CHILD_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1Child.get_id()))
-         .body("tasks._id", hasItem(taskToAdd.get_id()))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateCritTemplChild")
-  public void UpdateCritTemplChild() {
-
-    var ownername = "Pauleta";
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1Child.get_id())
-         .queryParam("idch", project1Child.getTasks()
-                                          .get(0)
-                                          .get_id())
-         .queryParam("ownername", ownername)
-         .body(project1Child)
-
-         .when()
-         .put(TEMPL_UPD_CHILD_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-         .body("_id", containsStringIgnoringCase(project1Child.get_id()))
-         .body("tasks[0].ownername", containsStringIgnoringCase(ownername))
-         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCritTemplChild")
-  public void DeleteCritTemplChild() {
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("id", project1Child.get_id())
-         .queryParam("idch", project1Child.getTasks()
-                                          .get(0)
-                                          .get_id())
-         .body(project1Child)
-
-         .when()
-         .delete(TEMPL_DEL_CHILD_CRIT)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-    //         .body("_id", containsStringIgnoringCase(project1Child.get_id()))
-    //         .body("countryList", hasItems(
-    //              project1.getCountryList()
-    //                      .get(0)
-    //              , project1.getCountryList()
-    //                        .get(1)
-    //              , ownername))
-    //         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
-    ;
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("DeleteCritTemplMultCollections")
-  public void DeleteCritTemplMultCollections() {
-
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
-
-    dbUtils.countAndExecuteFlux(serviceTask.findAll(), 1);
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("idProject", project1Child.get_id())
-         .queryParam("idTask", task1.get_id())
-
-         .when()
-         .delete(TEMPL_DEL_CRIT_MULT_COL)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-    ;
-
-    dbUtils.countAndExecuteFlux(serviceTask.findAll(), 0);
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("deleteAllColletionsTemplate")
-  public void deleteAllColletionsTemplate() {
-
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-
-         .when()
-         .delete(TEMPL_CLEAN_DB_CRIT_COL)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("checkCollectionsTemplate")
-  public void checkCollectionsTemplate() {
-
-    RestAssuredWebTestClient
-
-         .given()
-         .webTestClient(mockedWebClient)
-
-         .when()
-         .delete(TEMPL_CHECK_DB_CRIT_COL)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(OK.value())
-    ;
+    bhWorks();
   }
 }

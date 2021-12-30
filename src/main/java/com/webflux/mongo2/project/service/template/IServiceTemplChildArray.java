@@ -1,13 +1,13 @@
-package com.webflux.mongo2.project.service;
+package com.webflux.mongo2.project.service.template;
 
 
-import com.webflux.mongo2.project.Project;
-import com.webflux.mongo2.project.ProjectChild;
+import com.webflux.mongo2.project.entity.Project;
+import com.webflux.mongo2.project.entity.ProjectChild;
 import com.webflux.mongo2.task.Task;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface IServiceTemplAdvanced {
+public interface IServiceTemplChildArray {
 
   Mono<Project> AddCritTemplArray(String id, String country);
 
@@ -19,22 +19,13 @@ public interface IServiceTemplAdvanced {
        String id, String idch, String ownername);
 
 
-  Mono<ProjectChild> DeleteCritTemplMultCollections(
-       String projectId,
-       String taskIdToDelete);
-
-
   Flux<ProjectChild> DeleteCritTemplChild(String id, String idch);
 
 
   Mono<Project> DeleteCritTemplArray(String id, String country);
 
 
-  Mono<Void> deleteAllCollectionsTemplate();
-
-
-  Flux<String> checkCollectionsTemplate();
-
-
   Mono<Project> updateCritTemplArray(String id, String country, String newcountry);
+
+
 }

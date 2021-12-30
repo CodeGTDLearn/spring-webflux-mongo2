@@ -2,10 +2,10 @@ package com.webflux.mongo2.project.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webflux.mongo2.project.Project;
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.repo.IRepo;
-import com.webflux.mongo2.task.repo.ITaskRepo;
 import com.webflux.mongo2.task.Task;
+import com.webflux.mongo2.task.repo.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -121,53 +121,6 @@ public class ServiceRepo implements IServiceRepo {
 
     return repo.findByNameRegexQuery(regexp);
   }
-
-
-  /**
-   * db.project.aggregate([{$match:{"cost" : {"$gt" : 2000}}},{ $count:
-   * "costly_projects" }]);
-   */
-  //  @Override
-  //  public Mono<Long> findNoOfProjectsCostGreaterThan(Long cost) {
-  //
-  //    MatchOperation matchStage = Aggregation.match(new Criteria("cost").gt(cost));
-  //    CountOperation countStage = Aggregation.count()
-  //                                           .as("costly_projects");
-  //
-  //    Aggregation aggregation = Aggregation.newAggregation(matchStage,countStage);
-  //    Flux<ResultCount> output = reactiveMongoTemplate.aggregate(aggregation,"project",
-  //                                                               ResultCount.class
-  //                                                              );
-  //    Flux<Long> resultc = output.map(result -> result.getCostly_projects())
-  //                               .switchIfEmpty(Flux.just(0L));
-  //    return resultc.take(1)
-  //                  .single();
-  //
-  //  }
-
-
-  /**
-   * db.project.aggregate([ {$match:{"cost" : {"$gt" : 100}}}, {$group: {
-   * _id:"$startDate",total:{$sum:"$cost"} } }, {$sort: { "total": -1 } } ]);
-   */
-  //  @Override
-  //  public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan
-  //  (Long cost) {
-  //
-  //    MatchOperation filterCost = Aggregation.match(new Criteria("cost").gt(cost));
-  //    GroupOperation groupByStartDateAndSumCost = Aggregation.group("startDate")
-  //                                                           .sum("cost")
-  //                                                           .as("total");
-  //
-  //    SortOperation sortByTotal = Aggregation.sort(Sort.by(Direction.DESC,"total"));
-  //
-  //    Aggregation aggregation = Aggregation.newAggregation(filterCost,groupByStartDateAndSumCost,
-  //                                                         sortByTotal
-  //                                                        );
-  //    return reactiveMongoTemplate.aggregate(aggregation,"project",ResultByStartDateAndCost
-  //         .class);
-  //
-  //  }
 
 
   //  @Override
