@@ -2,12 +2,11 @@ package com.webflux.mongo2.project.service;
 
 
 import com.webflux.mongo2.project.entity.Project;
-import com.webflux.mongo2.task.Task;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IServiceRepo {
-  Mono<Project> createProject(Project project);
+  Mono<Project> save(Project project);
 
   Flux<Project> findAll();
 
@@ -32,15 +31,6 @@ public interface IServiceRepo {
   Flux<Project> findByEstimatedCostBetweenQuery(Long from,Long to);
 
   Flux<Project> findByNameRegexQuery(String regexp);
-
-  //  public Mono<Long> findNoOfProjectsCostGreaterThan(Long cost);
-
-  //  public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan
-  //  (Long cost);
-  //
-  //  public Flux<ResultProjectTasks> findAllProjectTasks();
-
-  Mono<Void> saveProjectAndTask(Mono<Project> p,Mono<Task> t);
 
   //  public Mono<Void> chunkAndSaveProject(Project p);
 

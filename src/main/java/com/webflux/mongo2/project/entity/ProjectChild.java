@@ -8,12 +8,15 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @Document(collection = "projectchild")
-public class ProjectChild {
+public class ProjectChild  implements Serializable {
+  private static final long serialVersionUID = 2311041330320264951L;
+
   @Id
   private String _id;
 

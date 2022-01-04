@@ -24,7 +24,7 @@ public class ProjectBuilder {
   }
 
 
-  public static ProjectBuilder projectWithID(
+  public static ProjectBuilder projecNoID(
        String code,
        String startDate,
        String endDate,
@@ -51,7 +51,7 @@ public class ProjectBuilder {
                          .build();
   }
 
-  public static ProjectBuilder projectNoID(
+  public static ProjectBuilder projectWithID(
        String code,
        String startDate,
        String endDate,
@@ -61,8 +61,8 @@ public class ProjectBuilder {
     Project proj = new Project();
 
     proj.set_id(createFakeUniqueRandomId());
-    proj.setName(faker.name()
-                      .fullName());
+    proj.setName(faker.commerce()
+                      .productName());
 
     proj.setCode(faker.letterify(code));
     proj.setDescription(faker.lorem()

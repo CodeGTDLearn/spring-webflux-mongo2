@@ -19,8 +19,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-import static com.webflux.mongo2.config.routes.project.RoutesCrud.*;
-import static config.databuilders.ProjectBuilder.projectWithID;
+import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
@@ -99,27 +98,27 @@ class CrudTest {
     globalTestMessage(testInfo.getTestMethod()
                               .toString(), "method-start");
 
-    project1 = projectWithID("C",
-                             "2020-05-05",
-                             "2021-05-05",
-                             1000L,
-                             of("UK", "USA")
-                            ).create();
+    project1 = projecNoID("C",
+                          "2020-05-05",
+                          "2021-05-05",
+                          1000L,
+                          of("UK", "USA")
+                         ).create();
 
-    project2 = projectWithID("B",
-                             "2020-06-06",
-                             "2021-06-06",
-                             2000L,
-                             of("UK", "USA")
-                            ).create();
+    project2 = projecNoID("B",
+                          "2020-06-06",
+                          "2021-06-06",
+                          2000L,
+                          of("UK", "USA")
+                         ).create();
 
-    project3 = projectWithID("B",
-                             "2020-07-07",
-                             "2021-07-07",
-                             3000L,
-                             of("UK", "USA")
-                            ).create();
-    projetoNoId = projectWithID("C",
+    project3 = projecNoID("B",
+                          "2020-07-07",
+                          "2021-07-07",
+                          3000L,
+                          of("UK", "USA")
+                         ).create();
+    projetoNoId = projecNoID("C",
                              "2020-05-05",
                              "2021-05-05",
                              1000L,

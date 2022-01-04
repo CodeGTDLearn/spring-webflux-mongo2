@@ -15,8 +15,7 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.mongo2.config.routes.task.RoutesTask.*;
-import static config.databuilders.ProjectBuilder.projectWithID;
+import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
@@ -88,12 +87,12 @@ class HandlerTaskTest {
     globalTestMessage(testInfo.getTestMethod()
                               .toString(),"method-start");
 
-    Project project1 = projectWithID("C",
-                                     "2020-05-05",
-                                     "2021-05-05",
-                                     1000L,
-                                     of("UK", "USA")
-                                    ).create();
+    Project project1 = projecNoID("C",
+                                  "2020-05-05",
+                                  "2021-05-05",
+                                  1000L,
+                                  of("UK", "USA")
+                                 ).create();
     Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
     dbUtils.countAndExecuteFlux(projectFlux, 1);
 

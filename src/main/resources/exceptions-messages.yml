@@ -10,8 +10,9 @@ global:
 # CUSTOM-EXCEPTION:
 custom:
   exception:
-    userNotFoundMessage: User not found
-    usersNotFoundMessage: Users not found
-    postNotFoundMessage: Post not found
-    commentNotFoundMessage: Comment not found
-    authorNotFoundMessage: Author not found
+    project:
+      projectNameSizeIncorretMessage: Project name size incorrect. Try Again.
+      projectNameNotFoundMessage: Project name is mandatory
+      projectCostNegativeException: the Project Cost should be positive
+    task:
+      taskProjectIdLackMessage: All tasks must have a projectId

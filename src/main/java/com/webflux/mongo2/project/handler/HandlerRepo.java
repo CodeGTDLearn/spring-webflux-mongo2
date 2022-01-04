@@ -159,46 +159,6 @@ public class HandlerRepo {
          .log();
   }
 
-  //  public Mono<ServerResponse> findNoOfProjectsCostGreaterThan(ServerRequest request) {
-  //    String cost = request.queryParam("cost")
-  //                         .orElseThrow();
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.findNoOfProjectsCostGreaterThan(Long.valueOf(cost)),Long.class)
-  //         .log();
-  //
-  //  }
-
-
-  //  public Mono<ServerResponse> findCostsGroupByStartDateForProjectsCostGreaterThan
-  //  (ServerRequest request) {
-  //    String cost = request.queryParam("cost")
-  //                         .orElseThrow();
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.findCostsGroupByStartDateForProjectsCostGreaterThan(
-  //              Long.valueOf(cost)),ResultByStartDateAndCost.class)
-  //         .log();
-  //
-  //  }
-
-
-  //  public Mono<ServerResponse> findAllProjectTasks(ServerRequest request) {
-  //
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.findAllProjectTasks(),ResultProjectTasks.class)
-  //         .log();
-  //
-  //  }
-
-
   //  public Mono<ServerResponse> saveProjectAndTask(ServerRequest request) {
   //
   //    Project p = new Project();

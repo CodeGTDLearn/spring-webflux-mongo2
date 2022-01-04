@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.repo.IRepo;
-import com.webflux.mongo2.task.Task;
 import com.webflux.mongo2.task.repo.ITaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -28,7 +26,7 @@ public class ServiceRepo implements IServiceRepo {
     ║   REACTIVE-MONGO-REPOSITORY  ║
     ╚══════════════════════════════╝*/
   @Override
-  public Mono<Project> createProject(Project project) {
+  public Mono<Project> save(Project project) {
 
     return repo.save(project);
   }
@@ -120,42 +118,6 @@ public class ServiceRepo implements IServiceRepo {
   public Flux<Project> findByNameRegexQuery(String regexp) {
 
     return repo.findByNameRegexQuery(regexp);
-  }
-
-
-  //  @Override
-  //  public Flux<ResultProjectTasks> findAllProjectTasks() {
-  //
-  //    LookupOperation lookupOperation = LookupOperation.newLookup()
-  //                                                     .from("task")
-  //                                                     .localField("_id")
-  //                                                     .foreignField("pid")
-  //                                                     .as("ProjectTasks");
-  //    UnwindOperation unwindOperation = Aggregation.unwind("ProjectTasks");
-  //    ProjectionOperation projectOpertaion = Aggregation.project()
-  //                                                      .andExpression("_id")
-  //                                                      .as("_id")
-  //                                                      .andExpression("name")
-  //                                                      .as("name")
-  //                                                      .andExpression("ProjectTasks.name")
-  //                                                      .as("taskName")
-  //                                                      .andExpression("ProjectTasks.ownername")
-  //                                                      .as("taskOwnerName");
-  //    Aggregation aggregation = Aggregation.newAggregation(lookupOperation,unwindOperation,
-  //                                                         projectOpertaion
-  //                                                        );
-  //    return reactiveMongoTemplate.aggregate(aggregation,"project",ResultProjectTasks.class);
-  //
-  //  }
-  @Override
-  @Transactional
-  public Mono<Void> saveProjectAndTask(Mono<Project> p, Mono<Task> t) {
-
-    return p.flatMap(repo::save)
-            .then(t)
-            .flatMap(taskRepo::save)
-            .then();
-
   }
 
 

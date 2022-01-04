@@ -103,3 +103,19 @@
          2. Child Objects Lists
       4. TemplCollections
          1. Operations in multiple collections
+
+
+9. Bean Validation:
+   1. Annotations - javax.validation.constraints:
+      1. @NotEmpty
+      2. @Positive
+
+
+10. Exceptions:
+    1. Global
+    2. Custom
+       1. Importation/validation of properties:
+           1. @PropertySource
+           2. @ConfigurationProperties:
+               1. Automatic importation from PropertiesFile to Class-Instances-variables
+                   1. Do not need "@Value" annotation

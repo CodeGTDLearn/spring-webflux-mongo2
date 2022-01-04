@@ -22,7 +22,7 @@ public class HandlerTempl {
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   @Autowired
-  IServiceTempl serviceTemplLecture;
+  IServiceTempl serviceTempl;
 
   @NonNull
   public Mono<ServerResponse> findProjByNameQueryCritTempl(ServerRequest request) {
@@ -33,7 +33,7 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTemplLecture.findProjectByNameQueryWithCriteriaTemplate(name), Project.class)
+         .body(serviceTempl.findProjectByNameQueryWithCriteriaTemplate(name), Project.class)
          .log();
   }
 
@@ -49,10 +49,10 @@ public class HandlerTempl {
          .contentType(JSON)
 
          .body(
-              serviceTemplLecture.findByEstimatedCostBetweenQueryWithCriteriaTemplate(
+              serviceTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(
                    Long.parseLong(from),
                    Long.parseLong(to)
-                                                                                     ),
+                                                                              ),
               Project.class
               )
          .log();
@@ -71,7 +71,7 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTemplLecture.findByNameRegexQueryWithCriteriaTemplate(regex), Project.class)
+         .body(serviceTempl.findByNameRegexQueryWithCriteriaTemplate(regex), Project.class)
          .log();
   }
 
@@ -88,7 +88,7 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTemplLecture.UpdateCostWithCritTemplUpsert(id, Long.valueOf(cost)),
+         .body(serviceTempl.UpdateCostWithCritTemplUpsert(id, Long.valueOf(cost)),
                Void.class
               )
          .log();
@@ -106,7 +106,7 @@ public class HandlerTempl {
 
          .contentType(JSON)
 
-         .body(serviceTemplLecture.deleteWithCriteriaTemplate(id), Void.class)
+         .body(serviceTempl.deleteWithCriteriaTemplate(id), Void.class)
          .log();
 
 

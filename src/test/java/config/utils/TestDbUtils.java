@@ -1,9 +1,10 @@
 package config.utils;
 
+import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.entity.ProjectChild;
 import com.webflux.mongo2.project.repo.IRepo;
-import com.webflux.mongo2.project.entity.Project;
 import com.webflux.mongo2.project.repo.IRepoProjectChild;
+import com.webflux.mongo2.project.repo.template.Colections;
 import com.webflux.mongo2.task.Task;
 import com.webflux.mongo2.task.repo.ITaskRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,10 @@ public class TestDbUtils {
 
   @Autowired
   ITaskRepo taskRepo;
+
+  @Autowired
+  Colections collections;
+
 
   public <E> void countAndExecuteFlux(Flux<E> flux, int totalElements) {
     StepVerifier
@@ -72,14 +77,24 @@ public class TestDbUtils {
 
   public void cleanTestDb() {
     StepVerifier
-         .create(projectRepo.deleteAll())
+         .create(collections.dropCollectionsTemplate())
          .expectSubscription()
          .verifyComplete();
 
-    StepVerifier
-         .create(taskRepo.deleteAll())
-         .expectSubscription()
-         .verifyComplete();
+//    StepVerifier
+//         .create(projectRepo.deleteAll())
+//         .expectSubscription()
+//         .verifyComplete();
+//
+//    StepVerifier
+//         .create(repoChild.deleteAll())
+//         .expectSubscription()
+//         .verifyComplete();
+//
+//    StepVerifier
+//         .create(taskRepo.deleteAll())
+//         .expectSubscription()
+//         .verifyComplete();
 
     System.out.println("\n>==================================================>" +
                             "\n>===============> CLEAN-DB-TO-TEST >===============>" +

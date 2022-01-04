@@ -7,10 +7,14 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Document(collection = "task")
-public class Task {
+public class Task  implements Serializable {
+
+  private static final long serialVersionUID = - 6403940540289908313L;
 
   @Id
   private String _id;

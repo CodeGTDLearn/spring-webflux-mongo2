@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static com.webflux.mongo2.config.routes.project.RoutesRepo.*;
+import static com.webflux.mongo2.core.routes.project.RoutesRepo.*;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
@@ -41,33 +41,6 @@ public class RouterRepo {
          .andRoute(GET(REPO_QUERY_NYNAME_REGEX).and(accept(JSON)),
                    handler::findByNameRegexQuery
                   )
-         //         .andRoute(
-         //              RequestPredicates.GET
-         //              ("/project/template/aggregate/findNoOfProjectsCostGreaterThan")
-         //                               .and(RequestPredicates.accept(MediaType
-         //                               .APPLICATION_JSON)),
-         //              handler::findNoOfProjectsCostGreaterThan
-         //                  )
-         //         .andRoute(RequestPredicates.GET(
-         //                                         "/project/template/aggregate" +
-         //                                              "/findCostsGroupByStartDateForProjectsCostGreaterThan")
-         //                                    .and(RequestPredicates.accept(MediaType
-         //                                    .APPLICATION_JSON)),
-         //                   handler::findCostsGroupByStartDateForProjectsCostGreaterThan
-         //                  )
-         //
-         //         .andRoute(RequestPredicates.GET
-         //         ("/project/template/aggregate/findAllProjectTasks")
-         //                                    .and(RequestPredicates.accept(MediaType
-         //                                    .APPLICATION_JSON)),
-         //                   handler::findAllProjectTasks
-         //                  )
-         //         .andRoute(RequestPredicates.POST("/project/savewithtx")
-         //                                    .and(RequestPredicates.accept(MediaType
-         //                                    .APPLICATION_JSON)),
-         //                   handler::saveProjectAndTask
-         //                  )
-
          //         .andRoute(POST(PROJ_CRID_CHUNK_SAVE).and(accept(JSON)),
          //         handler::chunkAndSaveProject)
          //         .andRoute(RequestPredicates.GET("/project/grid/load")

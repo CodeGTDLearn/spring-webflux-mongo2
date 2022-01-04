@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "array",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": [],
+  "examples": [
+    [
+      {
+        "_id": "PPw6m73xqqu4hjxz2be86agm19",
+        "name": "Kena Hartmann",
+        "taskName": "Wyatt Considine",
+        "taskOwnerName": "Mark"
+      },
+      {
+        "_id": "PP87w5ic83owwsz12kmq26580n",
+        "name": "Noble Nienow",
+        "taskName": "Gail Bailey MD",
+        "taskOwnerName": "Mark"
+      }
+    ]
+  ],
+  "additionalItems": true,
+  "items": {
+    "$id": "#/items",
+    "anyOf": [
+      {
+        "$id": "#/items/anyOf/0",
+        "type": "object",
+        "title": "The first anyOf schema",
+        "description": "An explanation about the purpose of this instance.",
+        "default": {},
+        "examples": [
+          {
+            "_id": "PPw6m73xqqu4hjxz2be86agm19",
+            "name": "Kena Hartmann",
+            "taskName": "Wyatt Considine",
+            "taskOwnerName": "Mark"
+          }
+        ],
+        "required": [
+          "_id",
+          "name",
+          "taskName",
+          "taskOwnerName"
+        ],
+        "properties": {
+          "_id": {
+            "$id": "#/items/anyOf/0/properties/_id",
+            "type": "string",
+            "title": "The _id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "PPw6m73xqqu4hjxz2be86agm19"
+            ]
+          },
+          "name": {
+            "$id": "#/items/anyOf/0/properties/name",
+            "type": "string",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Kena Hartmann"
+            ]
+          },
+          "taskName": {
+            "$id": "#/items/anyOf/0/properties/taskName",
+            "type": "string",
+            "title": "The taskName schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Wyatt Considine"
+            ]
+          },
+          "taskOwnerName": {
+            "$id": "#/items/anyOf/0/properties/taskOwnerName",
+            "type": "string",
+            "title": "The taskOwnerName schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Mark"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  }
+}
