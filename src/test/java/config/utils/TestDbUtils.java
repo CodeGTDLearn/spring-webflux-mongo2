@@ -1,12 +1,12 @@
 package config.utils;
 
-import com.webflux.mongo2.project.entity.Project;
-import com.webflux.mongo2.project.entity.ProjectChild;
-import com.webflux.mongo2.project.repo.IRepo;
-import com.webflux.mongo2.project.repo.IRepoProjectChild;
-import com.webflux.mongo2.project.repo.template.Colections;
-import com.webflux.mongo2.task.Task;
-import com.webflux.mongo2.task.repo.ITaskRepo;
+import com.webflux.api.modules.project.entity.Project;
+import com.webflux.api.modules.project.entity.ProjectChild;
+import com.webflux.api.modules.project.repo.IRepo;
+import com.webflux.api.modules.project.repo.IRepoProjectChild;
+import com.webflux.api.modules.project.repo.template.Colections;
+import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.ITaskRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;

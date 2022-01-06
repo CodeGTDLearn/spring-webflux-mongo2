@@ -1,7 +1,7 @@
 package config.databuilders;
 
 import com.github.javafaker.Faker;
-import com.webflux.mongo2.project.entity.Project;
+import com.webflux.api.modules.project.entity.Project;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -61,8 +61,8 @@ public class ProjectBuilder {
     Project proj = new Project();
 
     proj.set_id(createFakeUniqueRandomId());
-    proj.setName(faker.commerce()
-                      .productName());
+    proj.setName(faker.name()
+                      .fullName());
 
     proj.setCode(faker.letterify(code));
     proj.setDescription(faker.lorem()

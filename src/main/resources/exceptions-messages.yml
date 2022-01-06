@@ -8,11 +8,12 @@ global:
 
 
 # CUSTOM-EXCEPTION:
-custom:
+modules:
   exception:
     project:
       projectNameSizeIncorretMessage: Project name size incorrect. Try Again.
-      projectNameNotFoundMessage: Project name is mandatory
+      projectNameEmptyMessage: Project name is mandatory
       projectCostNegativeException: the Project Cost should be positive
+      projectNotFoundException: the Project was not found
     task:
       taskProjectIdLackMessage: All tasks must have a projectId

@@ -1,15 +1,7 @@
 ### Project Index
 
 1. WebFlux:
-    1. Functional End-Points:
-        1. **Router:**
-           1. Receive the messages from the client
-           2. Using the defined routes
-           3. Send the messages for Handler
-        2. **Handler:**
-           1. Manage HTTP(Resquests/responses)
-           2. Receiving the message ROUTED from the Router
-           3. and, send this message for SERVICE
+    1. RestControllers
 
 
 2. MongoDB Strategy:
