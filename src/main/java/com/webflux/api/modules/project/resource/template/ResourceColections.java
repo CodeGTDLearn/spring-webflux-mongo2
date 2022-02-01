@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.resource.template;
 
-import com.webflux.api.core.exception.modules.project.ProjectExceptions;
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.template.IServiceColections;
 import com.webflux.api.modules.task.Task;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static com.webflux.api.core.routes.modules.project.template.RoutesColections.*;
+import static com.webflux.api.modules.project.core.routes.template.RoutesColections.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -19,11 +19,11 @@ import static org.springframework.http.HttpStatus.OK;
 public class ResourceColections {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
-  private final ProjectExceptions projectExceptions;
+  private final ProjectExceptionsThrower projectExceptionsThrower;
   IServiceColections serviceColections;
 
-  @DeleteMapping(TEMPL_DEL_CRIT_MULT_COL)
   @ResponseStatus(OK)
+  @DeleteMapping(TEMPL_DEL_CRIT_MULT_COL)
   public Mono<ProjectChild> DeleteTemplMultCollections(
        @RequestParam String projectId,
        @RequestParam String taskIdToDelete) {
@@ -33,14 +33,14 @@ public class ResourceColections {
 
   @PostMapping(TEMPL_ADD_CRIT_MULT_COL)
   @ResponseStatus(OK)
-  public Mono<ProjectChild> addTemplMultCollections(Mono<Task> task) {
+  public Mono<ProjectChild> addTemplMultCollections(@RequestBody Mono<Task> task) {
 
     return serviceColections.addTemplMultCollections(task);
   }
 
   @PutMapping(TEMPL_UPD_CRIT_MULT_COL)
   @ResponseStatus(OK)
-  public Mono<ProjectChild> updateTemplMultCollections(Mono<Task> task) {
+  public Mono<ProjectChild> updateTemplMultCollections(@RequestBody Mono<Task> task) {
 
     return serviceColections.updateTemplMultCollections(task);
   }

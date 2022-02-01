@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.service.template.impl;
 
 import com.webflux.api.modules.project.entity.Project;
-import com.webflux.api.modules.project.repo.template.Templ;
+import com.webflux.api.modules.project.repo.template.RepoTempl;
 import com.webflux.api.modules.project.service.template.IServiceTempl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,39 +12,41 @@ import reactor.core.publisher.Mono;
 public class ServiceTempl implements IServiceTempl {
 
   @Autowired
-  Templ templ;
+  RepoTempl repoTempl;
 
   /*╔══════════════════════════════════╗
     ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
     ╚══════════════════════════════════╝*/
   @Override
-  public Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String name) {
+  public Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String projectName) {
 
-    return templ.findProjectByNameQueryWithCriteriaTemplate(name);
+    return repoTempl.findProjectByNameQueryWithCriteriaTemplate(projectName);
   }
 
   @Override
-  public Flux<Project> findByEstimatedCostBetweenQueryWithCriteriaTemplate(Long from, Long to) {
+  public Flux<Project> findByEstimatedCostBetweenQueryWithCriteriaTemplate(
+       Long projectCostFrom,
+       Long projectCostTo) {
 
-    return templ.findByEstimatedCostBetweenQueryWithCriteriaTemplate(from, to);
+    return repoTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(projectCostFrom, projectCostTo);
   }
 
   @Override
-  public Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexp) {
+  public Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexpProjectName) {
 
-    return templ.findByNameRegexQueryWithCriteriaTemplate(regexp);
+    return repoTempl.findByNameRegexQueryWithCriteriaTemplate(regexpProjectName);
   }
 
   @Override
-  public Mono<Void> UpdateCostWithCritTemplUpsert(String id, Long cost) {
+  public Mono<Void> UpdateCostWithCritTemplUpsert(String projectId, Long projectCost) {
 
-    return templ.UpdateCostWithCritTemplUpsert(id, cost);
+    return repoTempl.UpdateCostWithCritTemplUpsert(projectId, projectCost);
   }
 
   @Override
-  public Mono<Void> deleteWithCriteriaTemplate(String id) {
+  public Mono<Void> deleteWithCriteriaTemplate(String projectId) {
 
-    return templ.deleteWithCriteriaTemplate(id);
+    return repoTempl.deleteWithCriteriaTemplate(projectId);
   }
 
 }

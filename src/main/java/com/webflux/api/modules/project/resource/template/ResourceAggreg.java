@@ -1,15 +1,15 @@
 package com.webflux.api.modules.project.resource.template;
 
-import com.webflux.api.core.exception.modules.project.ProjectExceptions;
-import com.webflux.api.modules.project.dto.ResultByStartDateAndCost;
-import com.webflux.api.modules.project.dto.ResultCount;
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
+import com.webflux.api.modules.project.core.dto.ResultByStartDateAndCost;
+import com.webflux.api.modules.project.core.dto.ResultCount;
 import com.webflux.api.modules.project.service.template.IServiceAggreg;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.api.core.routes.modules.project.template.RoutesAggreg.*;
+import static com.webflux.api.modules.project.core.routes.template.RoutesAggreg.*;
 import static org.springframework.http.HttpStatus.OK;
 
 
@@ -22,16 +22,17 @@ public class ResourceAggreg {
 
   IServiceAggreg serviceAggreg;
 
-  private final ProjectExceptions projectExceptions;
+  private final ProjectExceptionsThrower projectExceptionsThrower;
 
   @GetMapping(TEMPL_AGGREG_NO_GT)
   @ResponseStatus(OK)
-  public Flux<ResultCount> findNoOfProjectsCostGreaterThan(@RequestParam Long cost) {
+  public Flux<ResultCount> findNoOfProjectsCostGreaterThan(
+       @RequestParam Long projectCost) {
 
     return
          serviceAggreg
-              .findNoOfProjectsCostGreaterThan(cost)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findNoOfProjectsCostGreaterThan(projectCost)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
   }
@@ -39,12 +40,13 @@ public class ResourceAggreg {
 
   @GetMapping(TEMPL_AGGREG_DATE)
   @ResponseStatus(OK)
-  public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan(@RequestParam Long cost) {
+  public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan(
+       @RequestParam Long projectCost) {
 
     return
          serviceAggreg
-              .findCostsGroupByStartDateForProjectsCostGreaterThan(cost)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findCostsGroupByStartDateForProjectsCostGreaterThan(projectCost)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
   }

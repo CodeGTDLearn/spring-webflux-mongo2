@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.service.template.impl;
 
-import com.webflux.api.modules.project.dto.ResultProjectTasks;
-import com.webflux.api.modules.project.repo.template.LookupProjection;
+import com.webflux.api.modules.project.core.dto.ResultProjectTasks;
+import com.webflux.api.modules.project.repo.template.RepoLookupProjection;
 import com.webflux.api.modules.project.service.template.IServiceLookupProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -17,7 +17,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 public class ServiceLookupProjection implements IServiceLookupProjection {
 
   @Autowired
-  LookupProjection lookupProjection;
+  RepoLookupProjection repoLookupProjection;
 
   @Override
   public Flux<ResultProjectTasks> findAllProjectTasks() {
@@ -50,7 +50,7 @@ public class ServiceLookupProjection implements IServiceLookupProjection {
               projection
                        );
 
-    return lookupProjection
+    return repoLookupProjection
          .aggreg(
               aggregation,
               "project",

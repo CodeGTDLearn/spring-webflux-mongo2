@@ -12,9 +12,9 @@ public interface IServiceCrud {
 
   Flux<Project> findAll();
 
-  Mono<Project> findById(String id);
+  Mono<Project> findById(String projectId);
 
-  Mono<Void> deleteById(String id);
+  Mono<Void> deleteById(String projectId);
 
-  Flux<Project> findByName(String name);
+  Flux<Project> findByName(String projectName);
 }

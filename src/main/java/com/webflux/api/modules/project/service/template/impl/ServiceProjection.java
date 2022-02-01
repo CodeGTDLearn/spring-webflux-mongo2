@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.service.template.impl;
 
-import com.webflux.api.modules.project.dto.ProjectDto;
-import com.webflux.api.modules.project.repo.template.Projection;
+import com.webflux.api.modules.project.core.dto.ProjectDto;
+import com.webflux.api.modules.project.repo.template.RepoProjection;
 import com.webflux.api.modules.project.service.template.IServiceProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -16,7 +16,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 public class ServiceProjection implements IServiceProjection {
 
   @Autowired
-  Projection projecttion;
+  RepoProjection repoProjection;
 
   @Override
   public Flux<ProjectDto> findAllProjectDto() {
@@ -30,7 +30,7 @@ public class ServiceProjection implements IServiceProjection {
 
     Aggregation aggregation = newAggregation(projection);
 
-    return this.projecttion.aggreg(aggregation, "project", ProjectDto.class);
+    return this.repoProjection.aggreg(aggregation, "project", ProjectDto.class);
 
   }
 

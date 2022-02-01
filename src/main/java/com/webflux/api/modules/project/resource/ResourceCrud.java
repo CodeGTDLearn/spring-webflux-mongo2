@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.exception.modules.project.ProjectExceptions;
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static com.webflux.api.core.routes.modules.project.RoutesCrud.*;
+import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static org.springframework.http.HttpStatus.*;
 
 // HANDLER: Manage HTTP(Resquests/responses)
@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 public class ResourceCrud {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
-  private final ProjectExceptions projectExceptions;
+  private final ProjectExceptionsThrower projectExceptionsThrower;
   private IServiceCrud serviceCrud;
 
   @PostMapping(CRUD_CREATE)
@@ -32,7 +32,7 @@ public class ResourceCrud {
     return
          serviceCrud
               .save(project)
-              .switchIfEmpty(projectExceptions.projectNameEmptyMessage())
+              .switchIfEmpty(projectExceptionsThrower.projectNameEmptyMessage())
          ;
 
     //              .onErrorResume(error -> {
@@ -53,7 +53,7 @@ public class ResourceCrud {
     return
          serviceCrud
               .findById(project.get_id())
-              .switchIfEmpty(projectExceptions.projectNameEmptyMessage())
+              .switchIfEmpty(projectExceptionsThrower.projectNameEmptyMessage())
               .then(serviceCrud.update(project))
          ;
   }
@@ -67,34 +67,34 @@ public class ResourceCrud {
 
   @GetMapping(CRUD_ID)
   @ResponseStatus(OK)
-  public Mono<Project> findById(@PathVariable String id) {
+  public Mono<Project> findById(@PathVariable String projectId) {
 
     return
          serviceCrud
-              .findById(id)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findById(projectId)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @DeleteMapping(CRUD_ID)
   @ResponseStatus(NO_CONTENT)
-  public Mono<Void> delete(@PathVariable String id) {
+  public Mono<Void> delete(@PathVariable String projectId) {
 
     return
          serviceCrud
-              .findById(id)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findById(projectId)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
               .flatMap(item -> serviceCrud.deleteById(item.get_id()));
   }
 
   @GetMapping(CRUD_BYNAME)
   @ResponseStatus(OK)
-  public Flux<Project> findByName(@RequestParam String name) {
+  public Flux<Project> findByName(@RequestParam String projectName) {
 
     return
          serviceCrud
-              .findByName(name)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByName(projectName)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
               ;
   }
 }

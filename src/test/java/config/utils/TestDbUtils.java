@@ -4,7 +4,7 @@ import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.repo.IRepo;
 import com.webflux.api.modules.project.repo.IRepoProjectChild;
-import com.webflux.api.modules.project.repo.template.Colections;
+import com.webflux.api.modules.project.repo.template.RepoColections;
 import com.webflux.api.modules.task.Task;
 import com.webflux.api.modules.task.ITaskRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class TestDbUtils {
   ITaskRepo taskRepo;
 
   @Autowired
-  Colections collections;
+  RepoColections collections;
 
 
   public <E> void countAndExecuteFlux(Flux<E> flux, int totalElements) {

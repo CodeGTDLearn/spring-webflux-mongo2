@@ -10,27 +10,27 @@ public interface IServiceRepo {
 
   Flux<Project> findAll();
 
-  Mono<Project> findById(String id);
+  Mono<Project> findById(String projectId);
 
-  Mono<Void> deleteById(String id);
+  Mono<Void> deleteById(String projectId);
 
-  Flux<Project> findByNameNot(String name);
+  Flux<Project> findByNameNot(String projectName);
 
-  Flux<Project> findByEstimatedCostGreaterThan(Long cost);
+  Flux<Project> findByEstimatedCostGreaterThan(Long projectCost);
 
-  Flux<Project> findByEstimatedCostBetween(Long from,Long to);
+  Flux<Project> findByEstimatedCostBetween(Long projectCostFrom,Long projectCostTo);
 
-  Flux<Project> findByNameLike(String name);
+  Flux<Project> findByNameLike(String projectName);
 
-  Flux<Project> findByNameRegex(String name);
+  Flux<Project> findByNameRegex(String projectName);
 
-  Flux<Project> findProjectByNameQuery(String name);
+  Flux<Project> findProjectByNameQuery(String projectName);
 
-  Flux<Project> findProjectByNameAndCostQuery(String name,Long cost);
+  Flux<Project> findProjectByNameAndCostQuery(String projectName,Long projectCost);
 
-  Flux<Project> findByEstimatedCostBetweenQuery(Long from,Long to);
+  Flux<Project> findByEstimatedCostBetweenQuery(Long projectCostFrom,Long projectCostTo);
 
-  Flux<Project> findByNameRegexQuery(String regexp);
+  Flux<Project> findByNameRegexQuery(String regexpProjectName);
 
   //  public Mono<Void> chunkAndSaveProject(Project p);
 

@@ -3,9 +3,9 @@ package com.webflux.api.modules.project.service.template.impl;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.api.modules.project.entity.Project;
-import com.webflux.api.modules.project.dto.ResultByStartDateAndCost;
-import com.webflux.api.modules.project.dto.ResultCount;
-import com.webflux.api.modules.project.repo.template.Aggreg;
+import com.webflux.api.modules.project.core.dto.ResultByStartDateAndCost;
+import com.webflux.api.modules.project.core.dto.ResultCount;
+import com.webflux.api.modules.project.repo.template.RepoAggreg;
 import com.webflux.api.modules.project.service.template.IServiceAggreg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,18 +19,18 @@ import reactor.core.publisher.Flux;
 public class ServiceAggreg implements IServiceAggreg {
 
   @Autowired
-  Aggreg aggreg;
+  RepoAggreg repoAggreg;
 
 
   /**
-   * db.project.aggregate([{$match:{"cost" : {"$gt" : 2000}}},{ $count:
+   * db.project.aggregate([{$match:{"costProject" : {"$gt" : 2000}}},{ $count:
    * "costly_projects" }]);
    */
   @Override
-  public Flux<ResultCount> findNoOfProjectsCostGreaterThan(Long cost) {
+  public Flux<ResultCount> findNoOfProjectsCostGreaterThan(Long projectCost) {
 
     MatchOperation matchStage =
-         Aggregation.match(new Criteria("cost").gt(cost));
+         Aggregation.match(new Criteria("cost").gt(projectCost));
 
     CountOperation countStage =
          Aggregation.count()
@@ -40,11 +40,11 @@ public class ServiceAggreg implements IServiceAggreg {
          Aggregation.newAggregation(matchStage, countStage);
 
     return
-         aggreg.aggregs(
+         repoAggreg.aggregs(
               aggregation,
               "project",
               ResultCount.class
-                       );
+                           );
 
   }
 
@@ -55,9 +55,9 @@ public class ServiceAggreg implements IServiceAggreg {
    */
   @Override
   public Flux<ResultByStartDateAndCost> findCostsGroupByStartDateForProjectsCostGreaterThan
-  (Long cost) {
+  (Long projectCost) {
 
-    MatchOperation filterCost = Aggregation.match(new Criteria("cost").gt(cost));
+    MatchOperation filterCost = Aggregation.match(new Criteria("cost").gt(projectCost));
 
     GroupOperation groupByStartDateAndSumCost =
          Aggregation
@@ -74,7 +74,7 @@ public class ServiceAggreg implements IServiceAggreg {
                    groupByStartDateAndSumCost,
                    sortByTotal
                              );
-    return aggreg
+    return repoAggreg
          .aggregs(
               aggregation,
               "project",
@@ -82,12 +82,12 @@ public class ServiceAggreg implements IServiceAggreg {
                  );
   }
 
-  private String serializetoJson(Project p) {
+  private String serializetoJson(Project project) {
 
     try {
       ObjectMapper mapper = new ObjectMapper();
       return mapper.writerWithDefaultPrettyPrinter()
-                   .writeValueAsString(p);
+                   .writeValueAsString(project);
 
     } catch (Exception e) {
       e.printStackTrace();

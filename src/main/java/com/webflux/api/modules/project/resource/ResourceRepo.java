@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.exception.modules.project.ProjectExceptions;
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceRepo;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.api.core.routes.modules.project.RoutesRepo.*;
+import static com.webflux.api.modules.project.core.routes.RoutesRepo.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -18,62 +18,62 @@ public class ResourceRepo {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
-  private final ProjectExceptions projectExceptions;
+  private final ProjectExceptionsThrower projectExceptionsThrower;
   private final IServiceRepo serviceRepo;
 
   @GetMapping(REPO_BYNAME_NOT)
   @ResponseStatus(OK)
-  Flux<Project> findByNameNot(@RequestParam String name) {
+  Flux<Project> findByNameNot(@RequestParam String projectName) {
 
     return
          serviceRepo
-              .findByNameNot(name)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByNameNot(projectName)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_COST_GREATER)
   @ResponseStatus(OK)
-  public Flux<Project> findByEstimCostGreatThan(@RequestParam Long cost) {
+  public Flux<Project> findByEstimCostGreatThan(@RequestParam Long projectCost) {
 
     return
          serviceRepo
-              .findByEstimatedCostGreaterThan(cost)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByEstimatedCostGreaterThan(projectCost)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_COST_BETW)
   @ResponseStatus(OK)
   public Flux<Project> findByEstimatedCostBetween(
-       @RequestParam Long from, @RequestParam Long to) {
+       @RequestParam Long projectCostFrom, @RequestParam Long projectCostTo) {
 
     return
          serviceRepo
-              .findByEstimatedCostBetween(from, to)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByEstimatedCostBetween(projectCostFrom, projectCostTo)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_BYNAME_LIKE)
   @ResponseStatus(OK)
-  public Flux<Project> findByNameLike(@RequestParam String name) {
+  public Flux<Project> findByNameLike(@RequestParam String projectName) {
 
     return
          serviceRepo
-              .findByNameLike(name)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByNameLike(projectName)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_BYNAME_REGEX)
   @ResponseStatus(OK)
-  public Flux<Project> findByNameRegex(@RequestParam String name) {
+  public Flux<Project> findByNameRegex(@RequestParam String projectName) {
 
     return
          serviceRepo
-              .findByNameRegex(name)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByNameRegex(projectName)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
@@ -83,47 +83,48 @@ public class ResourceRepo {
     ╚══════════════════════════════╝*/
   @GetMapping(REPO_QUERY_BYNAME)
   @ResponseStatus(OK)
-  public Flux<Project> findProjectByNameQuery(@RequestParam String name) {
+  public Flux<Project> findProjectByNameQuery(@RequestParam String projectName) {
 
     return
          serviceRepo
-              .findProjectByNameQuery(name)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findProjectByNameQuery(projectName)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_QUERY_BYNAME_COST)
   @ResponseStatus(OK)
   public Flux<Project> findProjectByNameAndCostQuery(
-       @RequestParam String name, @RequestParam Long cost) {
+       @RequestParam String projectName,
+       @RequestParam Long projectCost) {
 
     return
          serviceRepo
-              .findProjectByNameAndCostQuery(name, cost)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findProjectByNameAndCostQuery(projectName, projectCost)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_QUERY_EST_COST_BET)
   @ResponseStatus(OK)
   public Flux<Project> findByEstimatedCostBetweenQuery(
-       @RequestParam Long from, @RequestParam Long to) {
+       @RequestParam Long projectCostFrom, @RequestParam Long projectCostTo) {
 
     return
          serviceRepo
-              .findByEstimatedCostBetweenQuery(from, to)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByEstimatedCostBetweenQuery(projectCostFrom, projectCostTo)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 
   @GetMapping(REPO_QUERY_NYNAME_REGEX)
   @ResponseStatus(OK)
-  public Flux<Project> findByNameRegexQuery(@RequestParam String name) {
+  public Flux<Project> findByNameRegexQuery(@RequestParam String regexpProjectName) {
 
     return
          serviceRepo
-              .findByNameRegexQuery(name)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .findByNameRegexQuery(regexpProjectName)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 

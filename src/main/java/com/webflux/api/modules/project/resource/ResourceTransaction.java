@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.exception.modules.project.ProjectExceptions;
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.template.IServiceTransaction;
 import com.webflux.api.modules.task.Task;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import static com.webflux.api.core.routes.modules.project.RoutesTransaction.REPO_ROOT_TRANSACT;
-import static com.webflux.api.core.routes.modules.project.RoutesTransaction.REPO_TRANSACT;
+import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_ROOT_TRANSACT;
+import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -24,7 +24,7 @@ public class ResourceTransaction {
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   IServiceTransaction serviceTransaction;
-  private final ProjectExceptions projectExceptions;
+  private final ProjectExceptionsThrower projectExceptionsThrower;
 
   @PostMapping(REPO_TRANSACT)
   @ResponseStatus(CREATED)
@@ -34,7 +34,7 @@ public class ResourceTransaction {
     return
          serviceTransaction
               .saveProjectAndTask(projectMono, taskMono)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
   }
 

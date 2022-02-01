@@ -2,7 +2,7 @@
 package com.webflux.api.modules.project.service.template.impl;
 
 import com.webflux.api.modules.project.entity.ProjectChild;
-import com.webflux.api.modules.project.repo.template.Colections;
+import com.webflux.api.modules.project.repo.template.RepoColections;
 import com.webflux.api.modules.project.service.template.IServiceColections;
 import com.webflux.api.modules.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 public class ServiceColections implements IServiceColections {
 
   @Autowired
-  Colections colections;
+  RepoColections repoColections;
 
   /*╔══════════════════════════════════╗
     ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
@@ -23,13 +23,13 @@ public class ServiceColections implements IServiceColections {
   @Override
   public Mono<ProjectChild> addTemplMultCollections(Mono<Task> task) {
 
-    return colections.addTemplMultCollections(task);
+    return repoColections.addTemplMultCollections(task);
   }
 
   @Override
   public Mono<ProjectChild> updateTemplMultCollections(Mono<Task> task) {
 
-    return colections.updateTemplMultCollections(task);
+    return repoColections.updateTemplMultCollections(task);
   }
 
   @Override
@@ -37,20 +37,20 @@ public class ServiceColections implements IServiceColections {
        String projectId,
        String taskId) {
 
-    return colections.deleteTemplMultCollections(projectId, taskId);
+    return repoColections.deleteTemplMultCollections(projectId, taskId);
   }
 
 
   @Override
   public Mono<Void> deleteAllCollectionsTemplate() {
 
-    return colections.dropCollectionsTemplate();
+    return repoColections.dropCollectionsTemplate();
   }
 
   @Override
   public Flux<String> checkCollectionsTemplate() {
 
-    return colections.checkCollectionsTemplate();
+    return repoColections.checkCollectionsTemplate();
   }
 
 

@@ -13,30 +13,30 @@ public interface IRepo extends ReactiveMongoRepository<Project, String> {
     ║     AUTO-GENERATED QUERY     ║
     ╚══════════════════════════════╝*/
 
-  //{"name" : {"$ne" : name}}
-  Flux<Project> findByNameNot(String name);
+  //{"projectName" : {"$ne" : projectName}}
+  Flux<Project> findByNameNot(String projectName);
 
-  //{"cost" : {"$gt" : cost}}
-  Flux<Project> findByEstimatedCostGreaterThan(Long cost);
+  //{"ProjectCost" : {"$gt" : ProjectCost}}
+  Flux<Project> findByEstimatedCostGreaterThan(Long ProjectCost);
 
   //{"cost" : {"$gt" : from, "$lt" : to}}
   Flux<Project> findByEstimatedCostBetween(Long from, Long to);
 
-  //{"name": /name/ }
-  Flux<Project> findByNameLike(String name);
+  //{"projectName": /projectName/ }
+  Flux<Project> findByNameLike(String projectName);
 
-  //{"name" : {"$regex" : name }} =>/^Pro/
-  Flux<Project> findByNameRegex(String name);
+  //{"projectName" : {"$regex" : projectName }} =>/^Pro/
+  Flux<Project> findByNameRegex(String projectName);
 
 
   /*╔══════════════════════════════╗
     ║        ANNOTATED-QUERY       ║
     ╚══════════════════════════════╝*/
   @Query("{'name' : ?0}")
-  Flux<Project> findProjectByNameQuery(String name);
+  Flux<Project> findProjectByNameQuery(String projectName);
 
   @Query("{'name' : ?0 , 'cost' : ?1}")
-  Flux<Project> findProjectByNameAndCostQuery(String name, Long cost);
+  Flux<Project> findProjectByNameAndCostQuery(String projectName, Long projectCost);
 
   @Query("{cost : {$lt : ?1, $gt : ?0}}")
   Flux<Project> findByEstimatedCostBetweenQuery(
@@ -44,5 +44,5 @@ public interface IRepo extends ReactiveMongoRepository<Project, String> {
        org.springframework.data.domain.Sort sort);
 
   @Query(value = "{ 'name' : { $regex: ?0 } }", fields = "{'name' : 1,'cost':1}")
-  Flux<Project> findByNameRegexQuery(String regexp);
+  Flux<Project> findByNameRegexQuery(String regexpProjectName);
 }

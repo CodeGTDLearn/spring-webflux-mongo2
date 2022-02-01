@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.resource.template;
 
-import com.webflux.api.core.exception.modules.project.ProjectExceptions;
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.template.IServiceChildArray;
@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static com.webflux.api.core.routes.modules.project.template.RoutesAggreg.TEMPL_AGGREG_DATE;
-import static com.webflux.api.core.routes.modules.project.template.RoutesChildArray.*;
+import static com.webflux.api.modules.project.core.routes.template.RoutesChildArray.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -24,17 +23,17 @@ public class ResourceChildArray {
 
   private final IServiceChildArray serviceChildArray;
 
-  private final ProjectExceptions projectExceptions;
+  private final ProjectExceptionsThrower projectExceptionsThrower;
 
   @PutMapping(TEMPL_ADD_ARRAY_CRIT)
   @ResponseStatus(OK)
-  public Mono<Project> AddCritTemplArray(@RequestParam String id,
+  public Mono<Project> AddCritTemplArray(@RequestParam String projectId,
                                          @RequestParam String country) {
 
     return
          serviceChildArray
-              .AddCritTemplArray(id, country)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .addCritTemplArray(projectId, country)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
 
@@ -42,14 +41,14 @@ public class ResourceChildArray {
 
   @PutMapping(TEMPL_UPD_ARRAY_CRIT)
   @ResponseStatus(OK)
-  public Mono<Project> updateCritTemplArray(@RequestParam String id,
+  public Mono<Project> updateCritTemplArray(@RequestParam String projectId,
                                             @RequestParam String country,
                                             @RequestParam String newcountry) {
 
     return
          serviceChildArray
-              .updateCritTemplArray(id, country, newcountry)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .updateCritTemplArray(projectId, country, newcountry)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
 
@@ -57,13 +56,13 @@ public class ResourceChildArray {
 
   @DeleteMapping(TEMPL_DEL_ARRAY_CRIT)
   @ResponseStatus(OK)
-  public Mono<Project> DeleteCritTemplArray(@RequestParam String id,
+  public Mono<Project> DeleteCritTemplArray(@RequestParam String projectId,
                                             @RequestParam String country) {
 
     return
          serviceChildArray
-              .DeleteCritTemplArray(id, country)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .deleteCritTemplArray(projectId, country)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
 
@@ -72,42 +71,57 @@ public class ResourceChildArray {
 
   @PutMapping(TEMPL_ADD_CHILD_CRIT)
   @ResponseStatus(OK)
-  public Mono<ProjectChild> AddCritTemplChild(@RequestParam String id,
-                                              Mono<Task> task) {
+  public Mono<ProjectChild> AddCritTemplChild(
+       @RequestParam String projectId,
+       Mono<Task> task) {
 
     return
          serviceChildArray
-              .AddCritTemplChild(id, task)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .addCritTemplChild(projectId, task)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
   }
 
   @PutMapping(TEMPL_UPD_CHILD_CRIT)
   @ResponseStatus(OK)
-  public Mono<ProjectChild> UpdateCritTemplChild(@RequestParam String id,
-                                                 @RequestParam String idch,
+  public Mono<ProjectChild> UpdateCritTemplChild(@RequestParam String projectId,
+                                                 @RequestParam String taskIdToUpdate,
                                                  @RequestParam String ownername) {
 
     return
          serviceChildArray
-              .UpdateCritTemplChild(id, idch, ownername)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .updateCritTemplChild(projectId, taskIdToUpdate, ownername)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
 
 
   }
 
-  @DeleteMapping(TEMPL_AGGREG_DATE)
+  @DeleteMapping(TEMPL_DEL_CHILD_CRIT)
   @ResponseStatus(OK)
   public Flux<ProjectChild> DeleteCritTemplChild(
-       @RequestParam String id, @RequestParam String idch) {
+       @RequestParam String projectId,
+       @RequestParam String taskIdtoDelete) {
 
     return
          serviceChildArray
-              .DeleteCritTemplChild(id, idch)
-              .switchIfEmpty(projectExceptions.projectNotFoundException())
+              .deleteCritTemplChild(projectId, taskIdtoDelete)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
          ;
+  }
+
+  @GetMapping(TEMPL_CHK_CHILD_EXIST_CRIT)
+  @ResponseStatus(OK)
+  public Mono<Boolean> existTheTaskInProjectChild(@RequestParam String projectId,
+                                                  @RequestParam String idTask) {
+    return
+         serviceChildArray
+              .existTheTaskInProjectChild(projectId, idTask)
+              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+         ;
+
+
   }
 
 }

@@ -15,7 +15,7 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import static com.webflux.api.core.routes.modules.task.RoutesTask.*;
+import static com.webflux.api.modules.task.core.RoutesTask.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("HandlerTaskTest")
+@DisplayName("TaskResourceTest")
 @MergedResource
 class TaskResourceTest {
 

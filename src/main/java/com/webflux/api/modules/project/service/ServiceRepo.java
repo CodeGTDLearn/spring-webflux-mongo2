@@ -40,51 +40,51 @@ public class ServiceRepo implements IServiceRepo {
 
 
   @Override
-  public Mono<Project> findById(String id) {
+  public Mono<Project> findById(String projectId) {
 
-    return repo.findById(id);
+    return repo.findById(projectId);
   }
 
 
   @Override
-  public Mono<Void> deleteById(String id) {
+  public Mono<Void> deleteById(String projectId) {
 
-    return repo.deleteById(id);
+    return repo.deleteById(projectId);
   }
 
 
   @Override
-  public Flux<Project> findByNameNot(String name) {
+  public Flux<Project> findByNameNot(String projectName) {
 
-    return repo.findByNameNot(name);
+    return repo.findByNameNot(projectName);
   }
 
 
   @Override
-  public Flux<Project> findByEstimatedCostGreaterThan(Long cost) {
+  public Flux<Project> findByEstimatedCostGreaterThan(Long projectCost) {
 
-    return repo.findByEstimatedCostGreaterThan(cost);
+    return repo.findByEstimatedCostGreaterThan(projectCost);
   }
 
 
   @Override
-  public Flux<Project> findByEstimatedCostBetween(Long from, Long to) {
+  public Flux<Project> findByEstimatedCostBetween(Long projectCostFrom, Long projectCostTo) {
 
-    return repo.findByEstimatedCostBetween(from, to);
+    return repo.findByEstimatedCostBetween(projectCostFrom, projectCostTo);
   }
 
 
   @Override
-  public Flux<Project> findByNameLike(String name) {
+  public Flux<Project> findByNameLike(String projectName) {
 
-    return repo.findByNameLike(name);
+    return repo.findByNameLike(projectName);
   }
 
 
   @Override
-  public Flux<Project> findByNameRegex(String name) {
+  public Flux<Project> findByNameRegex(String projectName) {
 
-    return repo.findByNameRegex(name);
+    return repo.findByNameRegex(projectName);
   }
 
 
@@ -92,32 +92,32 @@ public class ServiceRepo implements IServiceRepo {
     ║        ANNOTATED-QUERY       ║
     ╚══════════════════════════════╝*/
   @Override
-  public Flux<Project> findProjectByNameQuery(String name) {
+  public Flux<Project> findProjectByNameQuery(String projectName) {
 
-    return repo.findProjectByNameQuery(name);
+    return repo.findProjectByNameQuery(projectName);
   }
 
 
   @Override
-  public Flux<Project> findProjectByNameAndCostQuery(String name, Long cost) {
+  public Flux<Project> findProjectByNameAndCostQuery(String projectName, Long projectCost) {
 
-    return repo.findProjectByNameAndCostQuery(name, cost);
+    return repo.findProjectByNameAndCostQuery(projectName, projectCost);
   }
 
 
   @Override
-  public Flux<Project> findByEstimatedCostBetweenQuery(Long from, Long to) {
+  public Flux<Project> findByEstimatedCostBetweenQuery(Long projectCostFrom, Long projectCostTo) {
 
-    return repo.findByEstimatedCostBetweenQuery(from, to,
+    return repo.findByEstimatedCostBetweenQuery(projectCostFrom, projectCostTo,
                                                 Sort.by(Direction.DESC, "cost")
                                                );
   }
 
 
   @Override
-  public Flux<Project> findByNameRegexQuery(String regexp) {
+  public Flux<Project> findByNameRegexQuery(String regexpProjectName) {
 
-    return repo.findByNameRegexQuery(regexp);
+    return repo.findByNameRegexQuery(regexpProjectName);
   }
 
 

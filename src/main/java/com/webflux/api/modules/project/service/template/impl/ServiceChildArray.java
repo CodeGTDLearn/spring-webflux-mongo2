@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.service.template.impl;
 
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
-import com.webflux.api.modules.project.repo.template.ChildArray;
+import com.webflux.api.modules.project.repo.template.RepoChildArray;
 import com.webflux.api.modules.project.service.template.IServiceChildArray;
 import com.webflux.api.modules.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,53 +15,71 @@ import reactor.core.publisher.Mono;
 public class ServiceChildArray implements IServiceChildArray {
 
   @Autowired
-  ChildArray childArray;
+  RepoChildArray repoChildArray;
 
   /*╔══════════════════════════════════╗
     ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
     ╚══════════════════════════════════╝*/
 
   @Override
-  public Mono<Project> AddCritTemplArray(String id, String country) {
+  public Mono<Project> addCritTemplArray(
+       String projectId,
+       String country) {
 
-    return childArray.AddCritTemplArray(id, country);
+    return repoChildArray.AddCritTemplArray(projectId, country);
   }
 
   @Override
-  public Mono<Project> updateCritTemplArray(String id, String country, String newcountry) {
+  public Mono<Project> updateCritTemplArray(
+       String projectId,
+       String country,
+       String newcountry) {
 
-    return childArray.updateCritTemplArray(id, country, newcountry);
+    return repoChildArray.updateCritTemplArray(projectId, country, newcountry);
   }
 
   @Override
-  public Mono<Project> DeleteCritTemplArray(String id, String country) {
-
-    return childArray.DeleteCritTemplArray(id, country);
+  public Mono<Boolean> existTheTaskInProjectChild(
+       String projectId,
+       String taskId) {
+    return repoChildArray.existTheTaskInProjectChild(projectId,taskId);
   }
 
   @Override
-  public Mono<ProjectChild> AddCritTemplChild(String id, Mono<Task> task) {
+  public Mono<Project> deleteCritTemplArray(
+       String projectId,
+       String country) {
 
-    return childArray.AddCritTemplChild(id, task);
+    return repoChildArray.DeleteCritTemplArray(projectId, country);
   }
 
   @Override
-  public Mono<ProjectChild> UpdateCritTemplChild(
-       String id,
-       String idch,
+  public Mono<ProjectChild> addCritTemplChild(
+       String projectId,
+       Mono<Task> task) {
+
+    return repoChildArray.AddCritTemplChild(projectId, task);
+  }
+
+  @Override
+  public Mono<ProjectChild> updateCritTemplChild(
+       String projectId,
+       String taskIdToUpdate,
        String ownername) {
 
-    return childArray.UpdateCritTemplChild(id, idch, ownername);
+    return repoChildArray.UpdateCritTemplChild(projectId, taskIdToUpdate, ownername);
   }
 
 
   @Override
-  public Flux<ProjectChild> DeleteCritTemplChild(String id, String idch) {
+  public Flux<ProjectChild> deleteCritTemplChild(
+       String projectId,
+       String taskIdToDelete) {
 
-    return childArray
-         .DeleteCritTemplChild(id, idch)
+    return repoChildArray
+         .DeleteCritTemplChild(projectId, taskIdToDelete)
          .thenMany(
-              childArray
+              repoChildArray
                    .findAllTemplProjectChild()
                    .flatMap(Flux::just)
                   )
