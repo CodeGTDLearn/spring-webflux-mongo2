@@ -63,18 +63,22 @@ public class RepoTempl {
 
   public Mono<Void> UpdateCostWithCritTemplUpsert(String projectId, Long projectCost) {
 
-    Query query = new Query();
-    query.addCriteria(Criteria.where("_id")
+    Query findProjectToUpdate = new Query();
+    findProjectToUpdate
+         .addCriteria(Criteria.where("_id")
                               .is(projectId));
 
     Update update = new Update();
     update.set("cost", projectCost);
 
-    //upsert: If document is matched, update it, else create a new document by combining the
-    // query and update object, it’s works like findAndModifyElseCreate()
-    return template
-         .upsert(query, update, Project.class)
-         .then();
+    // UPSERT:
+    // - If document is matched, update it,
+    // - else create a new document by combining the findProjectToUpdate and update object,
+    // - it’s works like findAndModifyElseCreate()
+    return
+         template
+              .upsert(findProjectToUpdate, update, Project.class)
+              .then();
 
   }
 
@@ -89,11 +93,11 @@ public class RepoTempl {
                    .then();
   }
 
-    public <T> Flux<T> aggreg(
-         Aggregation aggregation,
-         String collection,
-         Class<T> classe) {
+  public <T> Flux<T> aggreg(
+       Aggregation aggregation,
+       String collection,
+       Class<T> classe) {
 
-      return template.aggregate(aggregation, collection, classe);
-    }
+    return template.aggregate(aggregation, collection, classe);
+  }
 }

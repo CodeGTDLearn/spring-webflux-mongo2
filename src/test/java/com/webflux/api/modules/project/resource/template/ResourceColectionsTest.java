@@ -66,7 +66,8 @@ class ResourceColectionsTest {
   @Autowired
   IServiceChildArray serviceChildArray;
 
-  private Project project1, project2, project3;
+  private Project project1;
+  private Project project2;
   private Task task1, task2;
   private ProjectChild project1Child;
   private List<Project> projectList;
@@ -124,12 +125,12 @@ class ResourceColectionsTest {
                           of("UK", "USA")
                          ).create();
 
-    project3 = projecNoID("B",
-                          "2020-07-07",
-                          "2021-07-07",
-                          3000L,
-                          of("UK", "USA")
-                         ).create();
+    Project project3 = projecNoID("B",
+                                  "2020-07-07",
+                                  "2021-07-07",
+                                  3000L,
+                                  of("UK", "USA")
+                                 ).create();
 
     projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -177,7 +178,7 @@ class ResourceColectionsTest {
   @DisplayName("deleteTemplMultCollections")
   public void deleteTemplMultCollections() {
 
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
     dbUtils.countAndExecuteFlux(serviceTask.findAll(), 1);
 
@@ -273,8 +274,8 @@ class ResourceColectionsTest {
 
          .statusCode(OK.value())
          .body("_id", containsStringIgnoringCase(project1Child.get_id()))
-//         .body("tasks.name", hasItem(name))
-//         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
+         .body("tasks.name", hasItem(name))
+         .body(matchesJsonSchemaInClasspath("contracts/project/updateChild.json"))
     ;
   }
 
@@ -283,7 +284,7 @@ class ResourceColectionsTest {
   @DisplayName("deleteAllColletionsTemplate")
   public void deleteAllColletionsTemplate() {
 
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
     RestAssuredWebTestClient
 
@@ -306,7 +307,7 @@ class ResourceColectionsTest {
   @DisplayName("checkCollectionsTemplate")
   public void checkCollectionsTemplate() {
 
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
     RestAssuredWebTestClient
 
          .given()

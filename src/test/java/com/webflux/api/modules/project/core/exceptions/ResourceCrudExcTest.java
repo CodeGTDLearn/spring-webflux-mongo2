@@ -28,13 +28,19 @@ import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
-import static java.util.List.*;
-import static org.springframework.http.HttpStatus.*;
+import static java.util.List.of;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+// ==> EXCEPTIONS IN CONTROLLER:
+// *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
+//     - "Como stream pode ser manipulado por diferentes grupos de thread,
+//     - caso um erro aconteça em uma thread que não é a que operou a controller,
+//     - o ControllerAdvice não vai ser notificado "
+//     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @Import({TestDbUtilsConfig.class})
 @DisplayName("CrudExcTest")
 @MergedResource
-class CrudExcTest {
+class ResourceCrudExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -64,7 +70,7 @@ class CrudExcTest {
                                         );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
-         requestSpecsSetPath("http://localhost:8080/");
+         requestSpecsSetPath("http://localhost:8080/" + PROJ_ROOT_CRUD);
     RestAssuredWebTestClient.responseSpecification = responseSpecs();
   }
 
@@ -122,37 +128,38 @@ class CrudExcTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateOptLockExc")
-  void UpdateOptLockExc() {
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
-
-    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
-    project1.setName("NewName");
-    project1.setVersion(2L);
+  @DisplayName("findByIdGlobalException")
+  public void findByIdGlobalException() {
 
     RestAssuredWebTestClient
+
          .given()
          .webTestClient(mockedWebClient)
 
-         .body(project1)
-
          .when()
-         .put(CRUD_UPD)
+         .get(CRUD_ID, "xxx")
 
          .then()
          .log()
          .everything()
 
-         .statusCode(BAD_REQUEST.value())
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/UpdateOptLockExc.json"))
+//         .statusCode(OK.value())
+//         .body("name", equalTo(project1.getName()))
+//         .body("countryList", hasItems(
+//              project1.getCountryList()
+//                      .get(0),
+//              project1.getCountryList()
+//                      .get(1)
+//                                      ))
+//         .body(matchesJsonSchemaInClasspath("contracts/project/findbyid.json"))
     ;
   }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateOptLockExcStack")
-  void UpdateOptLockExcStack() {
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+  @DisplayName("UpdateOptLockExc")
+  void UpdateOptLockExc() {
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
     // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
     project1.setName("NewName");
@@ -161,7 +168,6 @@ class CrudExcTest {
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("completeStackTrace", true)
 
          .body(project1)
 
@@ -176,6 +182,35 @@ class CrudExcTest {
          .body(matchesJsonSchemaInClasspath("contracts/exceptions/UpdateOptLockExc.json"))
     ;
   }
+
+//  @Test
+//  @EnabledIf(expression = enabledTest, loadContext = true)
+//  @DisplayName("UpdateOptLockExcStack")
+//  void UpdateOptLockExcStack() {
+//    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
+//
+//    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
+//    project1.setName("NewName");
+//    project1.setVersion(2L);
+//
+//    RestAssuredWebTestClient
+//         .given()
+//         .webTestClient(mockedWebClient)
+//         .queryParam("completeStackTrace", true)
+//
+//         .body(project1)
+//
+//         .when()
+//         .put(CRUD_UPD)
+//
+//         .then()
+//         .log()
+//         .everything()
+//
+//         .statusCode(BAD_REQUEST.value())
+//         .body(matchesJsonSchemaInClasspath("contracts/exceptions/UpdateOptLockExc.json"))
+//    ;
+//  }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)

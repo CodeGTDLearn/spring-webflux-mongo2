@@ -1,9 +1,9 @@
 # GLOBAL-EXCEPTION:
 global:
   exception:
-    developerAttribute: Global-Dev-Atribbute
+    developerAttributeMessage: Global-Dev-Atribbute
     developerMessage: Global-Dev-Message
-    globalAttribute: Global-General-Atribute
+    globalAttributeMessage: Global-General-Atribute
     globalMessage: Global-General-Message
 
 
@@ -12,8 +12,8 @@ modules:
   exception:
     project:
       projectNameSizeIncorretMessage: Project name size incorrect. Try Again.
-      projectNameEmptyMessage: Project name is mandatory
-      projectCostNegativeException: the Project Cost should be positive
-      projectNotFoundException: the Project was not found
+      projectNameEmptyMessage: Project can not be Empty.
+      projectCostNegativeMessage: the Project Cost should be positive
+      projectNotFoundMessage: the Project was not found
     task:
       taskProjectIdLackMessage: All tasks must have a projectId

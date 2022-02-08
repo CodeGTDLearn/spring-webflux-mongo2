@@ -161,7 +161,7 @@ class ResourceCrudTest {
          .body(project1)
 
          .when()
-         .post(CRUD_CREATE)
+         .post(CRUD_SAVE)
 
          .then()
          .log()
@@ -176,7 +176,6 @@ class ResourceCrudTest {
               project1.getCountryList()
                       .get(1)
                                       ))
-
          .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
@@ -193,7 +192,7 @@ class ResourceCrudTest {
          .body(projetoNoId)
 
          .when()
-         .post(CRUD_CREATE)
+         .post(CRUD_SAVE)
 
          .then()
          .log()
@@ -207,7 +206,6 @@ class ResourceCrudTest {
               projetoNoId.getCountryList()
                       .get(1)
                                       ))
-
          .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
@@ -287,7 +285,7 @@ class ResourceCrudTest {
   @DisplayName("Delete")
   public void Delete() {
 
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
     RestAssuredWebTestClient
 
@@ -316,11 +314,11 @@ class ResourceCrudTest {
     // C) EXPLANATION:
     //  C.1) The ENTITY-VERSION in the UPDATING-OBJECT
     //  C.2) must be the same ENTITY-VERSION than the DB-OBJECT
-    var previousName = project1.getName();
+    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
     var initialVersion = project1.getVersion();
     var updatedVersion = initialVersion + 1;
 
-    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
+    var previousName = project1.getName();
     project1.setName("NewName");
 
     RestAssuredWebTestClient

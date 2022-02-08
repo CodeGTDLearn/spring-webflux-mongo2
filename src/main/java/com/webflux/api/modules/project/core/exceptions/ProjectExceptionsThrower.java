@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.webflux.api.modules.project.core.exceptions.types.ProjectCostNegativeException;
-import com.webflux.api.modules.project.core.exceptions.types.ProjectNameNotFoundException;
+import com.webflux.api.modules.project.core.exceptions.types.ProjectNameEmptyException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNameSizeIncorretException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,38 +10,36 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 // getters + setter are necessary, in order to use @ConfigurationProperties
-@Component("projectExceptions")
+@Component
 @Getter
 @Setter
 @AllArgsConstructor
 public class ProjectExceptionsThrower {
 
-  private ProjectExceptionMessages projectExceptionMessages;
+  private ProjectExceptionsCustomAttributes messages;
 
-
-  public <T> Mono<T> projectNameEmptyMessage() {
-
-    return Mono.error(new ProjectNameNotFoundException(
-         projectExceptionMessages.getProjectNameEmptyMessage()));
-  }
-
-  public <T> Mono<T> projectNotFoundException() {
-
-    return Mono.error(new ProjectNameNotFoundException(
-         projectExceptionMessages.getProjectNotFoundException()));
-  }
-
-  public <T> Mono<T> projectCostNegativeException() {
+  public <T> Mono<T> throwProjectCostNegativeException() {
 
     return Mono.error(new ProjectCostNegativeException(
-         projectExceptionMessages.getProjectCostNegativeException()));
+         messages.getProjectCostNegativeMessage()));
   }
 
-  public <T> Mono<T> projectNameSizeIncorretMessage() {
+  public <T> Mono<T> throwProjectNameEmptyException() {
+    return Mono.error(new ProjectNameEmptyException(
+         messages.getProjectNameEmptyMessage()));}
+
+  public <T> Mono<T> throwProjectNameSizeIncorretException() {
 
     return Mono.error(new ProjectNameSizeIncorretException(
-         projectExceptionMessages.getProjectNameSizeIncorretMessage()));
+         messages.getProjectNameSizeIncorretMessage()));
   }
+
+  public <T> Mono<T> throwProjectNotFoundException() {
+    return Mono.error(new ProjectNameEmptyException(
+         messages.getProjectNotFoundMessage()));
+  }
+
+
 
 
 }

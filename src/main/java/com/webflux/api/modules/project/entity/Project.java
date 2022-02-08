@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Project implements Serializable {
   @Id
   private String _id;
 
+  @NotEmpty
   private String name;
 
   private String code;

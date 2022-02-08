@@ -15,6 +15,12 @@ import static com.webflux.api.modules.project.core.routes.template.RoutesProject
 import static com.webflux.api.modules.project.core.routes.template.RoutesProjection.TEMPL_ROOT_PROJECTION;
 import static org.springframework.http.HttpStatus.OK;
 
+// ==> EXCEPTIONS IN CONTROLLER:
+// *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
+//     - "Como stream pode ser manipulado por diferentes grupos de thread,
+//     - caso um erro aconteça em uma thread que não é a que operou a controller,
+//     - o ControllerAdvice não vai ser notificado "
+//     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @RestController
 @AllArgsConstructor
 @RequestMapping(TEMPL_ROOT_PROJECTION)

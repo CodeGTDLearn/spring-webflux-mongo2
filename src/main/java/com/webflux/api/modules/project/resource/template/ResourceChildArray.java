@@ -14,6 +14,12 @@ import reactor.core.publisher.Mono;
 import static com.webflux.api.modules.project.core.routes.template.RoutesChildArray.*;
 import static org.springframework.http.HttpStatus.OK;
 
+// ==> EXCEPTIONS IN CONTROLLER:
+// *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
+//     - "Como stream pode ser manipulado por diferentes grupos de thread,
+//     - caso um erro aconteça em uma thread que não é a que operou a controller,
+//     - o ControllerAdvice não vai ser notificado "
+//     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @RestController
 @AllArgsConstructor
 @RequestMapping(TEMPL_ROOT_CHILD)
@@ -33,7 +39,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .addCritTemplArray(projectId, country)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -48,7 +54,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .updateCritTemplArray(projectId, country, newcountry)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -62,7 +68,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .deleteCritTemplArray(projectId, country)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -73,12 +79,12 @@ public class ResourceChildArray {
   @ResponseStatus(OK)
   public Mono<ProjectChild> AddCritTemplChild(
        @RequestParam String projectId,
-       Mono<Task> task) {
+       @RequestBody Mono<Task> task) {
 
     return
          serviceChildArray
               .addCritTemplChild(projectId, task)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
   }
@@ -92,7 +98,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .updateCritTemplChild(projectId, taskIdToUpdate, ownername)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -107,7 +113,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .deleteCritTemplChild(projectId, taskIdtoDelete)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -118,7 +124,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .existTheTaskInProjectChild(projectId, idTask)
-              .switchIfEmpty(projectExceptionsThrower.projectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 

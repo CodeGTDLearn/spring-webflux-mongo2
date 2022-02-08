@@ -1,4 +1,4 @@
-package com.webflux.api.core.globalexception;
+package com.webflux.api.modules.project.core.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ModulesExceptionAttributes {
+public class ProjectExceptionsAttributes {
 //    private String title;
     private String detail;
     private String classType;

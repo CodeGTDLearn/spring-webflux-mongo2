@@ -18,6 +18,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 import java.util.List;
@@ -106,6 +107,7 @@ class ResourceTemplTest {
     globalTestMessage(testInfo.getTestMethod()
                               .toString(), "method-start");
 
+    // ----- PROJECT TEST ELEMENTS SAVED IN DB ---------------------------------
     project1 = projecNoID("C",
                           "2020-05-05",
                           "2021-05-05",
@@ -131,6 +133,7 @@ class ResourceTemplTest {
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
+    // ----- TASK TEST ELEMENTS SAVED IN DB ------------------------------------
     task1 = taskWithID("3",
                        "Mark",
                        1000L
@@ -140,9 +143,9 @@ class ResourceTemplTest {
                        7000L
                       ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
-
     dbUtils.countAndExecuteFlux(taskFlux, 1);
 
+    // ----- PROJECT-CHILD TEST ELEMENTS SAVED IN DB ---------------------------
     project1Child = ProjectChildBuilder.projectChildWithID("D",
                                                            "2022-07-07",
                                                            "2023-07-07",
@@ -260,6 +263,8 @@ class ResourceTemplTest {
   @DisplayName("UpdateCostWithCritTemplUpsert")
   public void UpdateCostWithCritTemplUpsert() {
 
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
+
     var project4 = projectWithID("B",
                           "2020-07-07",
                           "2021-07-07",
@@ -269,6 +274,7 @@ class ResourceTemplTest {
     projectList = of(project4);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
     dbUtils.countAndExecuteFlux(projectFlux, 1);
+
 
     RestAssuredWebTestClient
 
@@ -287,6 +293,20 @@ class ResourceTemplTest {
 
          .statusCode(OK.value())
     ;
+
+    StepVerifier
+         .create(serviceCrud.findById(project4.get_id()))
+         .expectSubscription()
+         .expectNextMatches(proj -> proj.getEstimatedCost() == 5000L)
+         .verifyComplete();
+
+
+    StepVerifier
+         .create(serviceCrud.findById(project4.get_id()))
+         .expectSubscription()
+         .expectNextMatches(project -> project.get_id()
+                                              .equals(project4.get_id()))
+         .verifyComplete();
   }
 
   @Test
@@ -294,7 +314,7 @@ class ResourceTemplTest {
   @DisplayName("DeleteCritTempl")
   public void DeleteCritTempl() {
 
-    RestAssuredWebTestClient.responseSpecification = responseSpecNoContentType();
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
 

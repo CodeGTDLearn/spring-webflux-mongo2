@@ -1,6 +1,6 @@
 package com.webflux.api.modules.task.core.exceptions;
 
-import com.webflux.api.modules.project.core.exceptions.types.ProjectNameNotFoundException;
+import com.webflux.api.modules.project.core.exceptions.types.ProjectNameEmptyException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,14 +12,13 @@ import reactor.core.publisher.Mono;
 @Getter
 @Setter
 @AllArgsConstructor
-public class TaskExceptions {
+public class TaskExceptionsThrower {
 
-    private TaskExceptionValidator taskExceptionValidator;
-
+    private TaskExceptionsCustomAttributes messages;
 
     public <T> Mono<T> projectNameNotFoundException() {
-        return Mono.error(new ProjectNameNotFoundException(
-             taskExceptionValidator.getTaskProjectIdLackMessage()));
+        return Mono.error(new ProjectNameEmptyException(
+             messages.getTaskProjectIdLackMessage()));
     }
 
 

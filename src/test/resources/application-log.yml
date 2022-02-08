@@ -16,7 +16,7 @@ logging:
             core:
               ReactiveMongoTemplates: DEBUG
   pattern:
-    console: >
+    console:
       %clr(%d{yyyy-MM-dd }){magenta}
       %clr(%d{| E |}){blue}
       %clr(%d{ HH:mm:ss}){magenta}

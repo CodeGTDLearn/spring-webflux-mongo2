@@ -62,7 +62,8 @@ class ResourceChildArrayTest {
   @Autowired
   IServiceCrud serviceCrud;
 
-  private Project project1, project2, project3;
+  private Project project1;
+  private Project project2;
   private Task task1, task2;
   private ProjectChild project1Child;
   private List<Project> projectList;
@@ -120,12 +121,12 @@ class ResourceChildArrayTest {
                           of("UK", "USA")
                          ).create();
 
-    project3 = projecNoID("B",
-                          "2020-07-07",
-                          "2021-07-07",
-                          3000L,
-                          of("UK", "USA")
-                         ).create();
+    Project project3 = projecNoID("B",
+                                  "2020-07-07",
+                                  "2021-07-07",
+                                  3000L,
+                                  of("UK", "USA")
+                                 ).create();
 
     projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
