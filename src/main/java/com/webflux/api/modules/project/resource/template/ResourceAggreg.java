@@ -37,7 +37,7 @@ public class ResourceAggreg {
     return
          serviceAggreg
               .findNoOfProjectsCostGreaterThan(projectCost)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
   }
@@ -51,7 +51,7 @@ public class ResourceAggreg {
     return
          serviceAggreg
               .findCostsGroupByStartDateForProjectsCostGreaterThan(projectCost)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
   }

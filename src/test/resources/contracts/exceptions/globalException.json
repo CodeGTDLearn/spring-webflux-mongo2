@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "timestamp": "2022-02-11T00:03:36.302+00:00",
+      "path": "/project/error",
+      "status": 404,
+      "error": "Not Found",
+      "message": "404 NOT_FOUND \"message\"",
+      "requestId": "160aef01",
+      "Global-Global-Atribute": "Global-General-Message",
+      "Global-Dev-Atribute": "Global-Dev-Message"
+    }
+  ],
+  "required": [
+    "timestamp",
+    "path",
+    "status",
+    "error",
+    "message",
+    "requestId",
+    "Global-Global-Atribute",
+    "Global-Dev-Atribute"
+  ],
+  "properties": {
+    "timestamp": {
+      "$id": "#/properties/timestamp",
+      "type": "string",
+      "title": "The timestamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "2022-02-11T00:03:36.302+00:00"
+      ]
+    },
+    "path": {
+      "$id": "#/properties/path",
+      "type": "string",
+      "title": "The path schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "/project/error"
+      ]
+    },
+    "status": {
+      "$id": "#/properties/status",
+      "type": "integer",
+      "title": "The status schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        404
+      ]
+    },
+    "error": {
+      "$id": "#/properties/error",
+      "type": "string",
+      "title": "The error schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Not Found"
+      ]
+    },
+    "message": {
+      "$id": "#/properties/message",
+      "type": "string",
+      "title": "The message schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "404 NOT_FOUND \"message\""
+      ]
+    },
+    "requestId": {
+      "$id": "#/properties/requestId",
+      "type": "string",
+      "title": "The requestId schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "160aef01"
+      ]
+    },
+    "Global-Global-Atribute": {
+      "$id": "#/properties/Global-Global-Atribute",
+      "type": "string",
+      "title": "The Global-Global-Atribute schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Global-General-Message"
+      ]
+    },
+    "Global-Dev-Atribute": {
+      "$id": "#/properties/Global-Dev-Atribute",
+      "type": "string",
+      "title": "The Global-Dev-Atribute schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Global-Dev-Message"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

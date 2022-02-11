@@ -1,36 +1,26 @@
 package com.webflux.api.modules.project.core.exceptions;
 
+import com.webflux.api.core.YamlPropertyFileConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.*;
 
 
-// ========================== PropertySource + ConfigurationProperties =============================
-// - https://www.appsdeveloperblog.com/spring-boot-configurationproperties-tutorial/
-// Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
-// Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly
+// =================== PropertySource + ConfigurationProperties + YAML Files =======================
+// - @PropertySource with YAML Files in Spring Boot - https://www.baeldung.com/spring-yaml-propertysource
+// - Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly
 @Getter
 @Setter
-@PropertySource(value = "classpath:exceptions-custom-attributes.yml", ignoreResourceNotFound = true)
+@Configuration
 @ConfigurationProperties(prefix = "modules.exception.project")
-@Component
+@PropertySource(value = "classpath:exceptions-messages.yml", factory = YamlPropertyFileConverter.class)
 public class ProjectExceptionsCustomAttributes {
 
     // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
     // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
     // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
-    @Positive
-    private String projectCostNegativeMessage;
-
-    @NotEmpty
-    private String projectNameEmptyMessage;
-
-    @Size(min = 10, max = 20)
-    private String projectNameSizeIncorretMessage;
-
+//    @NotEmpty
     private String projectNotFoundMessage;
 }

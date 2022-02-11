@@ -39,7 +39,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .addCritTemplArray(projectId, country)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -54,7 +54,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .updateCritTemplArray(projectId, country, newcountry)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -68,7 +68,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .deleteCritTemplArray(projectId, country)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -84,7 +84,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .addCritTemplChild(projectId, task)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
   }
@@ -98,7 +98,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .updateCritTemplChild(projectId, taskIdToUpdate, ownername)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -113,7 +113,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .deleteCritTemplChild(projectId, taskIdtoDelete)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -124,7 +124,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .existTheTaskInProjectChild(projectId, idTask)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 

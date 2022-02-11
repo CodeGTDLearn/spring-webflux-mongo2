@@ -4,15 +4,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serializable;
 
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.*;
 
-@ResponseStatus(NOT_ACCEPTABLE)
-public class TaskProjectIdLackException extends RuntimeException implements Serializable {
-
+@ResponseStatus(NOT_FOUND)
+public class TaskNotFoundException extends RuntimeException implements Serializable {
 
   private static final long serialVersionUID = - 3999988295319075185L;
 
-  public TaskProjectIdLackException(String message) {
+  public TaskNotFoundException(String message) {
 
     super(message);
   }

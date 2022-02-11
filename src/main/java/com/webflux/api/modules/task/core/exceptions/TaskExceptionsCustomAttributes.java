@@ -12,10 +12,10 @@ import javax.validation.constraints.NotEmpty;
 // - https://www.appsdeveloperblog.com/spring-boot-configurationproperties-tutorial/
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly
-@Component
+@Component("taskExceptionsCustomAttributes")
 @Getter
 @Setter
-@PropertySource(value = "classpath:exceptions-custom-attributes.yml", ignoreResourceNotFound = true)
+@PropertySource(value = "classpath:exceptions-messages.yml", ignoreResourceNotFound = true)
 @ConfigurationProperties(prefix = "modules.exception.task")
 public class TaskExceptionsCustomAttributes {
 
@@ -23,6 +23,6 @@ public class TaskExceptionsCustomAttributes {
     // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
     // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
     @NotEmpty
-    private String taskProjectIdLackMessage;
+    private String taskNotFoundMessage;
 
 }

@@ -34,7 +34,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameNot(projectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -45,7 +45,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByEstimatedCostGreaterThan(projectCost)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -57,7 +57,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByEstimatedCostBetween(projectCostFrom, projectCostTo)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -68,7 +68,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameLike(projectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -79,7 +79,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameRegex(projectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -94,7 +94,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findProjectByNameQuery(projectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -107,7 +107,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findProjectByNameAndCostQuery(projectName, projectCost)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -119,7 +119,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByEstimatedCostBetweenQuery(projectCostFrom, projectCostTo)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -130,7 +130,7 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameRegexQuery(regexpProjectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 

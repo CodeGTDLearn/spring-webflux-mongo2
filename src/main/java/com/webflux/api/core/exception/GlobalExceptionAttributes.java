@@ -11,6 +11,17 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
+/*
+    ╔═══════════════════════════════════════════════════════════╗
+    ║              GLOBAL-EXCEPTIONS EXPLANATIONS               ║
+    ╠═══════════════════════════════════════════════════════════╣
+    ║             There is no Thrower in Global-Exceptions      ║
+    ║             Because Global-Exceptions are throwed         ║
+    ║                  for "the system by itself",              ║
+    ║           not programmatically in a specific method       ║
+    ║(meaning threw inside a method according the coder defined)║
+    ╚═══════════════════════════════════════════════════════════╝
+*/
 @Component
 @Getter
 @Setter
@@ -34,29 +45,28 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
 
       // SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)
       // adiciona ATTRIBUTES no globalAttributes
-      /* A) DEFAULT-EXCEPTION-ATTRIBUTES:
-      {
-           "timestamp": "2022-02-08T22:02:08.410+00:00",
-           "path": "/project/save",
-           "status": 500,
-           "error": "Internal Server Error",
-           "message": "",
-           "requestId": "317e3568"
-      }
-      */
+            /* A) DEFAULT-EXCEPTION-ATTRIBUTES:
+            {
+                 "timestamp": "2022-02-08T22:02:08.410+00:00",
+                 "path": "/project/save",
+                 "status": 500,
+                 "error": "Internal Server Error",
+                 "message": "",
+                 "requestId": "317e3568"
+            }
+            */
       // B) Fix the Default-Parameter "message"("message": "",) which, initially, is Empty
       globalAttributes.put("message", error.getMessage());
       // C) Add Custom-Parameters in the Default-Parameters
-      globalAttributes.put(attributes.getGlobalAttributeMessage(), "error.getMessage()");
-      globalAttributes.put(attributes.getDeveloperAttributeMessage(),
-                           attributes.getDeveloperMessage()
-                             );
+      globalAttributes.put("Global-Global-Atribute", attributes.getGlobalMessage());
+      globalAttributes.put("Global-Dev-Atribute", attributes.getDeveloperMessage());
     }
 
     // NAO SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)
     // PORTANTO SENDO, UMA CUSTOM-EXCEPTION
     // retorna o valor PADRAO de ATTRIBUTES ou seja,
-    // o globalAttributes "PURO"
+    // o globalAttributes "PURO", sem insercao(.put's do IF acima) de qquer atributo
+    // personalizado
     // OU SEJA, nao se acrescenta os atributos definidos no IF-ACIMA
     return globalAttributes;
   }

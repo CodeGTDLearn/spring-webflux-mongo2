@@ -36,7 +36,7 @@ public class ResourceTempl {
     return
          serviceTempl
               .findProjectByNameQueryWithCriteriaTemplate(projectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -49,7 +49,7 @@ public class ResourceTempl {
     return
          serviceTempl
               .findByEstimatedCostBetweenQueryWithCriteriaTemplate(projectCostFrom, projectCostTo)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
 
@@ -63,7 +63,7 @@ public class ResourceTempl {
     return
          serviceTempl
               .findByNameRegexQueryWithCriteriaTemplate(regexpProjectName)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -76,7 +76,7 @@ public class ResourceTempl {
     return
          serviceTempl
               .UpdateCostWithCritTemplUpsert(projectId, projectCost)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
 
   }

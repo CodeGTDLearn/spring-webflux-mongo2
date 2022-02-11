@@ -7,4 +7,5 @@ public final class RoutesCrud {
   public static final String CRUD_ID =  "/{projectId}";
   public static final String CRUD_BYNAME =  "/find/ByName";
   public static final String CRUD_FINDALL =  "/find/findAll";
+  public static final String ERROR_PATH =  "/error";
 }

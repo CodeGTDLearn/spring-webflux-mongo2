@@ -1,0 +1,14 @@
+# GLOBAL-EXCEPTION:
+global:
+  exception:
+    developerMessage: Global-Dev-Message
+    globalMessage: Global-General-Message
+
+
+# CUSTOM-EXCEPTION:
+modules:
+  exception:
+    project:
+      projectNotFoundMessage: the Project was not found
+    task:
+      taskNotFoundMessage: All tasks must have a projectId

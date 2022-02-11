@@ -40,7 +40,7 @@ public class ResourceTransaction {
     return
          serviceTransaction
               .saveProjectAndTask(projectMono, taskMono)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 

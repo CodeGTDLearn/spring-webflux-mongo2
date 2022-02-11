@@ -2,16 +2,16 @@ package com.webflux.api.modules.project.service;
 
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.repo.ICrud;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("serviceCrud")
+@AllArgsConstructor
 public class ServiceCrud implements IServiceCrud {
 
-  @Autowired
-  ICrud crud;
+  private ICrud crud;
 
 
   /*╔══════════════════════════════╗
@@ -57,5 +57,4 @@ public class ServiceCrud implements IServiceCrud {
 
     return crud.findByName(projectName);
   }
-
 }
