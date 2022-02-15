@@ -10,5 +10,8 @@ modules:
   exception:
     project:
       projectNotFoundMessage: the Project was not found
+      projectUpdateSimpleFailMessage: the Update operation fail. Try again later.
+      projectUpdateOptFailMessage: The Update operation fail. Someone did it before you. Try again.
+      projectNameIsEmptyMessage: Project name is empty. It is not allowed.
     task:
       taskNotFoundMessage: All tasks must have a projectId

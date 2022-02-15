@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.core.exceptions;
 
-import com.webflux.api.core.YamlPropertyFileConverter;
+import com.webflux.api.core.config.YamlPropertyFileConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -23,4 +23,7 @@ public class ProjectExceptionsCustomAttributes {
     // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
 //    @NotEmpty
     private String projectNotFoundMessage;
+    private String projectUpdateSimpleFailMessage;
+    private String projectUpdateOptFailMessage;
+    private String projectNameIsEmptyMessage;
 }

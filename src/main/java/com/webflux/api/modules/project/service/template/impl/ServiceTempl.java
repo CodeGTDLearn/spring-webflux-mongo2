@@ -3,15 +3,16 @@ package com.webflux.api.modules.project.service.template.impl;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.repo.template.RepoTempl;
 import com.webflux.api.modules.project.service.template.IServiceTempl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("serviceTempl")
+@AllArgsConstructor
 public class ServiceTempl implements IServiceTempl {
 
-  @Autowired
+
   RepoTempl repoTempl;
 
   /*╔══════════════════════════════════╗

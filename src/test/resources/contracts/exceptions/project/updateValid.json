@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "timestamp": "2022-02-14T21:02:51.299+00:00",
+      "path": "/project/update",
+      "status": 400,
+      "error": "Bad Request",
+      "message": "Validation failed for argument at index 0 in method: public reactor.core.publisher.Mono<com.webflux.api.modules.project.entity.Project> com.webflux.api.modules.project.resource.ResourceCrudTransact.update(com.webflux.api.modules.project.entity.Project), with 1 error(s): [Field error in object 'project' on field 'name': rejected value []; codes [NotEmpty.project.name,NotEmpty.name,NotEmpty.java.lang.String,NotEmpty]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [project.name,name]; arguments []; default message [name]]; default message [must not be empty]] ",
+      "requestId": "5ab4cd7e",
+      "Global-Global-Atribute": "Global-General-Message",
+      "Global-Dev-Atribute": "Global-Dev-Message"
+    }
+  ],
+  "required": [
+    "timestamp",
+    "path",
+    "status",
+    "error",
+    "message",
+    "requestId",
+    "Global-Global-Atribute",
+    "Global-Dev-Atribute"
+  ],
+  "properties": {
+    "timestamp": {
+      "$id": "#/properties/timestamp",
+      "type": "string",
+      "title": "The timestamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "2022-02-14T21:02:51.299+00:00"
+      ]
+    },
+    "path": {
+      "$id": "#/properties/path",
+      "type": "string",
+      "title": "The path schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "/project/update"
+      ]
+    },
+    "status": {
+      "$id": "#/properties/status",
+      "type": "integer",
+      "title": "The status schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        400
+      ]
+    },
+    "error": {
+      "$id": "#/properties/error",
+      "type": "string",
+      "title": "The error schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Bad Request"
+      ]
+    },
+    "message": {
+      "$id": "#/properties/message",
+      "type": "string",
+      "title": "The message schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Validation failed for argument at index 0 in method: public reactor.core.publisher.Mono<com.webflux.api.modules.project.entity.Project> com.webflux.api.modules.project.resource.ResourceCrudTransact.update(com.webflux.api.modules.project.entity.Project), with 1 error(s): [Field error in object 'project' on field 'name': rejected value []; codes [NotEmpty.project.name,NotEmpty.name,NotEmpty.java.lang.String,NotEmpty]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [project.name,name]; arguments []; default message [name]]; default message [must not be empty]] "
+      ]
+    },
+    "requestId": {
+      "$id": "#/properties/requestId",
+      "type": "string",
+      "title": "The requestId schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "5ab4cd7e"
+      ]
+    },
+    "Global-Global-Atribute": {
+      "$id": "#/properties/Global-Global-Atribute",
+      "type": "string",
+      "title": "The Global-Global-Atribute schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Global-General-Message"
+      ]
+    },
+    "Global-Dev-Atribute": {
+      "$id": "#/properties/Global-Dev-Atribute",
+      "type": "string",
+      "title": "The Global-Dev-Atribute schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Global-Dev-Message"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

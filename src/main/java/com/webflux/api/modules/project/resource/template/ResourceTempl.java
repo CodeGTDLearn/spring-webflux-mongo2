@@ -36,7 +36,6 @@ public class ResourceTempl {
     return
          serviceTempl
               .findProjectByNameQueryWithCriteriaTemplate(projectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -49,10 +48,7 @@ public class ResourceTempl {
     return
          serviceTempl
               .findByEstimatedCostBetweenQueryWithCriteriaTemplate(projectCostFrom, projectCostTo)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
-
   }
 
   @GetMapping(TEMPL_BYNAME_REG)
@@ -63,7 +59,6 @@ public class ResourceTempl {
     return
          serviceTempl
               .findByNameRegexQueryWithCriteriaTemplate(regexpProjectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -76,9 +71,7 @@ public class ResourceTempl {
     return
          serviceTempl
               .UpdateCostWithCritTemplUpsert(projectId, projectCost)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
   }
 
   @DeleteMapping(TEMPL_DEL_CRIT)
@@ -86,7 +79,5 @@ public class ResourceTempl {
   public Mono<Void> deleteWithCriteriaTemplate(@RequestParam String projectId) {
 
     return serviceTempl.deleteWithCriteriaTemplate(projectId);
-
-
   }
 }

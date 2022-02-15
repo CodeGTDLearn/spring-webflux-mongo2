@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.repo.template;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,9 +14,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository("repoChildArray")
+@AllArgsConstructor
 public class RepoChildArray {
 
-  @Autowired
+
   ReactiveMongoTemplate template;
 
   /*╔══════════════════════════════════╗

@@ -7,10 +7,10 @@
   "default": {},
   "examples": [
     {
-      "detail": "the Project was not found",
-      "classType": "com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException",
-      "status": 404,
-      "timeStamp": 1644537320622
+      "detail": "The Update operation fail. Someone did it before you. Try again.",
+      "classType": "com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVersionException",
+      "status": 400,
+      "timeStamp": 1644857228014
     }
   ],
   "required": [
@@ -27,7 +27,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": "",
       "examples": [
-        "the Project was not found"
+        "The Update operation fail. Someone did it before you. Try again."
       ]
     },
     "classType": {
@@ -37,7 +37,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": "",
       "examples": [
-        "com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException"
+        "com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVersionException"
       ]
     },
     "status": {
@@ -47,7 +47,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": 0,
       "examples": [
-        404
+        400
       ]
     },
     "timeStamp": {
@@ -57,7 +57,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": 0,
       "examples": [
-        1644537320622
+        1644857228014
       ]
     }
   },

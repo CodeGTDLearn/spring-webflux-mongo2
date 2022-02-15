@@ -2,12 +2,12 @@ package com.webflux.api.modules.project.service.template.impl;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.core.dto.ResultByStartDateAndCost;
 import com.webflux.api.modules.project.core.dto.ResultCount;
+import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.repo.template.RepoAggreg;
 import com.webflux.api.modules.project.service.template.IServiceAggreg;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -16,9 +16,10 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 @Service("serviceAggreg")
+@AllArgsConstructor
 public class ServiceAggreg implements IServiceAggreg {
 
-  @Autowired
+
   RepoAggreg repoAggreg;
 
 

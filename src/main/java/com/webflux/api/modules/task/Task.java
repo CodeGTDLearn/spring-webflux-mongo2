@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Getter
@@ -22,6 +23,7 @@ public class Task  implements Serializable {
   @Field("pid")
   private String projectId;
 
+  @NotEmpty
   private String name;
 
   @Field("desc")

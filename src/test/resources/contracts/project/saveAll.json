@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "array",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": [],
+  "examples": [
+    [
+      {
+        "_id": "620ace387aace702e07d8e74",
+        "name": "Shannon Schinner IV",
+        "code": "B",
+        "description": "Harum velit eligendi accusantium doloribus perferendis unde doloribus. Est voluptatibus placeat minus corporis in voluptatibus et. Sed et dolorem explicabo consectetur exercitationem. Velit quis et incidunt et ea dolor.",
+        "startDate": "2020-07-07",
+        "endDate": "2021-07-07",
+        "estimatedCost": 3000,
+        "countryList": [
+          "UK",
+          "USA"
+        ],
+        "version": 0
+      },
+      {
+        "_id": "620ace387aace702e07d8e75",
+        "name": "Refugio D'Amore",
+        "code": "C",
+        "description": "Quae doloremque cupiditate. Consequuntur ut aliquam aut. Velit totam non omnis. Accusamus dignissimos soluta doloribus ducimus.",
+        "startDate": "2020-05-05",
+        "endDate": "2021-05-05",
+        "estimatedCost": 1000,
+        "countryList": [
+          "HOL",
+          "CAN"
+        ],
+        "version": 0
+      }
+    ]
+  ],
+  "additionalItems": true,
+  "items": {
+    "$id": "#/items",
+    "anyOf": [
+      {
+        "$id": "#/items/anyOf/0",
+        "type": "object",
+        "title": "The first anyOf schema",
+        "description": "An explanation about the purpose of this instance.",
+        "default": {},
+        "examples": [
+          {
+            "_id": "620ace387aace702e07d8e74",
+            "name": "Shannon Schinner IV",
+            "code": "B",
+            "description": "Harum velit eligendi accusantium doloribus perferendis unde doloribus. Est voluptatibus placeat minus corporis in voluptatibus et. Sed et dolorem explicabo consectetur exercitationem. Velit quis et incidunt et ea dolor.",
+            "startDate": "2020-07-07",
+            "endDate": "2021-07-07",
+            "estimatedCost": 3000,
+            "countryList": [
+              "UK",
+              "USA"
+            ],
+            "version": 0
+          }
+        ],
+        "required": [
+          "_id",
+          "name",
+          "code",
+          "description",
+          "startDate",
+          "endDate",
+          "estimatedCost",
+          "countryList",
+          "version"
+        ],
+        "properties": {
+          "_id": {
+            "$id": "#/items/anyOf/0/properties/_id",
+            "type": "string",
+            "title": "The _id schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "620ace387aace702e07d8e74"
+            ]
+          },
+          "name": {
+            "$id": "#/items/anyOf/0/properties/name",
+            "type": "string",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Shannon Schinner IV"
+            ]
+          },
+          "code": {
+            "$id": "#/items/anyOf/0/properties/code",
+            "type": "string",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "B"
+            ]
+          },
+          "description": {
+            "$id": "#/items/anyOf/0/properties/description",
+            "type": "string",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "Harum velit eligendi accusantium doloribus perferendis unde doloribus. Est voluptatibus placeat minus corporis in voluptatibus et. Sed et dolorem explicabo consectetur exercitationem. Velit quis et incidunt et ea dolor."
+            ]
+          },
+          "startDate": {
+            "$id": "#/items/anyOf/0/properties/startDate",
+            "type": "string",
+            "title": "The startDate schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "2020-07-07"
+            ]
+          },
+          "endDate": {
+            "$id": "#/items/anyOf/0/properties/endDate",
+            "type": "string",
+            "title": "The endDate schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "2021-07-07"
+            ]
+          },
+          "estimatedCost": {
+            "$id": "#/items/anyOf/0/properties/estimatedCost",
+            "type": "integer",
+            "title": "The estimatedCost schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              3000
+            ]
+          },
+          "countryList": {
+            "$id": "#/items/anyOf/0/properties/countryList",
+            "type": "array",
+            "title": "The countryList schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+              [
+                "UK",
+                "USA"
+              ]
+            ],
+            "additionalItems": true,
+            "items": {
+              "$id": "#/items/anyOf/0/properties/countryList/items",
+              "anyOf": [
+                {
+                  "$id": "#/items/anyOf/0/properties/countryList/items/anyOf/0",
+                  "type": "string",
+                  "title": "The first anyOf schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "UK",
+                    "USA"
+                  ]
+                }
+              ]
+            }
+          },
+          "version": {
+            "$id": "#/items/anyOf/0/properties/version",
+            "type": "integer",
+            "title": "The version schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              0
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  }
+}

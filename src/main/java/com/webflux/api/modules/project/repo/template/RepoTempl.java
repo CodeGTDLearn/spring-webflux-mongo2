@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.repo.template;
 
 import com.webflux.api.modules.project.entity.Project;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -14,9 +14,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository("repoTempl")
+@AllArgsConstructor
 public class RepoTempl {
 
-  @Autowired
+
   ReactiveMongoTemplate template;
 
   /*╔══════════════════════════════════╗

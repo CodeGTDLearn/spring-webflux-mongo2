@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.repo.IRepo;
 import com.webflux.api.modules.task.ITaskRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -13,12 +13,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("serviceRepo")
+@AllArgsConstructor
 public class ServiceRepo implements IServiceRepo {
 
-  @Autowired
+
   IRepo repo;
 
-  @Autowired
+
   ITaskRepo taskRepo;
 
 

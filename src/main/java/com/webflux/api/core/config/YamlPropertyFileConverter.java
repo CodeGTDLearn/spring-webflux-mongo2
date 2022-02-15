@@ -1,4 +1,4 @@
-package com.webflux.api.core;
+package com.webflux.api.core.config;
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.env.PropertiesPropertySource;
@@ -9,6 +9,10 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import java.io.IOException;
 import java.util.Properties;
 
+/*
+    APPLICATION.YML MUST HAVE THIS CONVERTER
+    APPLICATION.PROPERTIES DOES NOT HAVE THE NECESSITY OF THIS CONVERTER
+ */
 public class YamlPropertyFileConverter implements PropertySourceFactory {
 
     @Override

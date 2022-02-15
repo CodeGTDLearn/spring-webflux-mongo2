@@ -3,8 +3,8 @@ package com.webflux.api.modules.task.core.exceptions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -12,11 +12,11 @@ import javax.validation.constraints.NotEmpty;
 // - https://www.appsdeveloperblog.com/spring-boot-configurationproperties-tutorial/
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly
-@Component("taskExceptionsCustomAttributes")
 @Getter
 @Setter
-@PropertySource(value = "classpath:exceptions-messages.yml", ignoreResourceNotFound = true)
+@Configuration
 @ConfigurationProperties(prefix = "modules.exception.task")
+@PropertySource(value = "classpath:exceptions-messages.yml", ignoreResourceNotFound = true)
 public class TaskExceptionsCustomAttributes {
 
     // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT

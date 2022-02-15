@@ -32,8 +32,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceCrudTest")
@@ -202,14 +201,13 @@ class ResourceCrudTest {
          .body("name", equalTo(projetoNoId.getName()))
          .body("countryList", hasItems(
               projetoNoId.getCountryList()
-                      .get(0),
+                         .get(0),
               projetoNoId.getCountryList()
-                      .get(1)
+                         .get(1)
                                       ))
          .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
-
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
@@ -287,27 +285,31 @@ class ResourceCrudTest {
 
     RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(CRUD_ID, project1.get_id())
+         .delete(CRUD_ID, project1.get_id())
 
          .then()
          .log()
          .everything()
 
-         .statusCode(OK.value())
+         .statusCode(NO_CONTENT.value())
     ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 1);
   }
 
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateOptimistic")
-  public void UpdateOptimisticLocking() {
+  @DisplayName("UpdateOptim")
+  public void UpdateOptim() {
     // OPTMISTIC-LOCKING-UPDATE:
     // A) Uses the 'VERSION-ANNOTATION' in THE Entity
     // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
@@ -376,6 +378,7 @@ class ResourceCrudTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("BHWorks")
   public void bHWorks() {
+
     bhWorks();
   }
 }

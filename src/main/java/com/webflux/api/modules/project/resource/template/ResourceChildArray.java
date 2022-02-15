@@ -39,10 +39,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .addCritTemplArray(projectId, country)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
-
   }
 
   @PutMapping(TEMPL_UPD_ARRAY_CRIT)
@@ -54,10 +51,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .updateCritTemplArray(projectId, country, newcountry)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
-
   }
 
   @DeleteMapping(TEMPL_DEL_ARRAY_CRIT)
@@ -68,10 +62,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .deleteCritTemplArray(projectId, country)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
-
   }
 
 
@@ -84,9 +75,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .addCritTemplChild(projectId, task)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
   }
 
   @PutMapping(TEMPL_UPD_CHILD_CRIT)
@@ -98,10 +87,7 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .updateCritTemplChild(projectId, taskIdToUpdate, ownername)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
-
   }
 
   @DeleteMapping(TEMPL_DEL_CHILD_CRIT)
@@ -113,7 +99,6 @@ public class ResourceChildArray {
     return
          serviceChildArray
               .deleteCritTemplChild(projectId, taskIdtoDelete)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -121,13 +106,10 @@ public class ResourceChildArray {
   @ResponseStatus(OK)
   public Mono<Boolean> existTheTaskInProjectChild(@RequestParam String projectId,
                                                   @RequestParam String idTask) {
+
     return
          serviceChildArray
               .existTheTaskInProjectChild(projectId, idTask)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
-
-
   }
-
 }

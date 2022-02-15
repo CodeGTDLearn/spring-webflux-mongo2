@@ -28,12 +28,6 @@ public class BlockhoundUtils {
             .allowBlockingCallsInside("java.io.FileOutputStream",
                                       "writeBytes"
                                      )
-            .allowBlockingCallsInside("java.io.PrintStream",
-                                      "write"
-                                     )
-            .allowBlockingCallsInside("java.io.FileOutputStream",
-                                      "writeBytes"
-                                     )
             .allowBlockingCallsInside("java.io.BufferedOutputStream",
                                       "flushBuffer"
                                      )
@@ -46,27 +40,37 @@ public class BlockhoundUtils {
             .allowBlockingCallsInside("java.io.PrintStream",
                                       "print"
                                      )
+            //problems with transactions
+            .allowBlockingCallsInside("java.util.UUID",
+                                      "randomUUID"
+                                     )
             .allowBlockingCallsInside("java.io.PrintStream",
                                       "println"
                                      );
 
 
   public static void blockhoundInstallAllowAllCalls() {
+
     BlockHound.install(AllowedCalls);
   }
 
 
   public static void blockhoundInstallSimple() {
+
     BlockHoundIntegration allowedCalls =
          builder -> builder
-              .allowBlockingCallsInside("java.io.PrintStream",
-                                        "write"
+//              .allowBlockingCallsInside("java.io.PrintStream",
+//                                        "write"
+//                                       )
+              .allowBlockingCallsInside("java.util.concurrent.ConcurrentMap",
+                                        "computeIfAbsent"
                                        );
     BlockHound.install(allowedCalls);
   }
 
 
   public static void bhWorks() {
+
     try {
       FutureTask<?> task = new FutureTask<>(() -> {
         Thread.sleep(0);
@@ -76,10 +80,10 @@ public class BlockhoundUtils {
       Schedulers.parallel()
                 .schedule(task);
 
-      task.get(10,TimeUnit.SECONDS);
+      task.get(10, TimeUnit.SECONDS);
       Assertions.fail("should fail");
     } catch (ExecutionException | InterruptedException | TimeoutException e) {
-      Assertions.assertTrue(e.getCause() instanceof BlockingOperationError,"detected");
+      Assertions.assertTrue(e.getCause() instanceof BlockingOperationError, "detected");
     }
   }
 

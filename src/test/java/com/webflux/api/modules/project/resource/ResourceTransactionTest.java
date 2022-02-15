@@ -1,7 +1,8 @@
-package com.webflux.api.core.exception;
+package com.webflux.api.modules.project.resource;
 
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
+import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
@@ -16,10 +17,10 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
-import java.util.Arrays;
+import java.util.List;
 
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.ERROR_PATH;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
+import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
@@ -28,28 +29,20 @@ import static config.utils.BlockhoundUtils.bhWorks;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.CREATED;
 
-// ==> EXCEPTIONS IN CONTROLLER:
-// *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
-//     - "Como stream pode ser manipulado por diferentes grupos de thread,
-//     - caso um erro aconteça em uma thread que não é a que operou a controller,
-//     - o ControllerAdvice não vai ser notificado "
-//     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @Import({TestDbUtilsConfig.class})
-@DisplayName("GlobalExceptionTest")
+@DisplayName("ResourceCrudTest")
 @MergedResource
-class GlobalExceptionTest {
+class ResourceTransactionTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
   @Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
-
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -62,9 +55,11 @@ class GlobalExceptionTest {
   TestDbUtils dbUtils;
 
   @Autowired
-  GlobalExceptionCustomAttributes globalException;
+  IServiceCrud serviceCrud;
 
-  private Project project1;
+  private Project project1, project2, project3, projetoNoId;
+  private Task task1;
+  private List<Project> projectList;
 
 
   @BeforeAll
@@ -78,7 +73,7 @@ class GlobalExceptionTest {
                                         );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
-         requestSpecsSetPath("http://localhost:8080/" + PROJ_ROOT_CRUD);
+         requestSpecsSetPath("http://localhost:8080" + PROJ_ROOT_CRUD);
     RestAssuredWebTestClient.responseSpecification = responseSpecs();
   }
 
@@ -94,9 +89,9 @@ class GlobalExceptionTest {
   @BeforeEach
   void beforeEach(TestInfo testInfo) {
 
-    //REAL-SERVER INJECTED IN WEB-TEST-CLIENT(non-blocking client)'
-    //SHOULD BE USED WHEN 'DOCKER-COMPOSE' UP A REAL-WEB-SERVER
-    //BECAUSE THERE IS 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
+    // REAL-SERVER INJECTED IN WEB-TEST-CLIENT(non-blocking client)'
+    // SHOULD BE USED WHEN 'DOCKER-COMPOSE' UP A REAL-WEB-SERVER
+    // BECAUSE THERE IS 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
     // realWebClient = WebTestClient.bindToServer()
     //                      .baseUrl("http://localhost:8080/customer")
     //                      .build();
@@ -111,19 +106,35 @@ class GlobalExceptionTest {
                           of("UK", "USA")
                          ).create();
 
-    Project project2 = projecNoID("B",
-                                  "2020-06-06",
-                                  "2021-06-06",
-                                  2000L,
-                                  of("UK", "USA")
-                                 ).create();
-    Flux<Project> projectFlux = dbUtils.saveProjectList(Arrays.asList(project1, project2));
+    project2 = projecNoID("B",
+                          "2020-06-06",
+                          "2021-06-06",
+                          2000L,
+                          of("UK", "USA")
+                         ).create();
+
+    project3 = projecNoID("B",
+                          "2020-07-07",
+                          "2021-07-07",
+                          3000L,
+                          of("UK", "USA")
+                         ).create();
+    projetoNoId = projecNoID("C",
+                             "2020-05-05",
+                             "2021-05-05",
+                             1000L,
+                             of("HOL", "CAN")
+                            ).create();
+
+    projectList = asList(project1, project2);
+    Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
+
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
-    Task task1 = taskWithID("3",
-                            "Mark",
-                            1000L
-                           ).create();
+    task1 = taskWithID("3",
+                       "Mark",
+                       1000L
+                      ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -136,56 +147,45 @@ class GlobalExceptionTest {
                               .toString(), "method-end");
   }
 
+
   @Test
-  @DisplayName("globalException")
   @EnabledIf(expression = enabledTest, loadContext = true)
-  void globalException() {
+  @DisplayName("saveTransaction")
+  public void saveTransaction() {
 
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
 
+         .body(projetoNoId)
+         .and()
+         .body(task1)
+
          .when()
-         .get(ERROR_PATH)
+         .post(REPO_TRANSACT)
 
          .then()
-         .statusCode(NOT_FOUND.value())
          .log()
          .everything()
 
-         .body("Global-Dev-Atribute", equalTo(globalException.getDeveloperMessage()))
-         .body("Global-Global-Atribute", equalTo(globalException.getGlobalMessage()))
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/global/globalException.json"))
+         .statusCode(CREATED.value())
+    //         .body("name", equalTo(projetoNoId.getName()))
+    //         .body("countryList", hasItems(
+    //              projetoNoId.getCountryList()
+    //                         .get(0),
+    //              projetoNoId.getCountryList()
+    //                         .get(1)
+    //                                      ))
+    //         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
 
-  @Test
-  @DisplayName("Global-Exception Error Stack")
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  void globalExceptionErrorStack() {
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
-         .queryParam("completeStackTrace", true)
-
-         .when()
-         .get(ERROR_PATH)
-
-         .then()
-         .statusCode(NOT_FOUND.value())
-         .log()
-         .everything()
-         .body("Global-Dev-Atribute", equalTo(globalException.getDeveloperMessage()))
-         .body("Global-Global-Atribute", equalTo(globalException.getGlobalMessage()))
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/global/globalExceptionStack.json"))
-    ;
-  }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("BHWorks")
-  void bHWorks() {
+  public void bHWorks() {
+
     bhWorks();
   }
-
 }

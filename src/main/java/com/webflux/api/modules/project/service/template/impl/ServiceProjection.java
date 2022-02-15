@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.service.template.impl;
 import com.webflux.api.modules.project.core.dto.ProjectDto;
 import com.webflux.api.modules.project.repo.template.RepoProjection;
 import com.webflux.api.modules.project.service.template.IServiceProjection;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,10 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 
 @Service("serviceProjection")
+@AllArgsConstructor
 public class ServiceProjection implements IServiceProjection {
 
-  @Autowired
+
   RepoProjection repoProjection;
 
   @Override

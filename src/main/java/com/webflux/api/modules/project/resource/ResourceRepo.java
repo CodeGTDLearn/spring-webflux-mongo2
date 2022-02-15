@@ -34,7 +34,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameNot(projectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -45,7 +44,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByEstimatedCostGreaterThan(projectCost)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -57,7 +55,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByEstimatedCostBetween(projectCostFrom, projectCostTo)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -68,7 +65,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameLike(projectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -79,7 +75,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameRegex(projectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -94,7 +89,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findProjectByNameQuery(projectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -107,7 +101,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findProjectByNameAndCostQuery(projectName, projectCost)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -119,7 +112,6 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByEstimatedCostBetweenQuery(projectCostFrom, projectCostTo)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
@@ -130,28 +122,10 @@ public class ResourceRepo {
     return
          serviceRepo
               .findByNameRegexQuery(regexpProjectName)
-//              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
          ;
   }
 
-  //  public Mono<ServerResponse> saveProjectAndTask(ServerRequest request) {
-  //
-  //    Project p = new Project();
-  //    p.set_id("6");
-  //    p.setName("Project6");
-  //
-  //    Task t = new Task();
-  //    t.set_id("10");
-  //    t.setProjectId("6");
-  //
-  //
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.saveProjectAndTask(Mono.just(p),Mono.just(t)),Void.class)
-  //         .log();
-  //  }
+
 
 
   //  public Mono<ServerResponse> chunkAndSaveProject(ServerRequest request) {

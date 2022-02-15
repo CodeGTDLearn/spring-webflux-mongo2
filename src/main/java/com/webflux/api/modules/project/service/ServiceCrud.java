@@ -1,9 +1,11 @@
 package com.webflux.api.modules.project.service;
 
+import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.repo.ICrud;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -11,8 +13,8 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class ServiceCrud implements IServiceCrud {
 
+  private final ProjectExceptionsThrower projectExceptionsThrower;
   private ICrud crud;
-
 
   /*╔══════════════════════════════╗
     ║   REACTIVE-MONGO-REPOSITORY  ║
@@ -24,6 +26,7 @@ public class ServiceCrud implements IServiceCrud {
   }
 
   @Override
+  @Transactional
   public Mono<Project> update(Project project) {
 
     return crud.save(project);

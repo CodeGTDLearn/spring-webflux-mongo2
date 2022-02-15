@@ -4,10 +4,14 @@ import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
+import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 
@@ -32,7 +36,7 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
   private String password;
   private String authenticationDatabase;
 
-  //  @Autowired
+
   //  private MappingMongoConverter mongoConverter;
 
 
@@ -69,18 +73,18 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
   }
 
 
-  //  @Bean
-  //  public ReactiveMongoTemplate reactiveMongoTemplate() {
-  //    return new ReactiveMongoTemplate(reactiveMongoClient(),getDatabaseName());
-  //  }
-  //
-  //
-  //  @Bean
-  //  ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
-  //    return new ReactiveMongoTransactionManager(factory);
-  //  }
-  //
-  //
+    @Bean
+    public ReactiveMongoTemplate reactiveMongoTemplate() {
+      return new ReactiveMongoTemplate(reactiveMongoClient(),getDatabaseName());
+    }
+
+
+    @Bean
+    ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
+      return new ReactiveMongoTransactionManager(factory);
+    }
+
+
   //  @Bean
   //  public ReactiveGridFsTemplate reactiveGridFsTemplate() throws Exception {
   //    return new ReactiveGridFsTemplate(reactiveMongoDbFactory(),mongoConverter);

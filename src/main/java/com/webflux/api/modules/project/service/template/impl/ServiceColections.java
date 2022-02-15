@@ -5,15 +5,16 @@ import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.repo.template.RepoColections;
 import com.webflux.api.modules.project.service.template.IServiceColections;
 import com.webflux.api.modules.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("serviceColections")
+@AllArgsConstructor
 public class ServiceColections implements IServiceColections {
 
-  @Autowired
+
   RepoColections repoColections;
 
   /*╔══════════════════════════════════╗

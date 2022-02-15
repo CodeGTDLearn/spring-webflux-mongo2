@@ -6,15 +6,16 @@ import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.repo.template.RepoChildArray;
 import com.webflux.api.modules.project.service.template.IServiceChildArray;
 import com.webflux.api.modules.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("serviceChildArray")
+@AllArgsConstructor
 public class ServiceChildArray implements IServiceChildArray {
 
-  @Autowired
+
   RepoChildArray repoChildArray;
 
   /*╔══════════════════════════════════╗

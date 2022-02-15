@@ -1,10 +1,11 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.exception.GlobalExceptionCustomAttributes;
 import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
+import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,10 +30,7 @@ public class ResourceCrud {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
   private final ProjectExceptionsThrower projectExceptionsThrower;
-
   private IServiceCrud serviceCrud;
-
-  private GlobalExceptionCustomAttributes globalException;
 
   @PostMapping(CRUD_SAVE)
   @ResponseStatus(CREATED)
@@ -41,28 +39,37 @@ public class ResourceCrud {
     return
          serviceCrud
               .save(project)
+//              .onErrorResume(error -> {
+//                if (error instanceof OptimisticLockingFailureException) {
+//                  return ServerResponse.status(BAD_REQUEST)
+//                                       .build();
+//                }
+//                return ServerResponse.status(INTERNAL_SERVER_ERROR)
+//                                     .build();
+//              })
          ;
 
-    //              .onErrorResume(error -> {
-    //                if (error instanceof OptimisticLockingFailureException) {
-    //                  return ServerResponse.status(BAD_REQUEST)
-    //                                       .build();
-    //                }
-    //                return ServerResponse.status(INTERNAL_SERVER_ERROR)
-    //                                     .build();
-    //              })
 
   }
 
   @PutMapping(CRUD_UPD)
   @ResponseStatus(OK)
-  public Mono<Project> update(@RequestBody Project project) {
+  public Mono<Project> update(@Valid @RequestBody Project project) {
 
     return
          serviceCrud
               .findById(project.get_id())
-         //              .switchIfEmpty(exceptions.throwProjectNameEmptyException())
-         //              .then(serviceCrud.update(project))
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+              .then(serviceCrud.update(project))
+              .onErrorResume(error -> {
+                if (error instanceof OptimisticLockingFailureException){
+                  return projectExceptionsThrower.throwUpdateOptmVersionException();
+                }
+                if (error instanceof ProjectNotFoundException){
+                  return projectExceptionsThrower.throwProjectNotFoundException();
+                }
+                return projectExceptionsThrower.throwUpdateSimpleException();
+              })
          ;
   }
 
@@ -94,26 +101,15 @@ public class ResourceCrud {
   @DeleteMapping(CRUD_ID)
   @ResponseStatus(NO_CONTENT)
   public Mono<Void> delete(@PathVariable String projectId) {
-
     return
          serviceCrud
               .findById(projectId)
-              //              .switchIfEmpty(exceptions.throwProjectNotFoundException())
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
               .flatMap(item -> serviceCrud.deleteById(item.get_id()));
   }
 
   @GetMapping(ERROR_PATH)
   public Mono<Project> globalExceptionError() {
-
-    //    String message = globalException.getGlobalMessage();
-
     return Mono.error(new ResponseStatusException(NOT_FOUND, "message"));
-
-    //    return serviceCrud
-    //         .findAll()
-    //         .concatWith(
-    //              Mono.error(
-    //                   new ResponseStatusException(NOT_FOUND, "message"))
-    //              );
   }
 }

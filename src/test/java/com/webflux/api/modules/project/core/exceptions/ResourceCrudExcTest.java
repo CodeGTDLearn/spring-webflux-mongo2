@@ -20,8 +20,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.CRUD_ID;
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
+import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
@@ -34,7 +33,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceCrudTest")
@@ -130,7 +129,6 @@ class ResourceCrudExcTest {
 
     projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
-
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
     task1 = taskWithID("3",
@@ -149,107 +147,6 @@ class ResourceCrudExcTest {
                               .toString(), "method-end");
   }
 
-//  @Test
-//  @EnabledIf(expression = enabledTest, loadContext = true)
-//  @DisplayName("saveWithID")
-//  public void saveWithID() {
-//
-//    RestAssuredWebTestClient
-//         .given()
-//         .webTestClient(mockedWebClient)
-//
-//         .body(project1)
-//
-//         .when()
-//         .post(CRUD_SAVE)
-//
-//         .then()
-//         .log()
-//         .everything()
-//
-//         .statusCode(CREATED.value())
-//         .body("_id", equalTo(project1.get_id()))
-//         .body("name", equalTo(project1.getName()))
-//         .body("countryList", hasItems(
-//              project1.getCountryList()
-//                      .get(0),
-//              project1.getCountryList()
-//                      .get(1)
-//                                      ))
-//         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
-//    ;
-//  }
-//
-//  @Test
-//  @EnabledIf(expression = enabledTest, loadContext = true)
-//  @DisplayName("saveNoID")
-//  public void saveNoID() {
-//
-//    RestAssuredWebTestClient
-//         .given()
-//         .webTestClient(mockedWebClient)
-//
-//         .body(projetoNoId)
-//
-//         .when()
-//         .post(CRUD_SAVE)
-//
-//         .then()
-//         .log()
-//         .everything()
-//
-//         .statusCode(CREATED.value())
-//         .body("name", equalTo(projetoNoId.getName()))
-//         .body("countryList", hasItems(
-//              projetoNoId.getCountryList()
-//                      .get(0),
-//              projetoNoId.getCountryList()
-//                      .get(1)
-//                                      ))
-//         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
-//    ;
-//  }
-//
-//
-//  @Test
-//  @EnabledIf(expression = enabledTest, loadContext = true)
-//  @DisplayName("FindAll")
-//  public void FindAll() {
-//
-//    dbUtils.checkFluxListElements(
-//         serviceCrud.findAll()
-//                    .flatMap(Flux::just),
-//         asList(project1, project2)
-//                                 );
-//
-//    RestAssuredWebTestClient
-//
-//         .given()
-//         .webTestClient(mockedWebClient)
-//
-//         .when()
-//         .get(CRUD_FINDALL)
-//
-//         .then()
-//         .log()
-//         .everything()
-//
-//         .statusCode(OK.value())
-//         .body("size()", is(2))
-//         .body("$", hasSize(2))
-//         .body("name", hasItems(project1.getName(), project2.getName()))
-//         .body("name", hasItem(project1.getName()))
-//         .body("name", hasItem(project2.getName()))
-//         .body("countryList[0]", hasItems(project1.getCountryList()
-//                                                  .get(0),
-//                                          project2.getCountryList()
-//                                                  .get(1)
-//                                         ))
-//         .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
-//    ;
-//  }
-
-
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByIdExc")
@@ -261,114 +158,157 @@ class ResourceCrudExcTest {
          .webTestClient(mockedWebClient)
 
          .when()
-         .get(CRUD_ID, Faker.instance().idNumber().invalid())
+         .get(CRUD_ID, Faker.instance()
+                            .idNumber()
+                            .invalid())
 
          .then()
          .log()
          .everything()
 
          .statusCode(NOT_FOUND.value())
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/findById.json"))
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/projectNotFound.json"))
     ;
   }
 
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("deleteExc")
+  public void deleteExc() {
 
-//  @Test
-//  @EnabledIf(expression = enabledTest, loadContext = true)
-//  @DisplayName("Delete")
-//  public void Delete() {
-//
-//    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
-//
-//    RestAssuredWebTestClient
-//
-//         .given()
-//         .webTestClient(mockedWebClient)
-//
-//         .when()
-//         .get(CRUD_ID, project1.get_id())
-//
-//         .then()
-//         .log()
-//         .everything()
-//
-//         .statusCode(OK.value())
-//    ;
-//  }
-//
-//
-//  @Test
-//  @EnabledIf(expression = enabledTest, loadContext = true)
-//  @DisplayName("UpdateOptimistic")
-//  public void UpdateOptimisticLocking() {
-//    // OPTMISTIC-LOCKING-UPDATE:
-//    // A) Uses the 'VERSION-ANNOTATION' in THE Entity
-//    // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
-//    // C) EXPLANATION:
-//    //  C.1) The ENTITY-VERSION in the UPDATING-OBJECT
-//    //  C.2) must be the same ENTITY-VERSION than the DB-OBJECT
-//    // DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
-//    var initialVersion = project1.getVersion();
-//    var updatedVersion = initialVersion + 1;
-//
-//    var previousName = project1.getName();
-//    project1.setName("NewName");
-//
-//    RestAssuredWebTestClient
-//         .given()
-//         .webTestClient(mockedWebClient)
-//
-//         .body(project1)
-//
-//         .when()
-//         .put(CRUD_UPD)
-//
-//         .then()
-//         .log()
-//         .everything()
-//
-//         .statusCode(OK.value())
-//         .body("name", not(equalTo(previousName)))
-//         .body("version", hasToString(Long.toString(updatedVersion)))
-//
-//         .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
-//    ;
-//  }
-//
-//  @Test
-//  @EnabledIf(expression = enabledTest, loadContext = true)
-//  @DisplayName("FindByName")
-//  public void FindByName() {
-//
-//    RestAssuredWebTestClient
-//
-//         .given()
-//         .webTestClient(mockedWebClient)
-//         .queryParam("projectName", project1.getName())
-//
-//         .when()
-//         .get(CRUD_BYNAME)
-//
-//         .then()
-//         .log()
-//         .everything()
-//
-//         .statusCode(OK.value())
-//         .body("name", containsInAnyOrder(project1.getName()))
-//         .body("countryList[0]", hasItems(
-//              project1.getCountryList()
-//                      .get(0)
-//              , project1.getCountryList()
-//                        .get(1)))
-//         .body(matchesJsonSchemaInClasspath("contracts/project/project.json"))
-//    ;
-//  }
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    RestAssuredWebTestClient
 
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .when()
+         .delete(CRUD_ID, Faker.instance()
+                               .idNumber()
+                               .invalid())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_FOUND.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/projectNotFound.json"))
+    ;
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateNoProjectIdExc")
+  public void UpdateNoProjectIdExc() {
+
+    project1.set_id(Faker.instance()
+                         .idNumber()
+                         .invalid());
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project1)
+
+         .when()
+         .put(CRUD_UPD)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_FOUND.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/projectNotFound.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateOptExc")
+  public void UpdateOptExc() {
+    // OPTIMISTIC-LOCKING-UPDATE:
+    // A) Uses the 'VERSION-ANNOTATION' in THE Entity
+    // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
+    // C) EXPLANATION:
+    //  C.1) The ENTITY-VERSION in the UPDATING-OBJECT
+    //  C.2) must be the "SAME" ENTITY-VERSION as the DB-OBJECT
+    //  DB-OBJECT-VERSION should be the same as the OBJECT-TO-BE-UPDATED
+    project1.setVersion(1L);
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project1)
+
+         .when()
+         .put(CRUD_UPD)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(BAD_REQUEST.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/UpdateOptExc.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateValid")
+  public void UpdateValid() {
+
+    project1.setName("");
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project1)
+
+         .when()
+         .put(CRUD_UPD)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(BAD_REQUEST.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/updateValid.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("UpdateValidTransaction")
+  public void UpdateValidTransaction() {
+
+    project1.setName("");
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project1)
+
+         .when()
+         .put(CRUD_UPD)
+
+         .then()
+         .log()
+         .everything()
+         .statusCode(BAD_REQUEST.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/updateValid.json"))
+    ;
+  }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("BHWorks")
   public void bHWorks() {
+
     bhWorks();
   }
 }

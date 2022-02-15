@@ -15,10 +15,10 @@ import java.util.Map;
     ╔═══════════════════════════════════════════════════════════╗
     ║              GLOBAL-EXCEPTIONS EXPLANATIONS               ║
     ╠═══════════════════════════════════════════════════════════╣
-    ║             There is no Thrower in Global-Exceptions      ║
-    ║             Because Global-Exceptions are throwed         ║
-    ║                  for "the system by itself",              ║
-    ║           not programmatically in a specific method       ║
+    ║         There is no Thrower in Global-Exceptions          ║
+    ║           Because Global-Exceptions are threw             ║
+    ║               for "the system by itself",                 ║
+    ║         not programmatically in a specific method         ║
     ║(meaning threw inside a method according the coder defined)║
     ╚═══════════════════════════════════════════════════════════╝
 */
