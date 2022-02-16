@@ -36,7 +36,7 @@ import static java.util.List.of;
 import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceCrudTest")
+@DisplayName("ResourceCrudExcTest")
 @MergedResource
 class ResourceCrudExcTest {
 
@@ -58,9 +58,7 @@ class ResourceCrudExcTest {
   @Autowired
   IServiceCrud serviceCrud;
 
-  private Project project1, project2, project3, projetoNoId;
-  private Task task1;
-  private List<Project> projectList;
+  private Project project1;
 
 
   @BeforeAll
@@ -107,34 +105,34 @@ class ResourceCrudExcTest {
                           of("UK", "USA")
                          ).create();
 
-    project2 = projecNoID("B",
-                          "2020-06-06",
-                          "2021-06-06",
-                          2000L,
-                          of("UK", "USA")
-                         ).create();
+    Project project2 = projecNoID("B",
+                                  "2020-06-06",
+                                  "2021-06-06",
+                                  2000L,
+                                  of("UK", "USA")
+                                 ).create();
 
-    project3 = projecNoID("B",
-                          "2020-07-07",
-                          "2021-07-07",
-                          3000L,
-                          of("UK", "USA")
-                         ).create();
-    projetoNoId = projecNoID("C",
-                             "2020-05-05",
-                             "2021-05-05",
-                             1000L,
-                             of("HOL", "CAN")
-                            ).create();
+    Project project3 = projecNoID("B",
+                                  "2020-07-07",
+                                  "2021-07-07",
+                                  3000L,
+                                  of("UK", "USA")
+                                 ).create();
+    Project projetoNoId = projecNoID("C",
+                                     "2020-05-05",
+                                     "2021-05-05",
+                                     1000L,
+                                     of("HOL", "CAN")
+                                    ).create();
 
-    projectList = asList(project1, project2);
+    List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
-    task1 = taskWithID("3",
-                       "Mark",
-                       1000L
-                      ).create();
+    Task task1 = taskWithID("3",
+                            "Mark",
+                            1000L
+                           ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -276,14 +274,15 @@ class ResourceCrudExcTest {
          .everything()
 
          .statusCode(BAD_REQUEST.value())
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/updateValid.json"))
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/exceptions/project/updateValidNotEmptyError.json"))
     ;
   }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateValidTransaction")
-  public void UpdateValidTransaction() {
+  @DisplayName("UpdateValidNotEmpty")
+  public void UpdateValidNameNotEmpty() {
 
     project1.setName("");
 
@@ -300,7 +299,8 @@ class ResourceCrudExcTest {
          .log()
          .everything()
          .statusCode(BAD_REQUEST.value())
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/updateValid.json"))
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/exceptions/project/updateValidNotEmptyError.json"))
     ;
   }
 

@@ -26,4 +26,5 @@ public class ProjectExceptionsCustomAttributes {
     private String projectUpdateSimpleFailMessage;
     private String projectUpdateOptFailMessage;
     private String projectNameIsEmptyMessage;
+    private String projectNameIsInvalidMessage;
 }

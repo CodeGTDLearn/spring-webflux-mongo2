@@ -28,7 +28,6 @@ public class ServiceCrud implements IServiceCrud {
   @Override
   @Transactional
   public Mono<Project> update(Project project) {
-
     return crud.save(project);
   }
 

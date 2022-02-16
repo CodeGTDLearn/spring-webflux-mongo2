@@ -13,11 +13,12 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @ResponseStatus(NOT_ACCEPTABLE)
-public class ProjectNameIsEmptyException extends RuntimeException implements Serializable {
+public class ProjectNameInvalidException extends RuntimeException implements Serializable {
 
-  private static final long serialVersionUID = - 2779773488307514980L;
 
-  public ProjectNameIsEmptyException(String message) {
+  private static final long serialVersionUID = - 5345541392659299663L;
+
+  public ProjectNameInvalidException(String message) {
     super(message);
   }
 }

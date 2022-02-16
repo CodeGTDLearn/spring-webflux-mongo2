@@ -23,6 +23,6 @@ public class TaskExceptionsCustomAttributes {
     // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
     // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
     @NotEmpty
-    private String taskNotFoundMessage;
+    private String taskNameIsEmptyMessage;
 
 }

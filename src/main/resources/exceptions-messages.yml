@@ -9,9 +9,10 @@ global:
 modules:
   exception:
     project:
-      projectNotFoundMessage: the Project was not found
-      projectUpdateSimpleFailMessage: the Update operation fail. Try again later.
-      projectUpdateOptFailMessage: The Update operation fail. Someone did it before you. Try again.
-      projectNameIsEmptyMessage: Project name is empty. It is not allowed.
+      projectNotFoundMessage: the Project was not found!!!!
+      projectUpdateSimpleFailMessage: the Update operation fail. Try again later!!!!
+      projectUpdateOptFailMessage: The Update operation fail. Someone did it before you. Try again!!!!
+      projectNameIsEmptyMessage: Project name is empty. It is not allowed!!!!
+      projectNameIsInvalidMessage: Project Name is less than 5 characteres
     task:
-      taskNotFoundMessage: All tasks must have a projectId
+      taskNameIsEmptyMessage: Task name is empty or not have minimal chracteres. It is not allowed!!!!

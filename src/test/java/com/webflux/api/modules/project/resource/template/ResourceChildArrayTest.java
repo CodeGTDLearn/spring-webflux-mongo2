@@ -63,11 +63,7 @@ class ResourceChildArrayTest {
   IServiceCrud serviceCrud;
 
   private Project project1;
-  private Project project2;
-  private Task task1, task2;
   private ProjectChild project1Child;
-  private List<Project> projectList;
-  private List<ProjectChild> projectChildList;
 
 
   @BeforeAll
@@ -114,33 +110,26 @@ class ResourceChildArrayTest {
                           of("UK", "USA")
                          ).create();
 
-    project2 = projecNoID("B",
-                          "2020-06-06",
-                          "2021-06-06",
-                          2000L,
-                          of("UK", "USA")
-                         ).create();
-
-    Project project3 = projecNoID("B",
-                                  "2020-07-07",
-                                  "2021-07-07",
-                                  3000L,
+    Project project2 = projecNoID("B",
+                                  "2020-06-06",
+                                  "2021-06-06",
+                                  2000L,
                                   of("UK", "USA")
                                  ).create();
 
-    projectList = asList(project1, project2);
+    List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
 
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
-    task1 = taskWithID("3",
-                       "Mark",
-                       1000L
-                      ).create();
-    task2 = taskWithID("4",
-                       "Mark Zuck",
-                       7000L
-                      ).create();
+    Task task1 = taskWithID("3",
+                            "Mark",
+                            1000L
+                           ).create();
+    Task task2 = taskWithID("4",
+                            "Mark Zuck",
+                            7000L
+                           ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
 
     dbUtils.countAndExecuteFlux(taskFlux, 1);
@@ -152,7 +141,7 @@ class ResourceChildArrayTest {
                                                            Arrays.asList(task1, task2)
                                                           )
                                        .create();
-    projectChildList = List.of(project1Child);
+    List<ProjectChild> projectChildList = List.of(project1Child);
     Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
     dbUtils.countAndExecuteFlux(projectChildFlux, 1);
 

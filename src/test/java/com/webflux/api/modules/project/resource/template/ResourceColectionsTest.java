@@ -66,12 +66,8 @@ class ResourceColectionsTest {
   @Autowired
   IServiceChildArray serviceChildArray;
 
-  private Project project1;
-  private Project project2;
   private Task task1, task2;
   private ProjectChild project1Child;
-  private List<Project> projectList;
-  private List<ProjectChild> projectChildList;
 
 
   @BeforeAll
@@ -111,28 +107,21 @@ class ResourceColectionsTest {
     globalTestMessage(testInfo.getTestMethod()
                               .toString(), "method-start");
 
-    project1 = projecNoID("C",
-                          "2020-05-05",
-                          "2021-05-05",
-                          1000L,
-                          of("UK", "USA")
-                         ).create();
-
-    project2 = projecNoID("B",
-                          "2020-06-06",
-                          "2021-06-06",
-                          2000L,
-                          of("UK", "USA")
-                         ).create();
-
-    Project project3 = projecNoID("B",
-                                  "2020-07-07",
-                                  "2021-07-07",
-                                  3000L,
+    Project project1 = projecNoID("C",
+                                  "2020-05-05",
+                                  "2021-05-05",
+                                  1000L,
                                   of("UK", "USA")
                                  ).create();
 
-    projectList = asList(project1, project2);
+    Project project2 = projecNoID("B",
+                                  "2020-06-06",
+                                  "2021-06-06",
+                                  2000L,
+                                  of("UK", "USA")
+                                 ).create();
+
+    List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
 
     dbUtils.countAndExecuteFlux(projectFlux, 2);
@@ -159,7 +148,7 @@ class ResourceColectionsTest {
                                  )
               .create();
 
-    projectChildList = List.of(project1Child);
+    List<ProjectChild> projectChildList = List.of(project1Child);
     Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
     dbUtils.countAndExecuteFlux(projectChildFlux, 1);
 

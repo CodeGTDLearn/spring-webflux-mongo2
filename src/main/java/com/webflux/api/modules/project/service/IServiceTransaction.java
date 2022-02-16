@@ -6,5 +6,5 @@ import com.webflux.api.modules.task.Task;
 import reactor.core.publisher.Mono;
 
 public interface IServiceTransaction {
-  Mono<Void> saveProjectAndTask(Project project, Task task);
+  Mono<Task> saveProjectAndTaskTransaction(Project project, Task task);
 }

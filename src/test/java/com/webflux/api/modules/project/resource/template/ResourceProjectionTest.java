@@ -62,7 +62,6 @@ class ResourceProjectionTest {
   private Task task1, task2;
   private ProjectChild project1Child;
   private Project projectLookup1, projectLookup2;
-  private Task taskLookup1, taskLookup2;
 
 
   @BeforeAll
@@ -194,12 +193,6 @@ class ResourceProjectionTest {
                           of("UK", "USA")
                          ).create();
 
-    Project project3 = projecNoID("B",
-                                  "2020-07-07",
-                                  "2021-07-07",
-                                  3000L,
-                                  of("UK", "USA")
-                                 ).create();
   }
 
   private void createTwoTaskProjects() {
@@ -223,16 +216,16 @@ class ResourceProjectionTest {
     Flux<Project> projectFlux = dbUtils.saveProjectList(asList(projectLookup1, projectLookup2));
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
-    taskLookup1 = taskWithID("3",
-                             "Mark",
-                             1000L
-                            ).create();
+    Task taskLookup1 = taskWithID("3",
+                                  "Mark",
+                                  1000L
+                                 ).create();
     taskLookup1.setProjectId(projectLookup1.get_id());
 
-    taskLookup2 = taskWithID("3",
-                             "Mark",
-                             1000L
-                            ).create();
+    Task taskLookup2 = taskWithID("3",
+                                  "Mark",
+                                  1000L
+                                 ).create();
     taskLookup2.setProjectId(projectLookup2.get_id());
 
     Flux<Task> taskFlux = dbUtils.saveTaskList(asList(taskLookup1, taskLookup2));

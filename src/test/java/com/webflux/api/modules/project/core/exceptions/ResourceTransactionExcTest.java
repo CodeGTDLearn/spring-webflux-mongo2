@@ -1,6 +1,5 @@
-package com.webflux.api.modules.project.resource;
+package com.webflux.api.modules.project.core.exceptions;
 
-import com.github.javafaker.Faker;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -36,12 +35,12 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceTransactionTest")
+@DisplayName("ResourceTransactionExcTest")
 @MergedResource
-class ResourceTransactionTest {
+class ResourceTransactionExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
@@ -135,45 +134,47 @@ class ResourceTransactionTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("saveProjectAndTaskTransaction")
-  public void saveProjectAndTaskTransaction() {
-    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
+  @DisplayName("saveProjectAndTaskTransactionExc")
+  public void saveProjectAndTaskTransactionExc() {
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
-    var newProjectName = Faker.instance()
-                              .name()
-                              .firstName();
+    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
-   var  task2 = taskWithID("3",
-                       "Mark",
-                       1000L
-                      ).create();
+    var newProjectName = "xxxxx";
 
-        RestAssuredWebTestClient
-             .given()
-             .webTestClient(mockedWebClient)
+    var task2 = taskWithID("3",
+                           "Mark",
+                           1000L
+                          ).create();
 
-             .body(task2)
-             .queryParam("projectId",projetoWithId.get_id())
-             .queryParam("newProjectName",newProjectName)
+        task2.setName("xx"); // transation is activated because taskName is less than 3 character
 
-             .when()
-             .post(REPO_TRANSACT)
 
-             .then()
-             .log()
-             .everything()
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
-             .statusCode(CREATED.value())
-             .body("projectId", equalTo(projetoWithId.get_id()))
-             .body("_id", equalTo(task2.get_id()))
-             .body(matchesJsonSchemaInClasspath("contracts/project/saveProjectAndTaskTransaction.json"))
-        ;
+         .body(task2)
+         .queryParam("projectId", projetoWithId.get_id())
+         .queryParam("newProjectName", newProjectName)
+         // .queryParam("completeStackTrace", true)
+
+         .when()
+         .post(REPO_TRANSACT)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_FOUND.value())
+         .body("detail", equalTo("Task name is empty or not have minimal chracteres. It is not allowed!!!!"))
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/transaction.json"))
+    ;
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
 

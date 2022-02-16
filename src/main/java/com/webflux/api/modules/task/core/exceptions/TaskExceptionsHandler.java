@@ -1,6 +1,6 @@
 package com.webflux.api.modules.task.core.exceptions;
 
-import com.webflux.api.modules.task.core.exceptions.types.TaskNotFoundException;
+import com.webflux.api.modules.task.core.exceptions.types.TaskNameIsEmptyException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,8 +15,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @AllArgsConstructor
 public class TaskExceptionsHandler {
 
-  @ExceptionHandler(TaskNotFoundException.class)
-  public ResponseEntity<?> TaskNotFoundException(TaskNotFoundException exception) {
+  @ExceptionHandler(TaskNameIsEmptyException.class)
+  public ResponseEntity<?> TaskNotFoundException(TaskNameIsEmptyException exception) {
 
     TaskExceptionsAttributes attributes =
          new TaskExceptionsAttributes(

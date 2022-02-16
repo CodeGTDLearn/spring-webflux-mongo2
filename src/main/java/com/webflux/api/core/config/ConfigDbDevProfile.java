@@ -1,4 +1,4 @@
-package com.webflux.api.core.dbconfig;
+package com.webflux.api.core.config;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
@@ -28,7 +28,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
      basePackages = {
           "com.webflux.mongo2.project",
           "com.webflux.mongo2.task.repo"})
-public class DevConfigDb extends AbstractReactiveMongoConfiguration {
+public class ConfigDbDevProfile extends AbstractReactiveMongoConfiguration {
   private String database;
   private String host;
   private String port;
@@ -40,6 +40,7 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
   //  private MappingMongoConverter mongoConverter;
 
 
+  // 01) REACTIVE-MONGO-TEMPLATE-BEANS:
   @Override
   public MongoClient reactiveMongoClient() {
 
@@ -78,6 +79,11 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
       return new ReactiveMongoTemplate(reactiveMongoClient(),getDatabaseName());
     }
 
+  // 02) TRANSACTION-BEANS:
+  //  @Bean
+  //  TransactionalOperator transactionOperator(ReactiveTransactionManager operator) {
+  //    return new TransactionalOperator(operator);
+  //  }
 
     @Bean
     ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
@@ -85,6 +91,7 @@ public class DevConfigDb extends AbstractReactiveMongoConfiguration {
     }
 
 
+  // 03) GRID-FS-BEANS:
   //  @Bean
   //  public ReactiveGridFsTemplate reactiveGridFsTemplate() throws Exception {
   //    return new ReactiveGridFsTemplate(reactiveMongoDbFactory(),mongoConverter);

@@ -5,7 +5,6 @@ import com.webflux.api.modules.task.ITaskRepo;
 import com.webflux.api.modules.task.Task;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 @Service("serviceTransaction")
@@ -16,15 +15,19 @@ public class ServiceTransaction implements IServiceTransaction {
 
   ITaskRepo taskRepo;
 
+//  @Transactional
   @Override
-  @Transactional
-  public Mono<Void> saveProjectAndTask(Project project, Task task) {
+  public Mono<Task> saveProjectAndTaskTransaction(Project project, Task task) {
 
     return
          serviceRepo
               .save(project)
-              .then(taskRepo.save(task))
-              .then();
+              .flatMap(proj -> {
+                task.setProjectId(proj.get_id());
+                return Mono.just(task);
+              })
+              .flatMap(task1 -> taskRepo.save(task1))
+         ;
   }
 
 }

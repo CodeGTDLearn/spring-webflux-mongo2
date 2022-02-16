@@ -7,12 +7,11 @@ import java.io.Serializable;
 import static org.springframework.http.HttpStatus.*;
 
 @ResponseStatus(NOT_FOUND)
-public class TaskNotFoundException extends RuntimeException implements Serializable {
+public class TaskNameIsEmptyException extends RuntimeException implements Serializable {
 
   private static final long serialVersionUID = - 3999988295319075185L;
 
-  public TaskNotFoundException(String message) {
-
+  public TaskNameIsEmptyException(String message) {
     super(message);
   }
 }

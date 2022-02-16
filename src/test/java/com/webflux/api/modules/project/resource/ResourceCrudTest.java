@@ -57,9 +57,9 @@ class ResourceCrudTest {
   @Autowired
   IServiceCrud serviceCrud;
 
-  private Project project1, project2, project3, projetoNoId;
-  private Task task1;
-  private List<Project> projectList;
+  private Project project1;
+  private Project project2;
+  private Project projetoNoId;
 
 
   @BeforeAll
@@ -113,12 +113,6 @@ class ResourceCrudTest {
                           of("UK", "USA")
                          ).create();
 
-    project3 = projecNoID("B",
-                          "2020-07-07",
-                          "2021-07-07",
-                          3000L,
-                          of("UK", "USA")
-                         ).create();
     projetoNoId = projecNoID("C",
                              "2020-05-05",
                              "2021-05-05",
@@ -126,15 +120,15 @@ class ResourceCrudTest {
                              of("HOL", "CAN")
                             ).create();
 
-    projectList = asList(project1, project2);
+    List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
 
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
-    task1 = taskWithID("3",
-                       "Mark",
-                       1000L
-                      ).create();
+    Task task1 = taskWithID("3",
+                            "Mark",
+                            1000L
+                           ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }

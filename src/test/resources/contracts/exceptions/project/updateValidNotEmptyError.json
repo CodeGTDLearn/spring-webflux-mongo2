@@ -7,9 +7,9 @@
   "default": {},
   "examples": [
     {
-      "path": "/project/error",
-      "status": 404,
-      "reason": "message",
+      "path": "/project/update",
+      "status": 400,
+      "reason": "Validation failure",
       "Global-Global-Atribute": "Global-General-Message",
       "Global-Dev-Atribute": "Global-Dev-Message"
     }
@@ -29,7 +29,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": "",
       "examples": [
-        "/project/error"
+        "/project/update"
       ]
     },
     "status": {
@@ -39,7 +39,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": 0,
       "examples": [
-        404
+        400
       ]
     },
     "reason": {
@@ -49,7 +49,7 @@
       "description": "An explanation about the purpose of this instance.",
       "default": "",
       "examples": [
-        "message"
+        "Validation failure"
       ]
     },
     "Global-Global-Atribute": {

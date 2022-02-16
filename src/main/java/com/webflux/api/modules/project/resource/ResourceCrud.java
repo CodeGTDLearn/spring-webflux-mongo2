@@ -68,7 +68,7 @@ public class ResourceCrud {
                 if (error instanceof ProjectNotFoundException){
                   return projectExceptionsThrower.throwProjectNotFoundException();
                 }
-                return projectExceptionsThrower.throwUpdateSimpleException();
+                return Mono.error(new ResponseStatusException(NOT_FOUND));
               })
          ;
   }

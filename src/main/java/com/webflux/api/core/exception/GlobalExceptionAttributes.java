@@ -43,9 +43,12 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
 
       ResponseStatusException error = (ResponseStatusException) throwable;
 
+      // IDEIA GERAL
       // SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)
       // adiciona ATTRIBUTES no globalAttributes
-            /* A) DEFAULT-EXCEPTION-ATTRIBUTES:
+
+      // A) DEFAULT-EXCEPTION-ATTRIBUTES EXAMPLE:
+            /*
             {
                  "timestamp": "2022-02-08T22:02:08.410+00:00",
                  "path": "/project/save",
@@ -55,11 +58,23 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
                  "requestId": "317e3568"
             }
             */
-      // B) Fix the Default-Parameter "message"("message": "",) which, initially, is Empty
+
+      // B) CREATING Parameters based on Default-Message
+      // B.1) Fix the Default-Parameter "message"("message": "",) DO NOT USE ":"
       globalAttributes.put("message", error.getMessage());
-      // C) Add Custom-Parameters in the Default-Parameters
+      globalAttributes.put("reason", error.getReason());
+
+      // C) ADDING Custom-Parameters in the Default-Parameters
       globalAttributes.put("Global-Global-Atribute", attributes.getGlobalMessage());
       globalAttributes.put("Global-Dev-Atribute", attributes.getDeveloperMessage());
+//      globalAttributes.put("example","example2");
+
+      // D) REMOVING Keys/Fields from the Global-Exception-Message
+//      globalAttributes.remove("path");
+      globalAttributes.remove("error");
+      globalAttributes.remove("message");
+      globalAttributes.remove("timestamp");
+      globalAttributes.remove("requestId");
     }
 
     // NAO SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)

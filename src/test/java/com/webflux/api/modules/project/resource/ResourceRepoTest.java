@@ -109,13 +109,6 @@ class ResourceRepoTest {
                           of("UK", "USA")
                          ).create();
 
-    Project project3 = projecNoID("B",
-                                  "2020-07-07",
-                                  "2021-07-07",
-                                  3000L,
-                                  of("UK", "USA")
-                                 ).create();
-
     List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
 
