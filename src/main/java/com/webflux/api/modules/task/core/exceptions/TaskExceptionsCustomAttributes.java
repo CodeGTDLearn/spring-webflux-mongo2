@@ -19,10 +19,10 @@ import javax.validation.constraints.NotEmpty;
 @PropertySource(value = "classpath:exceptions-messages.yml", ignoreResourceNotFound = true)
 public class TaskExceptionsCustomAttributes {
 
-    // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
-    // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
-    // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
-    @NotEmpty
-    private String taskNameIsEmptyMessage;
-
+  // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
+  // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
+  // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
+  @NotEmpty
+  private String taskNameIsEmptyMessage;
+  private String taskNameLessThanThreeMessage;
 }

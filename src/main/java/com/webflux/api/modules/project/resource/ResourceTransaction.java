@@ -1,26 +1,22 @@
 package com.webflux.api.modules.project.resource;
 
 import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
-import com.webflux.api.modules.project.core.exceptions.types.ProjectNameInvalidException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.entity.Project;
-import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.project.service.IServiceTransaction;
 import com.webflux.api.modules.task.Task;
 import com.webflux.api.modules.task.core.exceptions.TaskExceptionsThrower;
 import com.webflux.api.modules.task.core.exceptions.types.TaskNameIsEmptyException;
+import com.webflux.api.modules.task.core.exceptions.types.TaskNameLessThanThreeException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
-
 import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_ROOT_TRANSACT;
 import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
+import static config.databuilders.TaskBuilder.taskNoID;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -35,72 +31,42 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @AllArgsConstructor
 public class ResourceTransaction {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
-  private final ProjectExceptionsThrower projectExceptionsThrower;
-  private final TaskExceptionsThrower taskExceptionsThrower;
+  private final ProjectExceptionsThrower projectThrower;
+  private final TaskExceptionsThrower taskThrower;
   private IServiceTransaction serviceTransaction;
-  private IServiceCrud serviceCrud;
 
-  @Transactional
+
   @PostMapping(REPO_TRANSACT)
   @ResponseStatus(CREATED)
-  public Mono<Task> saveProjectAndTaskTransaction(
-       @RequestParam String projectId,
-       @RequestParam String newProjectName,
-       @Valid @RequestBody Task task) {
+  public Mono<Task> createProjectTransaction(
+       @RequestParam
+//       @NotEmpty
+//       @NotNull
+            String taskNameInitial,
+//       @Valid
+       @RequestBody
+            Project project
+       ) {
+
+    Task initialTask = taskNoID("3",
+                                "Mark",
+                                1000L
+                               ).create();
+
+    initialTask.setName(taskNameInitial);
 
     // @formatter:off
     return
-         serviceCrud
-              .findById(projectId)
-
-              // STEP 01 - THROW/BLOW-UP: EXCEPTIONS ARE THROW HERE (ON-ERROR-RESUME)
-              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
-              .flatMap(proj -> {
-                if (newProjectName.isEmpty()) return projectExceptionsThrower.throwProjectNameIsEmptyException();
-                if (task.getName().length() < 3) return taskExceptionsThrower.throwTaskNameIsEmptyException();
-                proj.setName(newProjectName);
-                return serviceTransaction.saveProjectAndTaskTransaction(proj, task);
-              })
-
-              // STEP 02 - HANDLE/MANAGING: EXCEPTIONS ARE HANDLED HERE (ON-ERROR-RESUME)
-              .onErrorResume(error -> {
-                if (error instanceof ProjectNotFoundException) {
-                  return projectExceptionsThrower.throwProjectNotFoundException();
-                }
-                if (error instanceof ProjectNameIsEmptyException) {
-                  return projectExceptionsThrower.throwProjectNameIsEmptyException();
-                }
-                if (error instanceof TaskNameIsEmptyException) {
-                  return taskExceptionsThrower.throwTaskNameIsEmptyException();
-                }
-
-                // STEP 03 - BENA-VALIDATIONS: THROW ONLY GLOBAL-EXCEPTION
-                return Mono.error(new ResponseStatusException(NOT_FOUND));
-              })
-         ;
-    // @formatter:on
-  }
-
-  @Transactional
-  @PostMapping(REPO_TRANSACT)
-  @ResponseStatus(CREATED)
-  public Mono<Task> saveProjectCheckProjectName(@RequestBody Project project) {
-
-    // @formatter:off
-    return
-         serviceCrud
-              .save(project)
-              .flatMap(proj -> {
-                if (project.getName().length() > 5 ) return projectExceptionsThrower.throwProjectNameInvalidException();
-              })
-              .onErrorResume(error -> {
-                 if (error instanceof ProjectNameInvalidException) {
-                  return projectExceptionsThrower.throwProjectNameInvalidException();
-                }
-                // STEP 03 - BENA-VALIDATIONS: THROW ONLY GLOBAL-EXCEPTION
-                return Mono.error(new ResponseStatusException(NOT_FOUND));
-              })
+         serviceTransaction
+          .createProjectTransaction(project, initialTask)
+          .onErrorResume(error ->
+            switch (error) {
+             case ProjectNameIsEmptyException ignored -> projectThrower.throwProjectNameIsEmptyException();
+             case ProjectNotFoundException ignored -> projectThrower.throwProjectNotFoundException();
+             case TaskNameIsEmptyException ignored -> taskThrower.throwTaskNameIsEmptyException();
+             case TaskNameLessThanThreeException ignored -> taskThrower.throwTaskNameLessThanThreeException();
+             default -> Mono.error(new ResponseStatusException(NOT_FOUND));
+          })
          ;
     // @formatter:on
   }

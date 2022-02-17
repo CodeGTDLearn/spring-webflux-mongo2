@@ -77,17 +77,4 @@ public class ProjectExceptionsHandler {
     return new ResponseEntity<>(exceptionAttributes, NOT_ACCEPTABLE);
   }
 
-  @ExceptionHandler(ProjectNameInvalidException.class)
-  public ResponseEntity<?> projectNameInvalidException(ProjectNameInvalidException exception) {
-
-    ProjectExceptionsAttributes exceptionAttributes =
-         new ProjectExceptionsAttributes(
-              exception.getMessage(),
-              exception.getClass()
-                       .getName(),
-              NOT_ACCEPTABLE.value(),
-              new Date().getTime()
-         );
-    return new ResponseEntity<>(exceptionAttributes, NOT_ACCEPTABLE);
-  }
 }

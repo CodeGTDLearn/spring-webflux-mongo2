@@ -39,14 +39,14 @@ public class ResourceCrud {
     return
          serviceCrud
               .save(project)
-//              .onErrorResume(error -> {
-//                if (error instanceof OptimisticLockingFailureException) {
-//                  return ServerResponse.status(BAD_REQUEST)
-//                                       .build();
-//                }
-//                return ServerResponse.status(INTERNAL_SERVER_ERROR)
-//                                     .build();
-//              })
+         //              .onErrorResume(error -> {
+         //                if (error instanceof OptimisticLockingFailureException) {
+         //                  return ServerResponse.status(BAD_REQUEST)
+         //                                       .build();
+         //                }
+         //                return ServerResponse.status(INTERNAL_SERVER_ERROR)
+         //                                     .build();
+         //              })
          ;
 
 
@@ -62,13 +62,18 @@ public class ResourceCrud {
               .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
               .then(serviceCrud.update(project))
               .onErrorResume(error -> {
-                if (error instanceof OptimisticLockingFailureException){
-                  return projectExceptionsThrower.throwUpdateOptmVersionException();
-                }
-                if (error instanceof ProjectNotFoundException){
-                  return projectExceptionsThrower.throwProjectNotFoundException();
-                }
-                return Mono.error(new ResponseStatusException(NOT_FOUND));
+                return switch (error) {
+                  case OptimisticLockingFailureException i -> projectExceptionsThrower.throwUpdateOptmVersionException();
+                  case ProjectNotFoundException s -> projectExceptionsThrower.throwProjectNotFoundException();
+                  default -> Mono.error(new ResponseStatusException(NOT_FOUND));
+                };
+//                if (error instanceof OptimisticLockingFailureException) {
+//                  return projectExceptionsThrower.throwUpdateOptmVersionException();
+//                }
+//                if (error instanceof ProjectNotFoundException) {
+//                  return projectExceptionsThrower.throwProjectNotFoundException();
+//                }
+//                return Mono.error(new ResponseStatusException(NOT_FOUND));
               })
          ;
   }
@@ -101,6 +106,7 @@ public class ResourceCrud {
   @DeleteMapping(CRUD_ID)
   @ResponseStatus(NO_CONTENT)
   public Mono<Void> delete(@PathVariable String projectId) {
+
     return
          serviceCrud
               .findById(projectId)

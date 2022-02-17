@@ -42,8 +42,4 @@ public class ProjectExceptionsThrower {
          projectExceptionsCustomAttributes.getProjectNameIsEmptyMessage()));
   }
 
-  public <T> Mono<T> throwProjectNameInvalidException() {
-    return Mono.error(new ProjectNameInvalidException(
-         projectExceptionsCustomAttributes.getProjectNameIsInvalidMessage()));
-  }
 }

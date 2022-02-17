@@ -29,7 +29,8 @@ import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.BlockhoundUtils.bhWorks;
-import static config.utils.RestAssureSpecs.*;
+import static config.utils.RestAssureSpecs.requestSpecsSetPath;
+import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
@@ -135,29 +136,29 @@ class ResourceTransactionTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("saveProjectAndTaskTransaction")
-  public void saveProjectAndTaskTransaction() {
-    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
+  @DisplayName("createProjectTransaction")
+  public void createProjectTransaction() {
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
-    var newProjectName = Faker.instance()
+    var newTaskName = Faker.instance()
                               .name()
                               .firstName();
 
-   var  task2 = taskWithID("3",
-                       "Mark",
-                       1000L
-                      ).create();
+    Project project = projectWithID("C",
+                                  "2020-05-05",
+                                  "2021-05-05",
+                                  1000L,
+                                  of("UK", "USA")
+                                 ).create();
 
         RestAssuredWebTestClient
              .given()
              .webTestClient(mockedWebClient)
 
-             .body(task2)
-             .queryParam("projectId",projetoWithId.get_id())
-             .queryParam("newProjectName",newProjectName)
+             .body(project)
+             .queryParam("taskNameInitial",newTaskName)
 
              .when()
              .post(REPO_TRANSACT)
@@ -167,12 +168,12 @@ class ResourceTransactionTest {
              .everything()
 
              .statusCode(CREATED.value())
-             .body("projectId", equalTo(projetoWithId.get_id()))
-             .body("_id", equalTo(task2.get_id()))
-             .body(matchesJsonSchemaInClasspath("contracts/project/saveProjectAndTaskTransaction.json"))
+             .body("name", equalTo(newTaskName))
+             .body("projectId", equalTo(project.get_id()))
+             .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
         ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 3);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 2);
   }
 

@@ -43,6 +43,29 @@ public class TaskBuilder {
                       .build();
   }
 
+  public static TaskBuilder taskNoID(
+       String projectId,
+       String ownerName,
+       Long cost) {
+
+    Task task = new Task();
+
+//    task.set_id(createFakeUniqueRandomId());
+    task.setProjectId(projectId);
+    task.setName(faker.name()
+                      .fullName());
+
+    task.setDescription(faker.lorem()
+                             .paragraph(2));
+    task.setOwnername(ownerName);
+    task.setCost(cost);
+    //    task.setVersion(0L);
+
+    return TaskBuilder.builder()
+                      .task(task)
+                      .build();
+  }
+
 
   public Task create() {
     return this.task;

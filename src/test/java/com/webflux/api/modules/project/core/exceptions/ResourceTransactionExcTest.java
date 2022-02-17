@@ -1,5 +1,6 @@
 package com.webflux.api.modules.project.core.exceptions;
 
+import com.github.javafaker.Faker;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -28,14 +29,13 @@ import static config.databuilders.TaskBuilder.taskWithID;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
 import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.BlockhoundUtils.bhWorks;
-import static config.utils.RestAssureSpecs.*;
+import static config.utils.RestAssureSpecs.requestSpecsSetPath;
+import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceTransactionExcTest")
@@ -134,32 +134,33 @@ class ResourceTransactionExcTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("saveProjectAndTaskTransactionExc")
-  public void saveProjectAndTaskTransactionExc() {
+  @DisplayName("createProjectTransacTaskNameEmptyExc")
+  public void createProjectTransacTaskNameEmptyExc() {
+
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
-    RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
+    var newTaskName = Faker.instance()
+                           .name()
+                           .firstName();
 
-    var newProjectName = "xxxxx";
+    Project project = projectWithID("C",
+                                    "2020-05-05",
+                                    "2021-05-05",
+                                    1000L,
+                                    of("UK", "USA")
+                                   ).create();
 
-    var task2 = taskWithID("3",
-                           "Mark",
-                           1000L
-                          ).create();
-
-        task2.setName("xx"); // transation is activated because taskName is less than 3 character
-
+    project.setName("xx");
+    newTaskName = "XX";
 
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
 
-         .body(task2)
-         .queryParam("projectId", projetoWithId.get_id())
-         .queryParam("newProjectName", newProjectName)
-         // .queryParam("completeStackTrace", true)
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
 
          .when()
          .post(REPO_TRANSACT)
@@ -168,13 +169,12 @@ class ResourceTransactionExcTest {
          .log()
          .everything()
 
-         .statusCode(NOT_FOUND.value())
-         .body("detail", equalTo("Task name is empty or not have minimal chracteres. It is not allowed!!!!"))
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/transaction.json"))
+         .statusCode(NOT_ACCEPTABLE.value())
+//         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
     ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+//    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+//    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
 
