@@ -24,6 +24,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 // =================================================================================================
 @Profile("dev")
 @Configuration
+//@EnableTransactionManagement
 @EnableReactiveMongoRepositories(
      basePackages = {
           "com.webflux.mongo2.project",
@@ -35,9 +36,6 @@ public class ConfigDbDevProfile extends AbstractReactiveMongoConfiguration {
   private String username;
   private String password;
   private String authenticationDatabase;
-
-
-  //  private MappingMongoConverter mongoConverter;
 
 
   // 01) REACTIVE-MONGO-TEMPLATE-BEANS:
@@ -74,21 +72,18 @@ public class ConfigDbDevProfile extends AbstractReactiveMongoConfiguration {
   }
 
 
-    @Bean
-    public ReactiveMongoTemplate reactiveMongoTemplate() {
-      return new ReactiveMongoTemplate(reactiveMongoClient(),getDatabaseName());
-    }
+  @Bean
+  public ReactiveMongoTemplate reactiveMongoTemplate() {
+
+    return new ReactiveMongoTemplate(reactiveMongoClient(), getDatabaseName());
+  }
 
   // 02) TRANSACTION-BEANS:
-  //  @Bean
-  //  TransactionalOperator transactionOperator(ReactiveTransactionManager operator) {
-  //    return new TransactionalOperator(operator);
-  //  }
+  @Bean
+  ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
 
-    @Bean
-    ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
-      return new ReactiveMongoTransactionManager(factory);
-    }
+    return new ReactiveMongoTransactionManager(factory);
+  }
 
 
   // 03) GRID-FS-BEANS:

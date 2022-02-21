@@ -5,8 +5,8 @@ import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.repo.IRepo;
 import com.webflux.api.modules.project.repo.IRepoProjectChild;
 import com.webflux.api.modules.project.repo.template.RepoColections;
-import com.webflux.api.modules.task.Task;
 import com.webflux.api.modules.task.ITaskRepo;
+import com.webflux.api.modules.task.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
@@ -32,6 +32,7 @@ public class TestDbUtils {
 
 
   public <E> void countAndExecuteFlux(Flux<E> flux, int totalElements) {
+
     StepVerifier
          .create(flux)
          .expectSubscription()
@@ -40,34 +41,62 @@ public class TestDbUtils {
   }
 
   public Flux<Project> saveProjectList(List<Project> projectList) {
+
     return projectRepo.deleteAll()
                       .thenMany(Flux.fromIterable(projectList))
                       .flatMap(projectRepo::save)
                       .doOnNext(item -> projectRepo.findAll())
-                      .doOnNext(item -> System.out.println(
-                           "\n--> Saved 'Project' in DB: \n    --> " + item.toString() + "\n"));
+                      .doOnNext(item -> System.out.printf(
+                           """
+                                >==> Saved 'ProjectChild' in DB:
+                                     -> ID: %s
+                                     -> Name: %s
+                                                                
+                                   """,
+                           item.get_id(),
+                           item.getName()
+                                                         ));
   }
 
   public Flux<ProjectChild> saveProjectChildList(List<ProjectChild> projectList) {
+
     return repoChild.deleteAll()
-                      .thenMany(Flux.fromIterable(projectList))
-                      .flatMap(repoChild::save)
-                      .doOnNext(item -> repoChild.findAll())
-                      .doOnNext(item -> System.out.println(
-                           "\n--> Saved 'ProjectChild' in DB: \n    --> " + item.toString() + "\n"));
+                    .thenMany(Flux.fromIterable(projectList))
+                    .flatMap(repoChild::save)
+                    .doOnNext(item -> repoChild.findAll())
+                    .doOnNext(item -> System.out.printf(
+                         """
+                              >==> Saved 'ProjectChild' in DB:
+                                   -> ID: %s
+                                   -> Name: %s
+                                                            
+                               """,
+                         item.get_id(),
+                         item.getName()
+                                                       ));
   }
 
   public Flux<Task> saveTaskList(List<Task> taskList) {
+
     return taskRepo.deleteAll()
                    .thenMany(Flux.fromIterable(taskList))
                    .flatMap(taskRepo::save)
                    .doOnNext(item -> taskRepo.findAll())
-                   .doOnNext(item -> System.out.println(
-                        "\n--> Saved 'Task' in DB: \n    --> " + item.toString() + "\n"))
+                   .doOnNext(item -> System.out.printf(
+                        """
+                             >==> Saved 'Task' in DB:
+                                  -> ID: %s
+                                  -> Name: %s
+                                                          
+                             """,
+                        item.get_id(),
+                        item.getName()
+                                                      ))
          ;
   }
 
   public <E> void checkFluxListElements(Flux<E> listFlux, List<E> listCompare) {
+
     StepVerifier.create(listFlux)
                 .recordWith(ArrayList::new)
                 .expectNextCount(listCompare.size())
@@ -76,25 +105,26 @@ public class TestDbUtils {
   }
 
   public void cleanTestDb() {
+
     StepVerifier
          .create(collections.dropCollectionsTemplate())
          .expectSubscription()
          .verifyComplete();
 
-//    StepVerifier
-//         .create(projectRepo.deleteAll())
-//         .expectSubscription()
-//         .verifyComplete();
-//
-//    StepVerifier
-//         .create(repoChild.deleteAll())
-//         .expectSubscription()
-//         .verifyComplete();
-//
-//    StepVerifier
-//         .create(taskRepo.deleteAll())
-//         .expectSubscription()
-//         .verifyComplete();
+    //    StepVerifier
+    //         .create(projectRepo.deleteAll())
+    //         .expectSubscription()
+    //         .verifyComplete();
+    //
+    //    StepVerifier
+    //         .create(repoChild.deleteAll())
+    //         .expectSubscription()
+    //         .verifyComplete();
+    //
+    //    StepVerifier
+    //         .create(taskRepo.deleteAll())
+    //         .expectSubscription()
+    //         .verifyComplete();
 
     System.out.println("\n>==================================================>" +
                             "\n>===============> CLEAN-DB-TO-TEST >===============>" +

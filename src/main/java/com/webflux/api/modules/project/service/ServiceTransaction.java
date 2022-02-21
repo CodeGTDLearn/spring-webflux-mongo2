@@ -24,27 +24,27 @@ public class ServiceTransaction implements IServiceTransaction {
   A) SERVICE: BLOW-UP EXCEPTIONS IN THE SERVICE
   B) CONTROLLER: TREAT/HANDLE EXCEPTIONS IN THE CONTROLLER(ON-ERROR-RESUME)
    */
+  //  @Transactional(transactionManager="transactionManager1")
   @Transactional
   @Override
   public Mono<Task> createProjectTransaction(Project project, Task task) {
+
     // @formatter:off
     return
-         serviceRepo
-              .save(project)
-              .flatMap(proj -> {
-                task.setProjectId(proj.get_id());
-                return Mono.just(proj);
-              })
-              .flatMap(proj1 ->{
-                if (proj1.getName().isEmpty()) return projectThrower.throwProjectNameIsEmptyException();
-                return Mono.just(task);
-              })
-              .flatMap(task1 -> taskRepo.save(task1))
-              .flatMap(task2 -> {
-                if (task2.getName().isEmpty()) return taskThrower.throwTaskNameIsEmptyException();
-                if (task2.getName().length() < 3) return taskThrower.throwTaskNameLessThanThreeException();
-                return Mono.just(task2);
-              })
+         Mono.just(project)
+             .flatMap(proj1 -> {
+               if (proj1.getName().isEmpty()) return projectThrower.throwProjectNameIsEmptyException();
+               return Mono.just(proj1); })
+             .flatMap(proj2 -> serviceRepo.save(proj2))
+             .flatMap(proj3 -> {
+               task.setProjectId(proj3.get_id());
+               return Mono.just(task); })
+             .flatMap(task1 -> {
+               if (task1.getName().isEmpty()) return taskThrower.throwTaskNameIsEmptyException();
+               if (task1.getName().length() < 3) return taskThrower.throwTaskNameLessThanThreeException();
+               return Mono.just(task1);
+             })
+             .flatMap(task1 -> taskRepo.save(task1))
          ;
     // @formatter:on
   }

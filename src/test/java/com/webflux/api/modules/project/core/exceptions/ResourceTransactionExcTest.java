@@ -112,7 +112,6 @@ class ResourceTransactionExcTest {
 
     List<Project> projectList = asList(project1, projetoWithId);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
-
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
     Task task1 = taskWithID("3",
@@ -136,7 +135,6 @@ class ResourceTransactionExcTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("createProjectTransacTaskNameEmptyExc")
   public void createProjectTransacTaskNameEmptyExc() {
-
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -173,8 +171,8 @@ class ResourceTransactionExcTest {
 //         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
     ;
 
-//    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-//    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
 
