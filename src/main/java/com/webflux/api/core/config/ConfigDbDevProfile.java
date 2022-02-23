@@ -3,6 +3,7 @@ package com.webflux.api.core.config;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @ConfigurationProperties(prefix = "spring.data.mongodb")
 @Setter
 // =================================================================================================
+@Slf4j
 @Profile("dev")
 @Configuration
 //@EnableTransactionManagement
@@ -41,6 +43,11 @@ public class ConfigDbDevProfile extends AbstractReactiveMongoConfiguration {
   // 01) REACTIVE-MONGO-TEMPLATE-BEANS:
   @Override
   public MongoClient reactiveMongoClient() {
+
+    log.info("""
+    LOGAGEM: 
+    authenticationDatabase
+    """);
 
     String connectionURI = "mongodb://" +
          username + ":" + password + "@" +

@@ -22,25 +22,22 @@ public class TcComposeConfig {
 
   //format 01: using a variable to create the tcContainerCompose
   private final DockerComposeContainer<?> tcCompose =
-       new DockerComposeContainer<>(
-            new File(TC_COMPOSE_PATH))
-            .withExposedService(
-                 TC_COMPOSE_SERVICE,
-                 TC_COMPOSE_SERVICE_PORT,
-                 Wait.forListeningPort()
-                     .withStartupTimeout(Duration.ofSeconds(TC_COMPOSE_STARTUP_TIMEOUT))
-                               );
-/* PISTA DA SOLUCAO
-new DockerComposeContainer<>(new File("../docker-compose.yml"))
-    .withEnv(Map.of("TEST_ENV_VAR", "test_value"))
-    .withLocalCompose(true)
-    .start();
- */
-
+       new DockerComposeContainer<>(new File(TC_COMPOSE_PATH))
+            .withExposedService(TC_COMPOSE_SERVICE,
+                                TC_COMPOSE_SERVICE_PORT,
+                                Wait.forListeningPort()
+                                    .withStartupTimeout(
+                                         Duration.ofMillis(10000))
+                               )
+//            .waitingFor(
+//                 TC_COMPOSE_SERVICE,
+//                 Wait.forLogMessage("Opened connection", 1)
+//                       )
+       ;
 
   //format 02: using a getter/accessor to create the tcContainerCompose
   public DockerComposeContainer<?> getTcCompose() {
+
     return tcCompose;
   }
-
 }

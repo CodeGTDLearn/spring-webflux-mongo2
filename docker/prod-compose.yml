@@ -22,11 +22,11 @@ services:
     container_name: mongo1
     image: mongo:4.4.4
     restart: always
-    command: mongod --replSet docker-rs --port 9042
+#    command: mongod --replSet docker-rs --port 9042
     #    OPTION 01 - DO NOT REMOVE:
-    #    command: >
-    #      bash -c "chmod +x /scripts/rs-init.sh
-    #      && sh /scripts/rs-init.sh"
+    command: >
+      bash -c "chmod +x /scripts/rs-init.sh
+      && sh /scripts/rs-init.sh"
     #    OPTION 02 - DO NOT REMOVE:
     #    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh"]
     ports:

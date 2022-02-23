@@ -41,8 +41,10 @@ class ResourceCrudTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
+  private static final TcComposeConfig composeConfig = new TcComposeConfig();
+
   @Container
-  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
+  private static final DockerComposeContainer<?> compose = composeConfig.getTcCompose();
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -56,7 +58,6 @@ class ResourceCrudTest {
 
   @Autowired
   IServiceCrud serviceCrud;
-
   private Project project1;
   private Project project2;
   private Project projetoNoId;
@@ -77,7 +78,6 @@ class ResourceCrudTest {
     RestAssuredWebTestClient.responseSpecification = responseSpecs();
   }
 
-
   @AfterAll
   static void afterAll(TestInfo testInfo) {
 
@@ -88,6 +88,8 @@ class ResourceCrudTest {
 
   @BeforeEach
   void beforeEach(TestInfo testInfo) {
+
+
 
     // REAL-SERVER INJECTED IN WEB-TEST-CLIENT(non-blocking client)'
     // SHOULD BE USED WHEN 'DOCKER-COMPOSE' UP A REAL-WEB-SERVER
@@ -177,7 +179,6 @@ class ResourceCrudTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("saveNoID")
   public void saveNoID() {
-
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)

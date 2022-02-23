@@ -17,89 +17,79 @@ public class TestUtils {
 
   @BeforeAll
   public static void globalBeforeAll() {
+//    try {
+//      TimeUnit.SECONDS.sleep(5);
+//    } catch (InterruptedException ie) {
+//      Thread.currentThread().interrupt();
+//    }
+
     requestSpecs();
     responseSpecs();
     blockhoundInstallSimple();
-//    blockhoundInstallAllowAllCalls();
+    //    blockhoundInstallAllowAllCalls();
   }
 
 
   @AfterAll
   public static void globalAfterAll() {
+
     RestAssuredWebTestClient.reset();
   }
 
 
-  public static void globalTestMessage(String subTitle,String testType) {
+  public static void globalTestMessage(String subTitle, String testType) {
 
 
     if (subTitle.contains("repetition"))
       subTitle = "Error: Provide TestInfo testInfo.getTestMethod().toString()";
 
     if (subTitle.contains("()]")) {
-      subTitle = subTitle.replace("()]","");
+      subTitle = subTitle.replace("()]", "");
       subTitle = subTitle.substring(subTitle.lastIndexOf(".") + 1);
-      subTitle = subTitle.substring(0,1)
+      subTitle = subTitle.substring(0, 1)
                          .toUpperCase() + subTitle.substring(1);
     }
 
-    String title = "";
-
-    switch (testType.toLowerCase()) {
-      case "class-start":
-        title = " STARTING TEST-CLASS...";
-        break;
-
-      case "class-end":
-        title = "...FINISHED TEST-CLASS ";
-        break;
-
-      case "method-start":
-        title = "STARTING TEST-METHOD...";
-        break;
-
-      case "method-end":
-        title = "...FINISHED TEST-METHOD";
-        break;
-    }
+    String title =
+         switch (testType.toLowerCase()) {
+           case "class-start" -> " STARTING TEST-CLASS...";
+           case "class-end" -> "...FINISHED TEST-CLASS ";
+           case "method-start" -> "STARTING TEST-METHOD...";
+           case "method-end" -> "...FINISHED TEST-METHOD";
+           default -> "";
+         };
 
     System.out.printf(
-         "%n%n" +
-              "╔════════════════════════════════════════════════════════════════════╗%n" +
-              "║                       %s                      ║%n" +
-              "║ --> Name: %s %38s%n" +
-              "╚════════════════════════════════════════════════════════════════════╝%n%n%n",
-         title,subTitle,"║"
+         """
+              ╔════════════════════════════════════════════════════════════════════╗
+              ║                       %s                                           ║
+              ║ --> Name: %s %38s%n"
+              ╚════════════════════════════════════════════════════════════════════╝
+                       
+              """,
+         title, subTitle, "║"
                      );
   }
 
 
-  public static void globalContainerMessage(MongoDBContainer container,String typeTestMessage) {
-    String title = "";
+  public static void globalContainerMessage(MongoDBContainer container, String typeTestMessage) {
 
-    switch (typeTestMessage.toLowerCase()) {
-      case "container-start":
-        title = "STARTING TEST-CONTAINER...";
-        break;
-
-      case "container-end":
-        title = "...FINISHED TEST-CONTAINER";
-        break;
-
-
-      case "container-state":
-        title = "  ...TEST'S TC-CONTAINER  ";
-        break;
-    }
+    String title =
+         switch (typeTestMessage.toLowerCase()) {
+           case "container-start" -> "STARTING TEST-CONTAINER...";
+           case "container-end" -> "...FINISHED TEST-CONTAINER";
+           case "container-state" -> "  ...TEST'S TC-CONTAINER  ";
+           default -> "";
+         };
 
     System.out.printf(
-         "%n%n" +
-              "╔═══════════════════════════════════════════════════════════════════════╗%n" +
-              "║                        %s                     ║%n" +
-              "║ --> Name: %s\n" +
-              "║ --> Url: %s\n" +
-              "║ --> Running: %s\n" +
-              "╚═══════════════════════════════════════════════════════════════════════╝%n%n",
+         """
+              ╔═══════════════════════════════════════════════════════════════════════╗
+              ║ --> Name: %s
+              ║ --> Url: %s
+              ║ --> Running: %s
+              ╚═══════════════════════════════════════════════════════════════════════╝
+              """,
          title,
          container.getContainerName(),
          container.getReplicaSetUrl(),
@@ -112,20 +102,22 @@ public class TestUtils {
        DockerComposeContainer<?> compose,
        String service,
        Integer port) {
+
     System.out.printf(
-         "%n%n" +
-              "╔═══════════════════════════════════════════════════════════════════════╗%n" +
-              "║                           %s                        ║%n" +
-              "║ --> Service: %s\n" +
-              "║ --> Host: %s\n" +
-              "║ --> Port: %s\n" +
-              "║ --> Created: %s\n" +
-              "║ --> Running: %s\n" +
-              "╚═══════════════════════════════════════════════════════════════════════╝%n%n",
+         """ 
+              ╔═══════════════════════════════════════════════════════════════════════
+              ║                           %s                        ║
+              ║ --> Service: %s
+              ║ --> Host: %s
+              ║ --> Port: %s
+              ║ --> Created: %s
+              ║ --> Running: %s
+              ╚═══════════════════════════════════════════════════════════════════════
+               """,
          "TC-CONTAINER-COMPOSE",
          service,
-         compose.getServiceHost(service,port),
-         compose.getServicePort(service,port),
+         compose.getServiceHost(service, port),
+         compose.getServicePort(service, port),
          compose.getContainerByServiceName(service + "_1")
                 .get()
                 .isCreated(),

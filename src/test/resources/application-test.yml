@@ -3,3 +3,11 @@ spring:
 #    active: test-group
     group:
       test-group: test, log
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: api-db-tc
+      username: root
+      password: root
+      authentication-database: admin
