@@ -20,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 public class BlockhoundUtils {
 
   //EXCECOES DE METODOS BLOQUEANTES DETECTADOS PELO BLOCKHOUND:
-  static BlockHoundIntegration AllowedCalls =
+  static BlockHoundIntegration allowedBlockingCalls =
        builder -> builder
             .allowBlockingCallsInside("java.io.PrintStream",
                                       "write"
@@ -44,24 +44,30 @@ public class BlockhoundUtils {
             .allowBlockingCallsInside("java.util.UUID",
                                       "randomUUID"
                                      )
+            .allowBlockingCallsInside("java.io.RandomAccessFile",
+                                      "readBytes"
+                                     )
             .allowBlockingCallsInside("java.io.PrintStream",
                                       "println"
+                                     )
+            .allowBlockingCallsInside("java.util.concurrent.ConcurrentMap",
+                                      "computeIfAbsent"
                                      );
 
 
-  public static void blockhoundInstallAllowAllCalls() {
+  public static void blockhoundInstallWithAllAllowedCalls() {
 
-    BlockHound.install(AllowedCalls);
+    BlockHound.install(allowedBlockingCalls);
   }
 
 
-  public static void blockhoundInstallSimple() {
+  public static void blockhoundInstallWithSpecificAllowedCalls() {
 
     BlockHoundIntegration allowedCalls =
          builder -> builder
-//              .allowBlockingCallsInside("java.io.PrintStream",
-//                                        "write"
-//                                       )
+              //              .allowBlockingCallsInside("java.io.PrintStream",
+              //                                        "write"
+              //                                       )
               .allowBlockingCallsInside("java.util.concurrent.ConcurrentMap",
                                         "computeIfAbsent"
                                        );
@@ -69,7 +75,7 @@ public class BlockhoundUtils {
   }
 
 
-  public static void bhWorks() {
+  public static void blockHoundTestCheck() {
 
     try {
       FutureTask<?> task = new FutureTask<>(() -> {

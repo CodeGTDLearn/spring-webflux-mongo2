@@ -9,6 +9,7 @@ public class TestDbUtilsConfig {
 
   @Bean
   public TestDbUtils testDbUtils() {
+
     return new TestDbUtils();
   }
 }

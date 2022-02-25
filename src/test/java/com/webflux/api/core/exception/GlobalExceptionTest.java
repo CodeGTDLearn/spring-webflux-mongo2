@@ -2,7 +2,7 @@ package com.webflux.api.core.exception;
 
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -22,9 +22,7 @@ import static com.webflux.api.modules.project.core.routes.RoutesCrud.ERROR_PATH;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -72,10 +70,7 @@ class GlobalExceptionTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080/" + PROJ_ROOT_CRUD);
@@ -163,6 +158,7 @@ class GlobalExceptionTest {
   @DisplayName("Global-Exception Error Stack")
   @EnabledIf(expression = enabledTest, loadContext = true)
   void globalExceptionErrorStack() {
+
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
@@ -177,7 +173,8 @@ class GlobalExceptionTest {
          .everything()
          .body("Global-Dev-Atribute", equalTo(globalException.getDeveloperMessage()))
          .body("Global-Global-Atribute", equalTo(globalException.getGlobalMessage()))
-         .body(matchesJsonSchemaInClasspath("contracts/exceptions/global/globalExceptionStack.json"))
+         .body(
+              matchesJsonSchemaInClasspath("contracts/exceptions/global/globalExceptionStack.json"))
     ;
   }
 
@@ -185,7 +182,8 @@ class GlobalExceptionTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("BHWorks")
   void bHWorks() {
-    bhWorks();
+
+    blockHoundTestCheck();
   }
 
 }

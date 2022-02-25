@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
@@ -26,9 +26,7 @@ import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -73,10 +71,7 @@ class ResourceTransactionTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + PROJ_ROOT_CRUD);
@@ -143,35 +138,35 @@ class ResourceTransactionTest {
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
     var newTaskName = Faker.instance()
-                              .name()
-                              .firstName();
+                           .name()
+                           .firstName();
 
     Project project = projectWithID("C",
-                                  "2020-05-05",
-                                  "2021-05-05",
-                                  1000L,
-                                  of("UK", "USA")
-                                 ).create();
+                                    "2020-05-05",
+                                    "2021-05-05",
+                                    1000L,
+                                    of("UK", "USA")
+                                   ).create();
 
-        RestAssuredWebTestClient
-             .given()
-             .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
-             .body(project)
-             .queryParam("taskNameInitial",newTaskName)
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
 
-             .when()
-             .post(REPO_TRANSACT)
+         .when()
+         .post(REPO_TRANSACT)
 
-             .then()
-             .log()
-             .everything()
+         .then()
+         .log()
+         .everything()
 
-             .statusCode(CREATED.value())
-             .body("name", equalTo(newTaskName))
-             .body("projectId", equalTo(project.get_id()))
-             .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
-        ;
+         .statusCode(CREATED.value())
+         .body("name", equalTo(newTaskName))
+         .body("projectId", equalTo(project.get_id()))
+         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
+    ;
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 3);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 2);
@@ -183,6 +178,6 @@ class ResourceTransactionTest {
   @DisplayName("BHWorks")
   public void bHWorks() {
 
-    bhWorks();
+    blockHoundTestCheck();
   }
 }

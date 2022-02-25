@@ -45,7 +45,8 @@ services:
     networks:
       - mongo-cluster
     environment:
-      # PROFILES ARE MANAGED BY APPLICATION.YML - WEBAPP IS MANAGING AUTOMATICALLY THE PROFILES
+      # API MANAGE AUTOMATICALLY THE PROFILES:
+      # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -
       #      PROFILE: dev
       PORT_DEBUG: 5005
       <<: *env-vars

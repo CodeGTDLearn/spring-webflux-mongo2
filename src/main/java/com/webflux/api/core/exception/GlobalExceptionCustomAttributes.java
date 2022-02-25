@@ -1,6 +1,6 @@
 package com.webflux.api.core.exception;
 
-import com.webflux.api.core.config.YamlPropertyFileConverter;
+import com.webflux.api.core.config.YamlFileConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -25,13 +25,14 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "global.exception")
-@PropertySource(value = "classpath:exceptions-messages.yml", factory = YamlPropertyFileConverter.class)
+@PropertySource(value = "classpath:exceptions-messages.yml", factory =
+     YamlFileConverter.class)
 public class GlobalExceptionCustomAttributes {
 
-    // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
-    // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
-    // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
-    private String developerMessage;
-    private String globalMessage;
+  // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
+  // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
+  // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
+  private String developerMessage;
+  private String globalMessage;
 
 }

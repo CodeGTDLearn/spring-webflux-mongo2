@@ -2,7 +2,7 @@ package config.databuilders;
 
 import com.github.javafaker.Faker;
 import com.webflux.api.modules.project.entity.ProjectChild;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import lombok.Builder;
 import lombok.Getter;
 

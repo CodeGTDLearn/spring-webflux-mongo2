@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.resource.template;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -26,8 +26,6 @@ import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.ProjectChildBuilder.projectChildWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -69,10 +67,7 @@ class ResourceProjectionTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + TEMPL_ROOT_PROJECTION);

@@ -25,7 +25,7 @@ public class RestAssureSpecs {
     WebTestClientRequestSpecification requestSpecs =
          new WebTestClientRequestSpecBuilder()
               .setContentType(JSON_CONTENT_TYPE)
-              .addHeader("Accept",String.valueOf(ContentType.ANY))
+              .addHeader("Accept", String.valueOf(ContentType.ANY))
               .log(LogDetail.ALL)
               .build();
 
@@ -40,7 +40,7 @@ public class RestAssureSpecs {
     WebTestClientRequestSpecification requestSpecs =
          new WebTestClientRequestSpecBuilder()
               .setContentType(JSON_CONTENT_TYPE)
-              .addHeader("Accept",String.valueOf(ContentType.ANY))
+              .addHeader("Accept", String.valueOf(ContentType.ANY))
               .log(LogDetail.ALL)
               .setBasePath(fullBasePath)
               .build();
@@ -58,13 +58,14 @@ public class RestAssureSpecs {
     responseSpecBuilder
          .expectResponseTime(lessThanOrEqualTo(MAX_TIMEOUT))
          .expectContentType(JSON_CONTENT_TYPE)
-         .expectHeader("Content-Type",String.valueOf(JSON_CONTENT_TYPE))
+         .expectHeader("Content-Type", String.valueOf(JSON_CONTENT_TYPE))
     ;
     return responseSpecBuilder.build();
   }
 
 
   public static ResponseSpecification noContentTypeAndVoidResponses() {
+
     return new ResponseSpecBuilder()
          .expectResponseTime(lessThanOrEqualTo(MAX_TIMEOUT))
          .build();

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serializable;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 // ==> EXCEPTIONS IN CONTROLLER:
 // *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
@@ -18,6 +18,7 @@ public class ProjectNotFoundException extends RuntimeException implements Serial
   private static final long serialVersionUID = - 8894682964071077679L;
 
   public ProjectNotFoundException(String message) {
+
     super(message);
   }
 }

@@ -37,66 +37,69 @@ import static org.springframework.boot.web.error.ErrorAttributeOptions.*;
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @Component
-@Order(-2)
+@Order(- 2)
 //CustomGlobalExceptionHandler COMES BEFORE the SpringWebFluxGlobalExceptionHandlerDefault
 public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
 
-    private final String completeStackTrace = "completeStackTrace=true";
+  private final String completeStackTrace = "completeStackTrace=true";
 
 
-    public GlobalExceptionHandler(
-            ErrorAttributes errorAttributes,
-            WebProperties.Resources resources,
-            ApplicationContext applicationContext,
-            ServerCodecConfigurer codecConfigurer) {
-        super(errorAttributes,resources,applicationContext);
-        this.setMessageWriters(codecConfigurer.getWriters());
-        super.setMessageReaders(codecConfigurer.getReaders());
-    }
+  public GlobalExceptionHandler(
+       ErrorAttributes errorAttributes,
+       WebProperties.Resources resources,
+       ApplicationContext applicationContext,
+       ServerCodecConfigurer codecConfigurer) {
+
+    super(errorAttributes, resources, applicationContext);
+    this.setMessageWriters(codecConfigurer.getWriters());
+    super.setMessageReaders(codecConfigurer.getReaders());
+  }
 
 
-    @Override
-    protected RouterFunction<ServerResponse> getRoutingFunction(ErrorAttributes errorAttributes) {
-        return RouterFunctions
-                .route(
-                        RequestPredicates.all(),
-                        this::formatErrorResponse
-                      );
-    }
+  @Override
+  protected RouterFunction<ServerResponse> getRoutingFunction(ErrorAttributes errorAttributes) {
+
+    return RouterFunctions
+         .route(
+              RequestPredicates.all(),
+              this::formatErrorResponse
+               );
+  }
 
 
-    private Mono<ServerResponse> formatErrorResponse(ServerRequest request) {
+  private Mono<ServerResponse> formatErrorResponse(ServerRequest request) {
 
-        String query =
-                request
-                        .uri()
-                        .getQuery();
+    String query =
+         request
+              .uri()
+              .getQuery();
 
-        ErrorAttributeOptions errorAttributeOptions =
-                isTraceEnabled(query)
-                        ? of(Include.STACK_TRACE)
-                        : defaults();
+    ErrorAttributeOptions errorAttributeOptions =
+         isTraceEnabled(query)
+              ? of(Include.STACK_TRACE)
+              : defaults();
 
-        Map<String, Object>
-                errorAttribsMap =
-                getErrorAttributes(request,errorAttributeOptions);
-
-
-        int status = (int) Optional
-                .ofNullable(errorAttribsMap
-                                    .get("status"))
-                .orElse(500);
-
-        return ServerResponse
-                .status(status)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(errorAttribsMap));
-    }
+    Map<String, Object>
+         errorAttribsMap =
+         getErrorAttributes(request, errorAttributeOptions);
 
 
-    // Hence: ?trace=true in the url show the COMPLETE STACK-TRACK IN THE BROWSER
-    // instead the CustomErrorHandlingException(simplified) as Stack-Trace
-    private boolean isTraceEnabled(String query) {
-        return StringUtils.hasText(query) && query.contains(completeStackTrace);
-    }
+    int status = (int) Optional
+         .ofNullable(errorAttribsMap
+                          .get("status"))
+         .orElse(500);
+
+    return ServerResponse
+         .status(status)
+         .contentType(MediaType.APPLICATION_JSON)
+         .body(BodyInserters.fromValue(errorAttribsMap));
+  }
+
+
+  // Hence: ?trace=true in the url show the COMPLETE STACK-TRACK IN THE BROWSER
+  // instead the CustomErrorHandlingException(simplified) as Stack-Trace
+  private boolean isTraceEnabled(String query) {
+
+    return StringUtils.hasText(query) && query.contains(completeStackTrace);
+  }
 }

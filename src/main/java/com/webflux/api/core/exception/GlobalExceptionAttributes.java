@@ -67,10 +67,10 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
       // C) ADDING Custom-Parameters in the Default-Parameters
       globalAttributes.put("Global-Global-Atribute", attributes.getGlobalMessage());
       globalAttributes.put("Global-Dev-Atribute", attributes.getDeveloperMessage());
-//      globalAttributes.put("example","example2");
+      //      globalAttributes.put("example","example2");
 
       // D) REMOVING Keys/Fields from the Global-Exception-Message
-//      globalAttributes.remove("path");
+      //      globalAttributes.remove("path");
       globalAttributes.remove("error");
       globalAttributes.remove("message");
       globalAttributes.remove("timestamp");

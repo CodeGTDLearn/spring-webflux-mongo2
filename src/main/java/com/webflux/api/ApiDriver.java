@@ -1,17 +1,18 @@
 package com.webflux.api;
 
+import com.webflux.api.core.BlockhoundUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import reactor.blockhound.BlockHound;
 
 @SpringBootApplication
 public class ApiDriver {
   static {
-    BlockHound.install();
+    BlockhoundUtils.blockhoundInstallAllowAllCalls();
   }
 
   public static void main(String[] args) {
-    SpringApplication.run(ApiDriver.class,args);
+
+    SpringApplication.run(ApiDriver.class, args);
   }
 
 }

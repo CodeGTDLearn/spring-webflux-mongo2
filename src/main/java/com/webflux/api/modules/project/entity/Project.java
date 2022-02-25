@@ -35,7 +35,7 @@ public class Project implements Serializable {
 
   @Field("cost")
   private long estimatedCost;
-  
+
   private List<String> countryList;
 
   @Version

@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.repo.IRepo;
-import com.webflux.api.modules.task.ITaskRepo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -13,14 +12,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("serviceRepo")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ServiceRepo implements IServiceRepo {
 
-
-  IRepo repo;
-
-
-  ITaskRepo taskRepo;
+  private final IRepo repo;
 
 
   /*╔══════════════════════════════╗

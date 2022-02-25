@@ -1,10 +1,10 @@
 #!/bin/bash
-echo "SCRIPT was execute by the docker-compose - STARTING"
-#mongod --replSet docker-rs --port 9042
-sleep 5
+echo "SCRIPT - STARTING"
+mongod --replSet docker-rs --port 9042
+sleep 5s
 echo "Delay-Sleep done"
 mongo --port 9042 <<EOF
-var config = {
+var replicasetConfig = {
     "_id": "docker-rs",
     "members": [
         {
@@ -24,13 +24,13 @@ var config = {
         }
     ]
 };
-rs.initiate(config);
+rs.initiate(replicasetConfig);
 rs.status();
 use admin;
 db.createUser({user: "admin",pwd: "admin",roles: [ { role: "root", db: "admin" }, "root" ]});
 exit
 EOF
 echo "Adding in etc/host - done"
-echo "127.0.0.1  localhost mongo1 mongo2 mongo3" >> /etc/hosts
-echo cat > /etc/hosts
-echo "SCRIPT was execute by the docker-compose - FINISHED"
+"127.0.0.1  localhost mongo1 mongo2 mongo3" >> /etc/hosts
+cat > /etc/hosts
+echo "SCRIPT - FINISHED"

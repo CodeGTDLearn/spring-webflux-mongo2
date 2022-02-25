@@ -1,14 +1,14 @@
-version: "3.4"
+version: "3.8"
 
 x-common-variables:
   &env-vars
-  MONGO_REPLICASET_NAME: docker-rs
-  MONGO_REPLICASET_USERNAME: admin
-  MONGO_REPLICASET_PASSWORD: admin
-  MONGO_REPLICASET_PRIMARY: mongo1
-  MONGO_REPLICASET_PORT: 9042
-  MONGO_REPLICASET_DB: udemy
-  MONGO_REPLICASET_AUTH_DB: admin
+  MONGO_INITDB_ROOT_USERNAME: root
+  MONGO_INITDB_ROOT_PASSWORD: root
+  MONGO_INITDB_DATABASE: udemy
+  MONGO_RS_NAME: my-replica-set
+  MONGO_RS_PRIMARY: mongo1
+  MONGO_RS_PORT: 30001
+  MONGO_AUTH_MAN: admin
   PORT_API: 8080
 
 volumes:
@@ -19,53 +19,46 @@ networks:
 
 services:
   mongo1:
+    image: mongo:4.2
     container_name: mongo1
-    image: mongo:4.4.4
-    restart: always
-#    command: mongod --replSet docker-rs --port 9042
-    #    OPTION 01 - DO NOT REMOVE:
-    command: >
-      bash -c "chmod +x /scripts/rs-init.sh
-      && sh /scripts/rs-init.sh"
-    #    OPTION 02 - DO NOT REMOVE:
-    #    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh"]
-    ports:
-      - "9042:9042"
-    networks:
-      - mongo-cluster
+    command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30001"]
     volumes:
-      - ~/mongors/data1:/data/db
-      - ./rs-init.sh:/scripts/rs-init.sh
-    #      - api_vol:/data/db
+      - ./data/mongo-1:/data/db
+    ports:
+      - "30001:30001"
+    healthcheck:
+      test: test $$(echo "rs.initiate({_id:'my-replica-set',members:[{_id:0,host:\"mongo1:30001\"},{_id:1,host:\"mongo2:30002\"},{_id:2,host:\"mongo3:30003\"}]}).ok || rs.status().ok" | mongo --port 30001 --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
     environment:
       *env-vars
     depends_on:
       - mongo2
       - mongo3
+    networks:
+      - mongo-cluster
 
   mongo2:
+    image: mongo:4.2
     container_name: mongo2
-    image: mongo:4.4.4
-    restart: always
-    command: mongod --replSet docker-rs --port 9142
+    command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30002"]
+    volumes:
+      - ./data/mongo-2:/data/db
     ports:
-      - "9142:9142"
+      - "30002:30002"
     networks:
       - mongo-cluster
-    volumes:
-      - ~/mongors/data2:/data/db
 
   mongo3:
+    image: mongo:4.2
     container_name: mongo3
-    image: mongo:4.4.4
-    restart: always
+    command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30003"]
+    volumes:
+      - ./data/mongo-3:/data/db
     ports:
-      - "9242:9242"
-    command: mongod --replSet docker-rs --port 9242
+      - "30003:30003"
     networks:
       - mongo-cluster
-    volumes:
-      - ~/mongors/data3:/data/db
 
   api:
     container_name: api
@@ -85,7 +78,8 @@ services:
     networks:
       - mongo-cluster
     environment:
-      # PROFILES ARE MANAGED BY APPLICATION.YML - WEBAPP IS MANAGING AUTOMATICALLY THE PROFILES
+      # API MANAGE AUTOMATICALLY THE PROFILES:
+      # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -
       #      PROFILE: dev
       PORT_DEBUG: 5005
       <<: *env-vars

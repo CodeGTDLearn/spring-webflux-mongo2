@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
@@ -26,16 +26,14 @@ import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceTransactionExcTest")
@@ -71,10 +69,7 @@ class ResourceTransactionExcTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + PROJ_ROOT_CRUD);
@@ -168,7 +163,7 @@ class ResourceTransactionExcTest {
          .everything()
 
          .statusCode(NOT_ACCEPTABLE.value())
-//         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
+    //         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
     ;
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
@@ -181,6 +176,6 @@ class ResourceTransactionExcTest {
   @DisplayName("BHWorks")
   public void bHWorks() {
 
-    bhWorks();
+    blockHoundTestCheck();
   }
 }

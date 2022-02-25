@@ -4,8 +4,8 @@ import com.github.javafaker.Faker;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
-import com.webflux.api.modules.project.service.template.IServiceChildArray;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.project.service.IServiceChildArray;
+import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
 import config.annotations.MergedResource;
 import config.databuilders.ProjectChildBuilder;
@@ -28,8 +28,6 @@ import java.util.List;
 import static com.webflux.api.modules.project.core.routes.template.RoutesColections.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -75,10 +73,7 @@ class ResourceColectionsTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + TEMPL_ROOT_COL);

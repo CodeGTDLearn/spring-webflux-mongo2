@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
 @ControllerAdvice(annotations = {RestController.class})
 @AllArgsConstructor

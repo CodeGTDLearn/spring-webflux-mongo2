@@ -1,8 +1,4 @@
 spring:
-  profiles:
-#    active: test-group
-    group:
-      test-group: test, log
   data:
     mongodb:
       host: localhost

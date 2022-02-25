@@ -4,9 +4,9 @@ import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.repo.IRepo;
 import com.webflux.api.modules.project.repo.IRepoProjectChild;
-import com.webflux.api.modules.project.repo.template.RepoColections;
-import com.webflux.api.modules.task.ITaskRepo;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.project.repo.TemplColections;
+import com.webflux.api.modules.task.entity.Task;
+import com.webflux.api.modules.task.repo.ITaskRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
@@ -28,7 +28,7 @@ public class TestDbUtils {
   ITaskRepo taskRepo;
 
   @Autowired
-  RepoColections collections;
+  TemplColections collections;
 
 
   public <E> void countAndExecuteFlux(Flux<E> flux, int totalElements) {
@@ -47,12 +47,10 @@ public class TestDbUtils {
                       .flatMap(projectRepo::save)
                       .doOnNext(item -> projectRepo.findAll())
                       .doOnNext(item -> System.out.printf(
-                           """
-                                >==> Saved 'ProjectChild' in DB:
-                                     -> ID: %s
-                                     -> Name: %s
-                                                                
-                                   """,
+                           ">==> Saved 'ProjectChild' in DB:\n" +
+                                "-> ID: %s\n" +
+                                "-> Name: %s\n\n"
+                           ,
                            item.get_id(),
                            item.getName()
                                                          ));
@@ -65,12 +63,10 @@ public class TestDbUtils {
                     .flatMap(repoChild::save)
                     .doOnNext(item -> repoChild.findAll())
                     .doOnNext(item -> System.out.printf(
-                         """
-                              >==> Saved 'ProjectChild' in DB:
-                                   -> ID: %s
-                                   -> Name: %s
-                                                            
-                               """,
+                         ">==> Saved 'ProjectChild' in DB:\n" +
+                              "-> ID: %s\n" +
+                              "-> Name: %s\n\n"
+                         ,
                          item.get_id(),
                          item.getName()
                                                        ));
@@ -83,12 +79,10 @@ public class TestDbUtils {
                    .flatMap(taskRepo::save)
                    .doOnNext(item -> taskRepo.findAll())
                    .doOnNext(item -> System.out.printf(
-                        """
-                             >==> Saved 'Task' in DB:
-                                  -> ID: %s
-                                  -> Name: %s
-                                                          
-                             """,
+                        ">==> Saved 'Task' in DB:\n" +
+                             "-> ID: %s\n" +
+                             "-> Name: %s\n\n"
+                        ,
                         item.get_id(),
                         item.getName()
                                                       ))
@@ -126,13 +120,11 @@ public class TestDbUtils {
     //         .expectSubscription()
     //         .verifyComplete();
 
-    System.out.println("""
-
-                            >==================================================>
-                            >===============> CLEAN-DB-TO-TEST >===============>
-                            >==================================================>
-                                                        
-                            """);
+    System.out.println(
+         ">==================================================>\n" +
+              ">===============> CLEAN-DB-TO-TEST >===============>\n" +
+              ">==================================================>\n\n"
+                      );
   }
 
 }

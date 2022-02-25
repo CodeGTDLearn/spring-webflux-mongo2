@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -23,9 +23,7 @@ import java.util.List;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -33,7 +31,8 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceCrudExcTest")
@@ -66,10 +65,7 @@ class ResourceCrudExcTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + PROJ_ROOT_CRUD);
@@ -309,6 +305,6 @@ class ResourceCrudExcTest {
   @DisplayName("BHWorks")
   public void bHWorks() {
 
-    bhWorks();
+    blockHoundTestCheck();
   }
 }

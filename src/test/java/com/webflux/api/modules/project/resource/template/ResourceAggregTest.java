@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.resource.template;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.databuilders.ProjectChildBuilder;
 import config.testcontainer.TcComposeConfig;
@@ -24,8 +24,6 @@ import java.util.List;
 import static com.webflux.api.modules.project.core.routes.template.RoutesAggreg.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -64,10 +62,6 @@ class ResourceAggregTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + TEMPL_ROOT_AGGREG);
@@ -175,7 +169,7 @@ class ResourceAggregTest {
          .everything()
 
          .statusCode(OK.value())
-         .body("costly_projects" , hasItem(1))
+         .body("costly_projects", hasItem(1))
          .body(matchesJsonSchemaInClasspath("contracts/aggregations/NoOfProjectsCostGT.json"))
     ;
 
@@ -201,7 +195,7 @@ class ResourceAggregTest {
 
          .statusCode(OK.value())
          .body("_id", hasItem(project2.getStartDate()))
-         .body("total", hasItem((int)project2.getEstimatedCost()))
+         .body("total", hasItem((int) project2.getEstimatedCost()))
          .body(matchesJsonSchemaInClasspath("contracts/aggregations/CostsGroupByStartDate.json"))
     ;
 

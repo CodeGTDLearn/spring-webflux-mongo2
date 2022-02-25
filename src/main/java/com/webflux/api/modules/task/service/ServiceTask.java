@@ -1,7 +1,7 @@
 package com.webflux.api.modules.task.service;
 
-import com.webflux.api.modules.task.ITaskRepo;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
+import com.webflux.api.modules.task.repo.ITaskRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -27,10 +27,10 @@ public class ServiceTask implements IServiceTask {
     return taskRepo.findAll();
   }
 
-//  @Override
-//  public Mono<Void> deleteById(String id) {
-//
-//    return taskRepo.deleteById(id);
-//  }
+  //  @Override
+  //  public Mono<Void> deleteById(String id) {
+  //
+  //    return taskRepo.deleteById(id);
+  //  }
 
 }

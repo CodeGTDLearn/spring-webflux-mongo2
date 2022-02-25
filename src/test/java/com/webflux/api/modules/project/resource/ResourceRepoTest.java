@@ -2,7 +2,7 @@ package com.webflux.api.modules.project.resource;
 
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -21,9 +21,7 @@ import java.util.List;
 import static com.webflux.api.modules.project.core.routes.RoutesRepo.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -43,6 +41,7 @@ class ResourceRepoTest {
   // NON-STATIC-@Container: one service for EACH test
   @Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
+
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -63,10 +62,10 @@ class ResourceRepoTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+    //    globalComposeServiceContainerMessage(compose,
+    //                                         TC_COMPOSE_SERVICE,
+    //                                         TC_COMPOSE_SERVICE_PORT
+    //                                        );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + REPO_ROOT);
@@ -136,13 +135,14 @@ class ResourceRepoTest {
   @DisplayName("BHWorks")
   public void bHWorks() {
 
-    bhWorks();
+    blockHoundTestCheck();
   }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameNot")
   public void FindByNameNot() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -171,6 +171,7 @@ class ResourceRepoTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByEstimCostGreatThan")
   public void FindByEstimCostGreatThan() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -199,6 +200,7 @@ class ResourceRepoTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByEstimatedCostBetween")
   public void FindByEstimatedCostBetween() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -228,6 +230,7 @@ class ResourceRepoTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByEstimatedCostBetween")
   public void FindByEstimatedCostBetweenList() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -243,7 +246,7 @@ class ResourceRepoTest {
          .everything()
 
          .statusCode(OK.value())
-         .body("name", hasItems(project1.getName(),project2.getName()))
+         .body("name", hasItems(project1.getName(), project2.getName()))
          .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
     ;
   }
@@ -252,11 +255,13 @@ class ResourceRepoTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameLike")
   public void FindByNameLike() {
+
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("projectName", project1.getName().substring(0,3))
+         .queryParam("projectName", project1.getName()
+                                            .substring(0, 3))
 
          .when()
          .get(REPO_BYNAME_LIKE)
@@ -280,11 +285,13 @@ class ResourceRepoTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameRegex")
   public void FindByNameRegex() {
+
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("projectName", project1.getName().substring(0,3))
+         .queryParam("projectName", project1.getName()
+                                            .substring(0, 3))
 
          .when()
          .get(REPO_BYNAME_REGEX)
@@ -384,8 +391,8 @@ class ResourceRepoTest {
 
          .statusCode(OK.value())
          .body("name", hasItems(project2.getName(), project1.getName()))
-         .body("estimatedCost[0]", equalTo((int)project2.getEstimatedCost()))
-         .body("estimatedCost[1]", equalTo((int)project1.getEstimatedCost()))
+         .body("estimatedCost[0]", equalTo((int) project2.getEstimatedCost()))
+         .body("estimatedCost[1]", equalTo((int) project1.getEstimatedCost()))
 
          .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
     ;
@@ -395,11 +402,13 @@ class ResourceRepoTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameRegexQuery")
   public void FindByNameRegexQuery() {
+
     RestAssuredWebTestClient
 
          .given()
          .webTestClient(mockedWebClient)
-         .queryParam("regexpProjectName", project1.getName().substring(0,3))
+         .queryParam("regexpProjectName", project1.getName()
+                                                  .substring(0, 3))
 
          .when()
          .get(REPO_QUERY_NYNAME_REGEX)
@@ -410,7 +419,7 @@ class ResourceRepoTest {
 
          .statusCode(OK.value())
          .body("name", containsInAnyOrder(project1.getName()))
-         .body("estimatedCost", hasItem((int)project1.getEstimatedCost()))
+         .body("estimatedCost", hasItem((int) project1.getEstimatedCost()))
 
          .body(matchesJsonSchemaInClasspath("contracts/project/projectOnlyNameAndCost.json"))
     ;

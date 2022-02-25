@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.resource;
 import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceRepo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -18,13 +18,14 @@ import static org.springframework.http.HttpStatus.OK;
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(REPO_ROOT)
 public class ResourceRepo {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
   private final ProjectExceptionsThrower projectExceptionsThrower;
+
   private final IServiceRepo serviceRepo;
 
   @GetMapping(REPO_BYNAME_NOT)
@@ -124,8 +125,6 @@ public class ResourceRepo {
               .findByNameRegexQuery(regexpProjectName)
          ;
   }
-
-
 
 
   //  public Mono<ServerResponse> chunkAndSaveProject(ServerRequest request) {

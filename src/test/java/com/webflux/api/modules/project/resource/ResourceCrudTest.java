@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.resource;
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -22,9 +22,7 @@ import java.util.List;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
-import static config.utils.BlockhoundUtils.bhWorks;
+import static config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -45,6 +43,7 @@ class ResourceCrudTest {
 
   @Container
   private static final DockerComposeContainer<?> compose = composeConfig.getTcCompose();
+
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -68,10 +67,10 @@ class ResourceCrudTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+    //    globalComposeServiceContainerMessage(compose,
+    //                                         TC_COMPOSE_SERVICE,
+    //                                         TC_COMPOSE_SERVICE_PORT
+    //                                        );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + PROJ_ROOT_CRUD);
@@ -88,7 +87,6 @@ class ResourceCrudTest {
 
   @BeforeEach
   void beforeEach(TestInfo testInfo) {
-
 
 
     // REAL-SERVER INJECTED IN WEB-TEST-CLIENT(non-blocking client)'
@@ -179,6 +177,7 @@ class ResourceCrudTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("saveNoID")
   public void saveNoID() {
+
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
@@ -374,6 +373,6 @@ class ResourceCrudTest {
   @DisplayName("BHWorks")
   public void bHWorks() {
 
-    bhWorks();
+    blockHoundTestCheck();
   }
 }

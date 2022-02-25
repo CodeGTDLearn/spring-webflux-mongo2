@@ -18,6 +18,7 @@ public class UpdateSimpleException extends RuntimeException implements Serializa
   private static final long serialVersionUID = - 5789512662465578333L;
 
   public UpdateSimpleException(String message) {
+
     super(message);
   }
 }

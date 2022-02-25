@@ -4,7 +4,7 @@ import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.databuilders.ProjectChildBuilder;
 import config.testcontainer.TcComposeConfig;
@@ -27,8 +27,6 @@ import static com.webflux.api.modules.project.core.routes.template.RoutesTempl.*
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.ProjectBuilder.projectWithID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.RestAssureSpecs.*;
 import static config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -72,10 +70,7 @@ class ResourceTemplTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + TEMPL_ROOT);
@@ -228,7 +223,7 @@ class ResourceTemplTest {
          .given()
          .webTestClient(mockedWebClient)
          .queryParam("regexpProjectName", project1.getName()
-                                     .substring(0, 3))
+                                                  .substring(0, 3))
 
          .when()
          .get(TEMPL_BYNAME_REG)
@@ -256,11 +251,11 @@ class ResourceTemplTest {
     RestAssuredWebTestClient.responseSpecification = noContentTypeAndVoidResponses();
 
     var project4 = projectWithID("B",
-                          "2020-07-07",
-                          "2021-07-07",
-                          3000L,
-                          of("UK", "USA")
-                         ).create();
+                                 "2020-07-07",
+                                 "2021-07-07",
+                                 3000L,
+                                 of("UK", "USA")
+                                ).create();
     projectList = of(project4);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
     dbUtils.countAndExecuteFlux(projectFlux, 1);

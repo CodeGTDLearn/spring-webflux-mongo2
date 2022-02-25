@@ -1,0 +1,93 @@
+version: "3.4"
+
+x-common-variables:
+  &env-vars
+  MONGO_RS_NAME: docker-rs
+  MONGO_RS_USERNAME: admin
+  MONGO_RS_PASSWORD: admin
+  MONGO_RS_PRIMARY: mongo1
+  MONGO_RS_PORT: 9042
+  MONGO_RS_DB: udemy
+  MONGO_RS_AUTH: admin
+  PORT_API: 8080
+
+volumes:
+  api_vol:
+
+networks:
+  mongo-cluster:
+
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4.4
+    restart: always
+#    command: mongod --replSet docker-rs --port 9042
+    #    OPTION 01 - DO NOT REMOVE:
+#    command: >
+#      bash -c "chmod +x /scripts/rs-init.sh
+#      && sh /scripts/rs-init.sh"
+    #    OPTION 02 - DO NOT REMOVE:
+    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh" ]
+    ports:
+      - "9042:9042"
+    networks:
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data1:/data/db
+      - ./rs-init.sh:/scripts/rs-init.sh
+    #      - api_vol:/data/db
+    environment:
+      *env-vars
+    depends_on:
+      - mongo2
+      - mongo3
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:4.4.4
+    restart: always
+    command: mongod --replSet docker-rs --port 9142
+    ports:
+      - "9142:9142"
+    networks:
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data2:/data/db
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:4.4.4
+    restart: always
+    ports:
+      - "9242:9242"
+    command: mongod --replSet docker-rs --port 9242
+    networks:
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data3:/data/db
+
+  api:
+    container_name: api
+    image: pauloportfolio/api
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      args:
+        JAR_FILE: target/*.jar
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - api_vol:/data/db
+    depends_on:
+      - mongo1
+    networks:
+      - mongo-cluster
+    environment:
+      # API MANAGE AUTOMATICALLY THE PROFILES:
+      # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -
+      #      PROFILE: dev
+      PORT_DEBUG: 5005
+      <<: *env-vars
+      DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

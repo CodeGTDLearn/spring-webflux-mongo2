@@ -5,7 +5,7 @@ import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import com.webflux.api.modules.task.Task;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.databuilders.ProjectChildBuilder;
 import config.testcontainer.TcComposeConfig;
@@ -26,8 +26,6 @@ import java.util.List;
 import static com.webflux.api.modules.project.core.routes.template.RoutesChildArray.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -36,7 +34,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
@@ -71,10 +69,7 @@ class ResourceChildArrayTest {
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + TEMPL_ROOT_CHILD);
@@ -315,8 +310,8 @@ class ResourceChildArrayTest {
          .webTestClient(mockedWebClient)
          .queryParam("projectId", project1Child.get_id())
          .queryParam("taskIdToUpdate", project1Child.getTasks()
-                                          .get(0)
-                                          .get_id())
+                                                    .get(0)
+                                                    .get_id())
          .queryParam("ownername", ownername)
          .body(project1Child)
 
@@ -347,8 +342,8 @@ class ResourceChildArrayTest {
          .webTestClient(mockedWebClient)
          .queryParam("projectId", project1Child.get_id())
          .queryParam("taskIdtoDelete", project1Child.getTasks()
-                                          .get(0)
-                                          .get_id())
+                                                    .get(0)
+                                                    .get_id())
          .body(project1Child)
 
          .when()

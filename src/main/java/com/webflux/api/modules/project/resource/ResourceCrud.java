@@ -4,7 +4,7 @@ import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +25,12 @@ import static org.springframework.http.HttpStatus.*;
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @RestController
 @RequestMapping(PROJ_ROOT_CRUD)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ResourceCrud {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
   private final ProjectExceptionsThrower projectExceptionsThrower;
-  private IServiceCrud serviceCrud;
+  private final IServiceCrud serviceCrud;
 
   @PostMapping(CRUD_SAVE)
   @ResponseStatus(CREATED)
@@ -62,18 +62,13 @@ public class ResourceCrud {
               .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
               .then(serviceCrud.update(project))
               .onErrorResume(error -> {
-                return switch (error) {
-                  case OptimisticLockingFailureException i -> projectExceptionsThrower.throwUpdateOptmVersionException();
-                  case ProjectNotFoundException s -> projectExceptionsThrower.throwProjectNotFoundException();
-                  default -> Mono.error(new ResponseStatusException(NOT_FOUND));
-                };
-//                if (error instanceof OptimisticLockingFailureException) {
-//                  return projectExceptionsThrower.throwUpdateOptmVersionException();
-//                }
-//                if (error instanceof ProjectNotFoundException) {
-//                  return projectExceptionsThrower.throwProjectNotFoundException();
-//                }
-//                return Mono.error(new ResponseStatusException(NOT_FOUND));
+                if (error instanceof OptimisticLockingFailureException) {
+                  return projectExceptionsThrower.throwUpdateOptmVersionException();
+                }
+                if (error instanceof ProjectNotFoundException) {
+                  return projectExceptionsThrower.throwProjectNotFoundException();
+                }
+                return Mono.error(new ResponseStatusException(NOT_FOUND));
               })
          ;
   }
@@ -116,6 +111,7 @@ public class ResourceCrud {
 
   @GetMapping(ERROR_PATH)
   public Mono<Project> globalExceptionError() {
+
     return Mono.error(new ResponseStatusException(NOT_FOUND, "message"));
   }
 }

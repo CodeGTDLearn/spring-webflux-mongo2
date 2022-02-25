@@ -18,6 +18,7 @@ public class ProjectNameIsEmptyException extends RuntimeException implements Ser
   private static final long serialVersionUID = - 2779773488307514980L;
 
   public ProjectNameIsEmptyException(String message) {
+
     super(message);
   }
 }

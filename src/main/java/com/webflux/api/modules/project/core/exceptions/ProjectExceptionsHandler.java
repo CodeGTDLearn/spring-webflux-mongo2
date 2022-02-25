@@ -1,6 +1,9 @@
 package com.webflux.api.modules.project.core.exceptions;
 
-import com.webflux.api.modules.project.core.exceptions.types.*;
+import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyException;
+import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
+import com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVersionException;
+import com.webflux.api.modules.project.core.exceptions.types.UpdateSimpleException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

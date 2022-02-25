@@ -2,6 +2,7 @@ package com.webflux.api.modules.task;
 
 import com.webflux.api.core.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
+import com.webflux.api.modules.task.entity.Task;
 import config.annotations.MergedResource;
 import config.testcontainer.TcComposeConfig;
 import config.utils.TestDbUtils;
@@ -18,8 +19,6 @@ import reactor.core.publisher.Flux;
 import static com.webflux.api.modules.task.core.RoutesTask.*;
 import static config.databuilders.ProjectBuilder.projecNoID;
 import static config.databuilders.TaskBuilder.taskWithID;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE;
-import static config.testcontainer.TcComposeConfig.TC_COMPOSE_SERVICE_PORT;
 import static config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static config.utils.RestAssureSpecs.responseSpecs;
 import static config.utils.TestUtils.*;
@@ -28,7 +27,8 @@ import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("TaskResourceTest")
@@ -55,12 +55,10 @@ class TaskResourceTest {
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
+
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(),"class-start");
-    globalComposeServiceContainerMessage(compose,
-                                         TC_COMPOSE_SERVICE,
-                                         TC_COMPOSE_SERVICE_PORT
-                                        );
+    globalTestMessage(testInfo.getDisplayName(), "class-start");
+
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080/" + TASK_ROOT);
@@ -70,8 +68,9 @@ class TaskResourceTest {
 
   @AfterAll
   static void afterAll(TestInfo testInfo) {
+
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(),"class-end");
+    globalTestMessage(testInfo.getDisplayName(), "class-end");
   }
 
 
@@ -86,7 +85,7 @@ class TaskResourceTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(),"method-start");
+                              .toString(), "method-start");
 
     Project project1 = projecNoID("C",
                                   "2020-05-05",
@@ -102,14 +101,15 @@ class TaskResourceTest {
                        1000L
                       ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
-    dbUtils.countAndExecuteFlux(taskFlux,1);
+    dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
 
 
   @AfterEach
   void tearDown(TestInfo testInfo) {
+
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(),"method-end");
+                              .toString(), "method-end");
   }
 
 
@@ -117,6 +117,7 @@ class TaskResourceTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("CreateTask")
   void CreateTask() {
+
     RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
@@ -131,8 +132,8 @@ class TaskResourceTest {
          .everything()
 
          .statusCode(CREATED.value())
-         .body("_id",containsStringIgnoringCase(task1.get_id()))
-         .body("projectId",containsStringIgnoringCase(task1.getProjectId()))
+         .body("_id", containsStringIgnoringCase(task1.get_id()))
+         .body("projectId", containsStringIgnoringCase(task1.getProjectId()))
          .body(matchesJsonSchemaInClasspath("contracts/task/task.json"))
     ;
   }

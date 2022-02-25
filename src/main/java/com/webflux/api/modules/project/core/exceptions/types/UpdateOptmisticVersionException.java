@@ -18,6 +18,7 @@ public class UpdateOptmisticVersionException extends RuntimeException implements
   private static final long serialVersionUID = 2850705722823547736L;
 
   public UpdateOptmisticVersionException(String message) {
+
     super(message);
   }
 }
