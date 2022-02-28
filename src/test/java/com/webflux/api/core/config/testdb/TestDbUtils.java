@@ -1,4 +1,4 @@
-package config.utils;
+package com.webflux.api.core.config.testdb;
 
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;

@@ -1,4 +1,4 @@
-package config.testcontainer;
+package com.webflux.api.core.config.testcontainer;
 
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -31,29 +31,26 @@ https://callistaenterprise.se/blogg/teknik/2020/10/09/speed-up-your-testcontaine
 https://medium.com/pictet-technologies-blog/speeding-up-your-integration-tests-with
 -testcontainers-e54ab655c03d
  */
-public class TcComposeConfig {
+public class TestcontainerComposeConfig {
 
-  final static public int TC_COMPOSE_STARTUP_SECONDS_TIMEOUT = 15;
-  final static public int TC_COMPOSE_SERVICE_PORT = 27017;
-  final static public String TC_COMPOSE_SERVICE = "api-db-tc";
-  final static private String TC_COMPOSE_PATH_SIMPLE =
-       "src/test/resources/tc-composes/tc-compose-simple.yml";
-
+  final static public int STARTUP_TIMEOUT = 15;
+  final static public int SERVICE_PORT = 27017;
+  final static public String SERVICE = "api-test";
+  final static private String COMPOSE_PATH = "src/test/resources/compose-test.yml";
 
   //format 01: using a variable to create the tcContainerCompose
-  private final DockerComposeContainer<?> tcCompose =
-       new DockerComposeContainer<>(new File(TC_COMPOSE_PATH_SIMPLE))
-            .withExposedService(TC_COMPOSE_SERVICE,
-                                TC_COMPOSE_SERVICE_PORT,
+  private final DockerComposeContainer<?> testcontainerCompose =
+       new DockerComposeContainer<>(new File(COMPOSE_PATH))
+            .withExposedService(SERVICE,
+                                SERVICE_PORT,
                                 Wait.forListeningPort()
                                     .withStartupTimeout(
-                                         Duration.ofSeconds(TC_COMPOSE_STARTUP_SECONDS_TIMEOUT))
-                               )
-       ;
+                                         Duration.ofSeconds(STARTUP_TIMEOUT))
+                               );
 
   //format 02: using a getter/accessor to create the tcContainerCompose
-  public DockerComposeContainer<?> getTcCompose() {
+  public DockerComposeContainer<?> getContainer() {
 
-    return tcCompose;
+    return testcontainerCompose;
   }
 }

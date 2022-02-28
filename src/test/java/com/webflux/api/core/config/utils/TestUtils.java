@@ -1,4 +1,4 @@
-package config.utils;
+package com.webflux.api.core.config.utils;
 
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import lombok.extern.slf4j.Slf4j;
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.MongoDBContainer;
 
-import static config.utils.BlockhoundUtils.blockhoundInstallWithSpecificAllowedCalls;
-import static config.utils.RestAssureSpecs.requestSpecs;
-import static config.utils.RestAssureSpecs.responseSpecs;
+import static com.webflux.api.core.config.utils.BlockhoundUtils.blockhoundInstallWithSpecificAllowedCalls;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecs;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 
 @Slf4j
 public class TestUtils {

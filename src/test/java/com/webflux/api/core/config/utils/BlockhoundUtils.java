@@ -1,4 +1,4 @@
-package config.utils;
+package com.webflux.api.core.config.utils;
 
 import lombok.NoArgsConstructor;
 import org.junit.Ignore;

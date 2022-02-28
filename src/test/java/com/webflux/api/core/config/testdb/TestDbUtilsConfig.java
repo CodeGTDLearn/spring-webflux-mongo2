@@ -1,6 +1,5 @@
-package com.webflux.api.core;
+package com.webflux.api.core.config.testdb;
 
-import config.utils.TestDbUtils;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

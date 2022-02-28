@@ -1,11 +1,11 @@
 package com.webflux.api.core.exception;
 
-import com.webflux.api.core.TestDbUtilsConfig;
+import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.task.entity.Task;
-import config.annotations.MergedResource;
-import config.testcontainer.TcComposeConfig;
-import config.utils.TestDbUtils;
+import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
+import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ import java.util.Arrays;
 
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.ERROR_PATH;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
-import static config.databuilders.ProjectBuilder.projecNoID;
-import static config.databuilders.TaskBuilder.taskWithID;
-import static config.utils.BlockhoundUtils.blockHoundTestCheck;
-import static config.utils.RestAssureSpecs.requestSpecsSetPath;
-import static config.utils.RestAssureSpecs.responseSpecs;
-import static config.utils.TestUtils.*;
+import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
+import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
+import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
+import static com.webflux.api.core.config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
@@ -46,7 +46,7 @@ class GlobalExceptionTest {
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
   @Container
-  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
+  private static final DockerComposeContainer<?> compose = new TestcontainerComposeConfig().getContainer();
 
   final String enabledTest = "true";
 

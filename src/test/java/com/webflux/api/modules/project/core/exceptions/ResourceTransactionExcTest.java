@@ -1,14 +1,14 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.TestDbUtilsConfig;
+import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
-import config.annotations.MergedResource;
-import config.testcontainer.TcComposeConfig;
-import config.utils.TestDbUtils;
+import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
+import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,13 @@ import java.util.List;
 
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
 import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
-import static config.databuilders.ProjectBuilder.projecNoID;
-import static config.databuilders.ProjectBuilder.projectWithID;
-import static config.databuilders.TaskBuilder.taskWithID;
-import static config.utils.BlockhoundUtils.blockHoundTestCheck;
-import static config.utils.RestAssureSpecs.requestSpecsSetPath;
-import static config.utils.RestAssureSpecs.responseSpecs;
-import static config.utils.TestUtils.*;
+import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
+import static com.webflux.api.core.config.databuilders.ProjectBuilder.projectWithID;
+import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
+import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
+import static com.webflux.api.core.config.utils.TestUtils.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
@@ -43,7 +43,7 @@ class ResourceTransactionExcTest {
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
   @Container
-  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getTcCompose();
+  private static final DockerComposeContainer<?> compose = new TestcontainerComposeConfig().getContainer();
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'

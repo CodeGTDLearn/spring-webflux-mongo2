@@ -1,4 +1,4 @@
-package config.annotations;
+package com.webflux.api.core.config.testcontainer;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

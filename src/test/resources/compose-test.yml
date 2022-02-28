@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  api-db-tc:
+  api-test:
     image: mongo:4.0.10
     ports:
       - 27017:27017
@@ -11,3 +11,5 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=root
       - MONGO_AUTH_DB=admin
       - MONGO_PORT=27017
+      - MONGO_DB=test-db
+      - MONGO_HOST=localhost

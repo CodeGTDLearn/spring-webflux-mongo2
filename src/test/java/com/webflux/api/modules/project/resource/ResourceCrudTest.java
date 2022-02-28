@@ -1,12 +1,12 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.TestDbUtilsConfig;
+import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
-import config.annotations.MergedResource;
-import config.testcontainer.TcComposeConfig;
-import config.utils.TestDbUtils;
+import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
+import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
-import static config.databuilders.ProjectBuilder.projecNoID;
-import static config.databuilders.TaskBuilder.taskWithID;
-import static config.utils.BlockhoundUtils.blockHoundTestCheck;
-import static config.utils.RestAssureSpecs.*;
-import static config.utils.TestUtils.*;
+import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
+import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
+import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
+import static com.webflux.api.core.config.utils.RestAssureSpecs.*;
+import static com.webflux.api.core.config.utils.TestUtils.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -39,10 +39,8 @@ class ResourceCrudTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
-  private static final TcComposeConfig composeConfig = new TcComposeConfig();
-
   @Container
-  private static final DockerComposeContainer<?> compose = composeConfig.getTcCompose();
+  private static final DockerComposeContainer<?> compose = new TestcontainerComposeConfig().getContainer();
 
   final String enabledTest = "true";
 

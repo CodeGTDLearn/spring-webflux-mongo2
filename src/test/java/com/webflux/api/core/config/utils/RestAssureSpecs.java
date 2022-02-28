@@ -1,4 +1,4 @@
-package config.utils;
+package com.webflux.api.core.config.utils;
 
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;

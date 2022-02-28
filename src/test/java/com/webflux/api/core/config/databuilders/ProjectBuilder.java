@@ -1,4 +1,4 @@
-package config.databuilders;
+package com.webflux.api.core.config.databuilders;
 
 import com.github.javafaker.Faker;
 import com.webflux.api.modules.project.entity.Project;
