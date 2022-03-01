@@ -4,6 +4,7 @@ import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.MongoDBContainer;
 
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockhoundInstallWithSpecificAllowedCalls;
@@ -98,7 +99,7 @@ public class TestUtils {
                 "║ --> Name: %s\n" +
                 "║ --> Url: %s\n" +
                 "║ --> Running: %s\n" +
-                "╚═══════════════════════════════════════════════════════════════════════╝"
+                "╚═══════════════════════════════════════════════════════════════════════╝\n\n"
            ,
            title,
            container.getContainerName(),
@@ -109,34 +110,34 @@ public class TestUtils {
   }
 
 
-  //  public static void globalComposeServiceContainerMessage(
-  //       DockerComposeContainer<?> compose,
-  //       String service,
-  //       Integer port) {
-  //
-  //    if (compose != null) {
-  //      System.out.printf(
-  //
-  //           "╔═══════════════════════════════════════════════════════════════════════\n" +
-  //                "║                           %s                        ║\n" +
-  //                "║ --> Service: %s\n" +
-  //                "║ --> Host: %s\n" +
-  //                "║ --> Port: %s\n" +
-  //                "║ --> Created: %s\n" +
-  //                "║ --> Running: %s\n" +
-  //                "╚═══════════════════════════════════════════════════════════════════════"
-  //           ,
-  //           "TC-CONTAINER-COMPOSE",
-  //           service,
-  //           compose.getServiceHost(service, port),
-  //           compose.getServicePort(service, port),
-  //           compose.getContainerByServiceName(service + "_1")
-  //                  .get()
-  //                  .isCreated(),
-  //           compose.getContainerByServiceName(service + "_1")
-  //                  .get()
-  //                  .isRunning()
-  //                       );
-  //    }
-  //  }
+    public static void globalComposeServiceContainerMessage(
+         DockerComposeContainer<?> compose,
+         String service,
+         Integer port) {
+
+      if (compose != null) {
+        System.out.printf(
+
+             "╔═══════════════════════════════════════════════════════════════════════\n" +
+                  "║                           %s                        ║\n" +
+                  "║ --> Service: %s\n" +
+                  "║ --> Host: %s\n" +
+                  "║ --> Port: %s\n" +
+                  "║ --> Created: %s\n" +
+                  "║ --> Running: %s\n" +
+                  "╚═══════════════════════════════════════════════════════════════════════\n\n"
+             ,
+             "TC-CONTAINER-COMPOSE",
+             service,
+             compose.getServiceHost(service, port),
+             compose.getServicePort(service, port),
+             compose.getContainerByServiceName(service + "_1")
+                    .get()
+                    .isCreated(),
+             compose.getContainerByServiceName(service + "_1")
+                    .get()
+                    .isRunning()
+                         );
+      }
+    }
 }

@@ -25,6 +25,15 @@ public class BlockhoundUtils {
             .allowBlockingCallsInside("java.io.PrintStream",
                                       "write"
                                      )
+            .allowBlockingCallsInside("java.io.PrintStream",
+                                      "print"
+                                     )
+            .allowBlockingCallsInside("java.io.PrintStream",
+                                      "println"
+                                     )
+            .allowBlockingCallsInside("java.io.FilterInputStream",
+                                      "read"
+                                     )
             .allowBlockingCallsInside("java.io.FileOutputStream",
                                       "writeBytes"
                                      )
@@ -37,8 +46,11 @@ public class BlockhoundUtils {
             .allowBlockingCallsInside("java.io.OutputStreamWriter",
                                       "flushBuffer"
                                      )
-            .allowBlockingCallsInside("java.io.PrintStream",
-                                      "print"
+            .allowBlockingCallsInside("java.io.RandomAccessFile",
+                                      "read"
+                                     )
+            .allowBlockingCallsInside("java.io.RandomAccessFile",
+                                      "readFully"
                                      )
             //problems with transactions
             .allowBlockingCallsInside("java.util.UUID",
@@ -47,8 +59,11 @@ public class BlockhoundUtils {
             .allowBlockingCallsInside("java.io.RandomAccessFile",
                                       "readBytes"
                                      )
-            .allowBlockingCallsInside("java.io.PrintStream",
-                                      "println"
+            .allowBlockingCallsInside("java.io.RandomAccessFile",
+                                      "read"
+                                     )
+            .allowBlockingCallsInside("java.io.RandomAccessFile",
+                                      "readFully"
                                      )
             .allowBlockingCallsInside("java.util.concurrent.ConcurrentMap",
                                       "computeIfAbsent"
@@ -65,12 +80,13 @@ public class BlockhoundUtils {
 
     BlockHoundIntegration allowedCalls =
          builder -> builder
-              //              .allowBlockingCallsInside("java.io.PrintStream",
-              //                                        "write"
-              //                                       )
               .allowBlockingCallsInside("java.util.concurrent.ConcurrentMap",
                                         "computeIfAbsent"
+                                       )
+              .allowBlockingCallsInside("java.io.FilterInputStream",
+                                        "read"
                                        );
+
     BlockHound.install(allowedCalls);
   }
 

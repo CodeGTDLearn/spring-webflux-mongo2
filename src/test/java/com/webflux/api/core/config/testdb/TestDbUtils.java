@@ -47,9 +47,9 @@ public class TestDbUtils {
                       .flatMap(projectRepo::save)
                       .doOnNext(item -> projectRepo.findAll())
                       .doOnNext(item -> System.out.printf(
-                           ">==> Saved 'ProjectChild' in DB:\n" +
-                                "-> ID: %s\n" +
-                                "-> Name: %s\n\n"
+                           ">=> Saved 'ProjectChild' in DB:\n" +
+                                "    |> ID: %s\n" +
+                                "    |> Name: %s\n\n"
                            ,
                            item.get_id(),
                            item.getName()
@@ -63,9 +63,9 @@ public class TestDbUtils {
                     .flatMap(repoChild::save)
                     .doOnNext(item -> repoChild.findAll())
                     .doOnNext(item -> System.out.printf(
-                         ">==> Saved 'ProjectChild' in DB:\n" +
-                              "-> ID: %s\n" +
-                              "-> Name: %s\n\n"
+                         ">=> Saved 'ProjectChild' in DB:\n" +
+                              "    |> ID: %s\n" +
+                              "    |> Name: %s\n\n"
                          ,
                          item.get_id(),
                          item.getName()
@@ -79,9 +79,9 @@ public class TestDbUtils {
                    .flatMap(taskRepo::save)
                    .doOnNext(item -> taskRepo.findAll())
                    .doOnNext(item -> System.out.printf(
-                        ">==> Saved 'Task' in DB:\n" +
-                             "-> ID: %s\n" +
-                             "-> Name: %s\n\n"
+                        ">=> Saved 'Task' in DB:\n" +
+                             "    |> ID: %s\n" +
+                             "    |> Name: %s\n\n"
                         ,
                         item.get_id(),
                         item.getName()
@@ -104,21 +104,6 @@ public class TestDbUtils {
          .create(collections.dropCollectionsTemplate())
          .expectSubscription()
          .verifyComplete();
-
-    //    StepVerifier
-    //         .create(projectRepo.deleteAll())
-    //         .expectSubscription()
-    //         .verifyComplete();
-    //
-    //    StepVerifier
-    //         .create(repoChild.deleteAll())
-    //         .expectSubscription()
-    //         .verifyComplete();
-    //
-    //    StepVerifier
-    //         .create(taskRepo.deleteAll())
-    //         .expectSubscription()
-    //         .verifyComplete();
 
     System.out.println(
          ">==================================================>\n" +

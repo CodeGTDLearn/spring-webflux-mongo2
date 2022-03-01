@@ -4,7 +4,7 @@ import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.annotations.MergedResourceTc;
 import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
 import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -38,7 +38,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceProjectionTest")
-@MergedResource
+@MergedResourceTc
 class ResourceProjectionTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER

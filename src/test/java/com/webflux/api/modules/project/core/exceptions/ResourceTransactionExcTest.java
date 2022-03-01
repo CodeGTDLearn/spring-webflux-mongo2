@@ -6,7 +6,7 @@ import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
-import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.annotations.MergedResourceTc;
 import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
 import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -37,7 +37,7 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceTransactionExcTest")
-@MergedResource
+@MergedResourceTc
 class ResourceTransactionExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
@@ -166,7 +166,7 @@ class ResourceTransactionExcTest {
     //         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
     ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 3);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 

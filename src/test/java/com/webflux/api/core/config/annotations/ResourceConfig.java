@@ -14,7 +14,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 
 @Retention(RUNTIME)
 @Target(TYPE)
-@AutoConfigureWebTestClient
+@AutoConfigureWebTestClient(timeout = "3600000")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 public @interface ResourceConfig {

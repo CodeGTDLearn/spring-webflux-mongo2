@@ -1,0 +1,13 @@
+# IN ORDER TO, USE TEST-CONTAINER DOCKER-COMPOSE-MODULE
+# THE PROPERTIES MUST BE USED/DEFINED
+# HOWEVER, TRANSACTIONS WILL NOT WORK
+# TRANSACTIONS MUST HAVE SPECIFIC PROPERTIES-FILE
+spring:
+  data:
+    mongodb:
+      username: root
+      password: root
+      authentication-database: admin
+      port: 27017
+      database: test-db
+      host: localhost

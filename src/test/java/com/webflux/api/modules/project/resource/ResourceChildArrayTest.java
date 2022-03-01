@@ -6,7 +6,7 @@ import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.annotations.MergedResourceTc;
 import com.webflux.api.core.config.databuilders.ProjectChildBuilder;
 import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
 import com.webflux.api.core.config.testdb.TestDbUtils;
@@ -39,7 +39,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceChildArrayTest")
-@MergedResource
+@MergedResourceTc
 class ResourceChildArrayTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER

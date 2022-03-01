@@ -1,11 +1,11 @@
 package com.webflux.api.modules.project.resource;
 
+import com.webflux.api.core.config.annotations.MergedResourceTc;
+import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
+import com.webflux.api.core.config.testdb.TestDbUtils;
 import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.MergedResource;
-import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
-import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,13 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-import static com.webflux.api.modules.project.core.routes.RoutesRepo.*;
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.modules.project.core.routes.RoutesRepo.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -34,7 +34,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceRepoTest")
-@MergedResource
+@MergedResourceTc
 class ResourceRepoTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
@@ -60,12 +60,12 @@ class ResourceRepoTest {
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
 
+//    globalComposeServiceContainerMessage(compose,
+//                                         compose.get,
+//                                         TC_COMPOSE_SERVICE_PORT
+//                                        );
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
-    //    globalComposeServiceContainerMessage(compose,
-    //                                         TC_COMPOSE_SERVICE,
-    //                                         TC_COMPOSE_SERVICE_PORT
-    //                                        );
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + REPO_ROOT);
