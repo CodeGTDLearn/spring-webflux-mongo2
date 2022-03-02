@@ -72,7 +72,18 @@ public class ConfigDbDev extends AbstractReactiveMongoConfiguration {
     return new ReactiveMongoTemplate(reactiveMongoClient(), getDatabaseName());
   }
 
-  // 02) TRANSACTION-BEANS:
+  /*
+   ╔════════════════════════════════════════════════╗
+   ║           TRANSACTION-MANAGER-BEAN             ║
+   ╠════════════════════════════════════════════════╣
+   ║ THIS TRANSACTION-MANAGER-BEAN IS NECESSARY IN: ║
+   ║ A) APP-CONTEXT  -> @Configuration              ║
+   ║    - SRC/MAIN/JAVA/com/webflux/api/core/config ║
+   ║                                                ║
+   ║ B) TEST-CONTEXT -> @TestConfiguration          ║
+   ║    - SRC/TEST/JAVA/com/webflux/api/core/config ║
+   ╚════════════════════════════════════════════════╝
+  */
   @Bean
   ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
 

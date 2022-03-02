@@ -1,6 +1,6 @@
-package com.webflux.api.core.config.annotations;
+package com.webflux.api.core.config.testcontainer.container;
 
-import com.webflux.api.core.config.testcontainer.compose.TcCompose;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -9,9 +9,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
-@Target(TYPE)
-@TcCompose
-@MongoConfig
-@StartupConfig
-public @interface MergedRepo {
+@Target({TYPE})
+@ExtendWith(TcContainerConfig.class)
+public @interface TcContainer {
 }

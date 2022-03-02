@@ -13,7 +13,7 @@
         1. Embed Objects
         2. Referencing
         3. _"Assemble"_ full objects
-    3. Example Sources - :
+    3. Example Sources:
         1. [Spring Project](https://github.com/spring-projects/spring-data-examples)
         2. Spring DataMongo
 
@@ -39,7 +39,7 @@
         1. _Specific file:_ **dev-compose.yml**
     2. Dockerfile
         1. _Specific file:_ **Dockerfile-dev**
-    3. Bat Scripts:
+    3. Batch Scripts:
         1. Parametric-scripts (env_variables)
             1. Parametric-scripts IDE execution
         2. Reusing bat-scripts:
@@ -47,8 +47,12 @@
 
 
 4. Testcontainers:
-    * Containers
-    * Compose
+    * Containers:
+      - Annotation (TcContainerConfig)
+        - EX.: ResourceTransactionExcTest 
+      - ContextConfiguration - initializers
+        - EX.: ResourceTransactionTest 
+    * Compose - Annotation
 
 
 5. CRUD Strategy:
@@ -71,14 +75,15 @@
 
 
 7. Spring Data  (findPostsByAuthor_Id)
-    1. Queries
+    1. @Transactions
+    2. Queries
         1. Derived:
             1. Simple
             2. Relationships
         2. Parameter
         3. Native
         4. Criteria
-    2. Examples:
+    3. Examples:
         1. [SpringaData Project](https://github.com/spring-projects/spring-data-examples)
         2. [MongoDB](https://github.com/spring-projects/spring-data-examples/tree/main/mongodb)
         3. [Reactive MongoDB](https://github.com/spring-projects/spring-data-examples/tree/main/mongodb/reactive)
@@ -111,3 +116,7 @@
             2. @ConfigurationProperties:
                 1. Automatic importation from PropertiesFile to Class-Instances-variables
                     1. Do not need "@Value" annotation
+
+
+11. MultiThread/Parallel Test
+    1. Aborted: Because server-costs in CI/CD  

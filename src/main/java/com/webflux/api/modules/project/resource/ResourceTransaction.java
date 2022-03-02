@@ -4,19 +4,21 @@ import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.entity.Project;
+import com.webflux.api.modules.project.service.IServiceRepo;
 import com.webflux.api.modules.project.service.IServiceTransaction;
 import com.webflux.api.modules.task.core.exceptions.TaskExceptionsThrower;
 import com.webflux.api.modules.task.core.exceptions.types.TaskNameIsEmptyException;
 import com.webflux.api.modules.task.core.exceptions.types.TaskNameLessThanThreeException;
 import com.webflux.api.modules.task.entity.Task;
+import com.webflux.api.modules.task.repo.ITaskRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import static com.webflux.api.core.TaskBuilder.taskNoID;
-import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_ROOT_TRANSACT;
-import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
+import static com.webflux.api.modules.project.core.routes.RoutesTransaction.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -33,20 +35,21 @@ public class ResourceTransaction {
 
   private final ProjectExceptionsThrower projectThrower;
   private final TaskExceptionsThrower taskThrower;
-  private IServiceTransaction serviceTransaction;
+  private final IServiceRepo serviceRepo;
+  private final ITaskRepo taskRepo;
+  private final IServiceTransaction serviceTransaction;
 
 
-  @PostMapping(REPO_TRANSACT)
+  @PostMapping(REPO_TRANSACT_CHK_EXC)
   @ResponseStatus(CREATED)
-  public Mono<Task> createProjectTransaction(
+  public Mono<Task> checkContentWithExc(
        @RequestParam
             //       @NotEmpty
             //       @NotNull
             String taskNameInitial,
        //       @Valid
        @RequestBody
-            Project project
-                                            ) {
+            Project project) {
 
     Task initialTask = taskNoID("3",
                                 "Mark",
@@ -57,32 +60,70 @@ public class ResourceTransaction {
 
     // @formatter:off
     return
-         serviceTransaction
-          .createProjectTransaction(project, initialTask)
-          .onErrorResume(error ->{
-                           if (error instanceof ProjectNameIsEmptyException) {
-                             return projectThrower.throwProjectNameIsEmptyException();
-                           }
-                           if (error instanceof ProjectNotFoundException) {
-                             return projectThrower.throwProjectNotFoundException();
-                           }
-                           if (error instanceof TaskNameIsEmptyException) {
-                             return taskThrower.throwTaskNameIsEmptyException();
-                           }
-                           if (error instanceof TaskNameLessThanThreeException) {
-                             return taskThrower.throwTaskNameLessThanThreeException();
-                           }
-                           return Mono.error(new ResponseStatusException(NOT_FOUND));
-                         }
-//            switch (error) {
-//             case ProjectNameIsEmptyException ignored -> projectThrower.throwProjectNameIsEmptyException();
-//             case ProjectNotFoundException ignored -> projectThrower.throwProjectNotFoundException();
-//             case TaskNameIsEmptyException ignored -> taskThrower.throwTaskNameIsEmptyException();
-//             case TaskNameLessThanThreeException ignored -> taskThrower.throwTaskNameLessThanThreeException();
-//             default -> Mono.error(new ResponseStatusException(NOT_FOUND));
-//          }
-          )
+         Mono.just(project)
+             .flatMap(proj1 -> {
+               if (proj1.getName().isEmpty()) return projectThrower.throwProjectNameIsEmptyException();
+               return Mono.just(proj1);
+             })
+             .flatMap(proj2 -> {
+               if (proj2.getName().isEmpty()) return taskThrower.throwTaskNameIsEmptyException();
+               if (proj2.getName().length() < 3) return taskThrower.throwTaskNameLessThanThreeException();
+               return Mono.just(proj2);
+             })
+             .flatMap(proj3 -> serviceTransaction.checkContentWithExc(proj3,initialTask))
          ;
+    // @formatter:on
+  }
+
+  /*
+ ╔════════════════════════════════════════════════════════════════════════════════╗
+ ║                          EXCEPTIONS  +  TRANSACTIONS                           ║
+ ╠════════════════════════════════════════════════════════════════════════════════╣
+ ║ A) SERVICE: TRIGGER THE EXCEPTIONS (NO 'ON-ERROR-RESUME')                      ║
+ ║ B) CONTROLLER: CATCH+HANDLE THE EXCEPTIONS TRIGGERED (USING ON-ERROR-RESUME)   ║
+ ╚════════════════════════════════════════════════════════════════════════════════╝*/
+  @Transactional
+  @PostMapping(REPO_TRANSACT_CLASSIC)
+  @ResponseStatus(CREATED)
+  public Mono<Task> transactionsClassic(
+       @RequestParam
+            //       @NotEmpty
+            //       @NotNull
+            String taskNameInitial,
+       //       @Valid
+       @RequestBody
+            Project project) {
+
+    Task task = taskNoID("3",
+                         "Mark",
+                         1000L
+                        ).create();
+
+    task.setName(taskNameInitial);
+
+    // @formatter:off
+        return
+             serviceTransaction
+                  .transactionsClassic(project, task)
+
+                  // ON-ERROR-RESUME: CATCH+HANDLE THOSE EXCEPTIONS
+                  .onErrorResume(error -> {
+                                   if (error instanceof ProjectNameIsEmptyException) {
+                                     return projectThrower.throwProjectNameIsEmptyException();
+                                   }
+                                   if (error instanceof ProjectNotFoundException) {
+                                     return projectThrower.throwProjectNotFoundException();
+                                   }
+                                   if (error instanceof TaskNameIsEmptyException) {
+                                     return taskThrower.throwTaskNameIsEmptyException();
+                                   }
+                                   if (error instanceof TaskNameLessThanThreeException) {
+                                     return taskThrower.throwTaskNameLessThanThreeException();
+                                   }
+                                   return Mono.error(new ResponseStatusException(NOT_FOUND));
+                                 }
+                                )
+             ;
     // @formatter:on
   }
 }

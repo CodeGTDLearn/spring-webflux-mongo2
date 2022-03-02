@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.resource;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.annotations.MergedResourceTr;
+import com.webflux.api.core.config.annotations.MergedResource;
 import com.webflux.api.core.config.testdb.TestDbUtils;
 import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
@@ -34,8 +34,7 @@ import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetP
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
-import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT_CLASSIC;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
@@ -43,19 +42,35 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpStatus.CREATED;
 
 
+/*
+  ╔══════════════════════════════════════════════════════════════════════╗
+  ║                         SILAEV + TRANSACTIONS                        ║
+  ╠══════════════════════════════════════════════════════════════════════╣
+  ║ MongoDBContainer does replicaset init automatically:                 ║
+  ║ a) add a static field with MongoDBContainer                          ║
+  ║ b) run it in @BeforeAll and                                          ║
+  ║ c) create a 'STATIC CLASS INITIALIZER' to set spring.data.mongodb.uri║
+  ║ d) define @ContextConfiguration with 'static class Initializer'      ║
+  ╚══════════════════════════════════════════════════════════════════════╝
+*/
+@ContextConfiguration(initializers = ResourceTransactionTest.Initializer.class)
 @Import({TestDbUtilsConfig.class})
 @Slf4j
-@MergedResourceTr
-@ContextConfiguration(initializers = ResourceTransactionTest.Initializer.class)
+@MergedResource
 class ResourceTransactionTest {
   /*
-   SILAEV: MongoDBContainer does replicaset init automatically
-           a) add a static field with MongoDBContainer
-           b) run it in @BeforeAll and
-           c) create a 'static class Initializer' to set spring.data.mongodb.uri
-           d) define @ContextConfiguration with 'static class Initializer'
-   */
-
+╔════════════════════════════════════════════════════════════╗
+║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
+╠════════════════════════════════════════════════════════════╣
+║ a) TRANSACTIONS IN MONGO-DB DEPENDS ON THE REPLICASET      ║
+║    - MEANING: TRANSACTIONS ONLY WILL WORK WITH REPLICASET  ║
+║                                                            ║
+║ b) MongoDBContainer provides REPLICASET automatically      ║
+║    - MEANING:                                              ║
+║      B.1) TESTS MUST BE DONE WITH "MongoDBContainer"       ║
+║      B.2) DO NOT USE TEST-CONTAINER-DOCKER-COMPOSE-MODULE  ║
+╚════════════════════════════════════════════════════════════╝
+*/
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
   private static final MongoDBContainer MONGO_DB_CONTAINER =
@@ -154,7 +169,7 @@ class ResourceTransactionTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("createProjectTransaction")
+  @DisplayName("checkContentWithExc.json")
   public void createProjectTransaction() {
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
@@ -179,7 +194,7 @@ class ResourceTransactionTest {
          .queryParam("taskNameInitial", newTaskName)
 
          .when()
-         .post(REPO_TRANSACT)
+         .post(REPO_TRANSACT_CLASSIC)
 
          .then()
          .log()
@@ -188,11 +203,9 @@ class ResourceTransactionTest {
          .statusCode(CREATED.value())
          .body("name", equalTo(newTaskName))
          .body("projectId", equalTo(project.get_id()))
-         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
+    //         .body(matchesJsonSchemaInClasspath("contracts/project/checkContentWithExc.json"))
     ;
 
-    // esta sanlvando o project no banco, nao esta funcioanndo a annotation transaction
-    //investigar
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 3);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 2);
   }
@@ -218,10 +231,3 @@ class ResourceTransactionTest {
     }
   }
 }
-//@Import({TestDbUtilsConfig.class})
-//@Slf4j
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@AutoConfigureWebTestClient(timeout = "3600000")
-//@ActiveProfiles("test")
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@ContextConfiguration(initializers = ResourceTransactionTest.Initializer.class)

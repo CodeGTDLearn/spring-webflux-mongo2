@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "detail": "Task name is empty or not have minimal chracteres. It is not allowed!!!!",
+      "classType": "com.webflux.api.modules.task.core.exceptions.types.TaskNameIsEmptyException",
+      "status": 406,
+      "timeStamp": 1646254997867
+    }
+  ],
+  "required": [
+    "detail",
+    "classType",
+    "status",
+    "timeStamp"
+  ],
+  "properties": {
+    "detail": {
+      "$id": "#/properties/detail",
+      "type": "string",
+      "title": "The detail schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Task name is empty or not have minimal chracteres. It is not allowed!!!!"
+      ]
+    },
+    "classType": {
+      "$id": "#/properties/classType",
+      "type": "string",
+      "title": "The classType schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "com.webflux.api.modules.task.core.exceptions.types.TaskNameIsEmptyException"
+      ]
+    },
+    "status": {
+      "$id": "#/properties/status",
+      "type": "integer",
+      "title": "The status schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        406
+      ]
+    },
+    "timeStamp": {
+      "$id": "#/properties/timeStamp",
+      "type": "integer",
+      "title": "The timeStamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        1646254997867
+      ]
+    }
+  },
+  "additionalProperties": true
+}

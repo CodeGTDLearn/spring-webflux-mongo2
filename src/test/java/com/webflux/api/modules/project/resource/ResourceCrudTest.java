@@ -4,8 +4,8 @@ import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.MergedResourceTc;
-import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
+import com.webflux.api.core.config.annotations.MergedResourceTcompose;
+import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
@@ -34,13 +34,13 @@ import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceCrudTest")
-@MergedResourceTc
+@MergedResourceTcompose
 class ResourceCrudTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
   @Container
-  private static final DockerComposeContainer<?> compose = new TestcontainerComposeConfig().getContainer();
+  private static final DockerComposeContainer<?> compose = new TcComposeConfig().getContainer();
 
   final String enabledTest = "true";
 

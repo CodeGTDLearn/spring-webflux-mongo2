@@ -1,4 +1,4 @@
-package com.webflux.api.core.config.testcontainer;
+package com.webflux.api.core.config.testcontainer.compose;
 
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -31,5 +31,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Testcontainers
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface TestcontainersConfig {
+public @interface TcCompose {
 }

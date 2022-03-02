@@ -1,49 +1,81 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
+import com.webflux.api.core.config.annotations.MergedResource;
+import com.webflux.api.core.config.testcontainer.container.TcContainer;
+import com.webflux.api.core.config.testdb.TestDbUtils;
 import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
-import com.webflux.api.core.config.annotations.MergedResourceTc;
-import com.webflux.api.core.config.testcontainer.TestcontainerComposeConfig;
-import com.webflux.api.core.config.testdb.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
-import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT;
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projectWithID;
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
+import static com.webflux.api.core.config.testcontainer.container.TcContainerConfig.closeTcContainer;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
+import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT_CLASSIC;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
-@Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceTransactionExcTest")
-@MergedResourceTc
-class ResourceTransactionExcTest {
+/*
+  ╔══════════════════════════════════════════════════════════════════════╗
+  ║                         SILAEV + TRANSACTIONS                        ║
+  ╠══════════════════════════════════════════════════════════════════════╣
+  ║ MongoDBContainer does replicaset init automatically:                 ║
+  ║ a) add a static field with MongoDBContainer                          ║
+  ║ b) run it in @BeforeAll and                                          ║
+  ║ c) create a 'STATIC CLASS INITIALIZER' to set spring.data.mongodb.uri║
+  ║ d) define @ContextConfiguration with 'static class Initializer'      ║
+  ╚══════════════════════════════════════════════════════════════════════╝
+*/
 
-  // STATIC-@Container: one service for ALL tests -> SUPER FASTER
-  // NON-STATIC-@Container: one service for EACH test
-  @Container
-  private static final DockerComposeContainer<?> compose = new TestcontainerComposeConfig().getContainer();
+/*
+ ╔═════════════════════════════════════════════════════════════════╗
+ ║                    ANOTACAO DE TCCONTAINER                      ║
+ ╠═════════════════════════════════════════════════════════════════╣
+ ║ A) Sera inocua, se imports staticos, de sua classe de extensao  ║
+ ║    da anotacao, forem feitos                                    ║
+ ║ B) Tal classe de extensao, possui "STATIC-AUTOMATIC-STARTING",  ║
+ ║    assim seu "importe" ja a iniciara, independente da anotacao  ║
+ ╚═════════════════════════════════════════════════════════════════╝
+*/
+@Import({TestDbUtilsConfig.class})
+@Slf4j
+@MergedResource
+@TcContainer
+@DisplayName("ResourceTransactionExcTest")
+class ResourceTransactionExcTest {
+/*╔════════════════════════════════════════════════════════════╗
+  ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
+  ╠════════════════════════════════════════════════════════════╣
+  ║ a) TRANSACTIONS IN MONGO-DB DEPENDS ON THE REPLICASET      ║
+  ║    - MEANING: TRANSACTIONS ONLY WILL WORK WITH REPLICASET  ║
+  ║                                                            ║
+  ║ b) MongoDBContainer provides REPLICASET automatically      ║
+  ║    - MEANING:                                              ║
+  ║      B.1) TESTS MUST BE DONE WITH "MongoDBContainer"       ║
+  ║      B.2) DO NOT USE TEST-CONTAINER-DOCKER-COMPOSE-MODULE  ║
+  ╚════════════════════════════════════════════════════════════╝*/
+
   final String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
@@ -60,8 +92,6 @@ class ResourceTransactionExcTest {
 
   @Autowired
   IServiceTask taskService;
-
-  private Project projetoWithId;
 
 
   @BeforeAll
@@ -80,10 +110,10 @@ class ResourceTransactionExcTest {
   @AfterAll
   static void afterAll(TestInfo testInfo) {
 
+    closeTcContainer();
     globalAfterAll();
     globalTestMessage(testInfo.getDisplayName(), "class-end");
   }
-
 
   @BeforeEach
   void beforeEach(TestInfo testInfo) {
@@ -98,12 +128,12 @@ class ResourceTransactionExcTest {
                                   of("UK", "USA")
                                  ).create();
 
-    projetoWithId = projectWithID("C",
-                                  "2020-05-05",
-                                  "2021-05-05",
-                                  1000L,
-                                  of("HOL", "CAN")
-                                 ).create();
+    Project projetoWithId = projectWithID("C",
+                                          "2020-05-05",
+                                          "2021-05-05",
+                                          1000L,
+                                          of("HOL", "CAN")
+                                         ).create();
 
     List<Project> projectList = asList(project1, projetoWithId);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -117,7 +147,6 @@ class ResourceTransactionExcTest {
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
 
-
   @AfterEach
   void tearDown(TestInfo testInfo) {
 
@@ -125,11 +154,10 @@ class ResourceTransactionExcTest {
                               .toString(), "method-end");
   }
 
-
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("createProjectTransacTaskNameEmptyExc")
-  public void createProjectTransacTaskNameEmptyExc() {
+  @DisplayName("checkContentWithExc")
+  public void checkContentWithExceptions() {
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -156,20 +184,154 @@ class ResourceTransactionExcTest {
          .queryParam("taskNameInitial", newTaskName)
 
          .when()
-         .post(REPO_TRANSACT)
+         .post(REPO_TRANSACT_CLASSIC)
 
          .then()
          .log()
          .everything()
 
          .statusCode(NOT_ACCEPTABLE.value())
-    //         .body(matchesJsonSchemaInClasspath("contracts/project/createProjectTransaction"))
+         .body(matchesJsonSchemaInClasspath("contracts/transactions/checkContentWithExc.json"))
     ;
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 3);
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("transactionsClassicExcTaskLessThree")
+  public void transactionsClassicExcTaskLessThanThree() {
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+
+    var newTaskName = Faker.instance()
+                           .name()
+                           .firstName();
+
+    Project project = projectWithID("C",
+                                    "2020-05-05",
+                                    "2021-05-05",
+                                    1000L,
+                                    of("UK", "USA")
+                                   ).create();
+
+    project.setName("NOT-EMPTY");
+    newTaskName = "XX";
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
+
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/transactionsClassicExcTaskLessThanThree.json"))
+    ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("transactionsClassicExcTaskEmpty")
+  public void transactionsClassicExcTaskEmpty() {
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+
+    var newTaskName = Faker.instance()
+                           .name()
+                           .firstName();
+
+    Project project = projectWithID("C",
+                                    "2020-05-05",
+                                    "2021-05-05",
+                                    1000L,
+                                    of("UK", "USA")
+                                   ).create();
+
+    project.setName("NOT-EMPTY");
+    newTaskName = "";
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
+
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/transactionsClassicExcTaskEmpty.json"))
+    ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("transactionsClassicExcProjectEmpty")
+  public void transactionsClassicExcProjectEmpty() {
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+
+    var newTaskName = Faker.instance()
+                           .name()
+                           .firstName();
+
+    Project project = projectWithID("C",
+                                    "2020-05-05",
+                                    "2021-05-05",
+                                    1000L,
+                                    of("UK", "USA")
+                                   ).create();
+
+    project.setName("");
+    newTaskName = "";
+
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
+
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
+
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/transactionsClassicExcProjectEmpty.json"))
+    ;
+
+    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
+    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
+  }
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)

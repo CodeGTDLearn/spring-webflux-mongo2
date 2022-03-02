@@ -1,4 +1,4 @@
-package com.webflux.api.core.config.testcontainer;
+package com.webflux.api.core.config.testcontainer.compose;
 
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -31,7 +31,7 @@ https://callistaenterprise.se/blogg/teknik/2020/10/09/speed-up-your-testcontaine
 https://medium.com/pictet-technologies-blog/speeding-up-your-integration-tests-with
 -testcontainers-e54ab655c03d
  */
-public class TestcontainerComposeConfig {
+public class TcComposeConfig {
 
   final static public int STARTUP_TIMEOUT = 15;
   final static public int SERVICE_PORT = 27017;
