@@ -2,8 +2,9 @@ package com.webflux.api.modules.project.resource;
 
 import com.github.javafaker.Faker;
 import com.webflux.api.core.config.annotations.MergedResource;
-import com.webflux.api.core.config.testdb.TestDbUtils;
-import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
+import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
+import com.webflux.api.core.config.testconfigs.TestTransactionsConfig;
+import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
@@ -54,7 +55,7 @@ import static org.springframework.http.HttpStatus.CREATED;
   ╚══════════════════════════════════════════════════════════════════════╝
 */
 @ContextConfiguration(initializers = ResourceTransactionTest.Initializer.class)
-@Import({TestDbUtilsConfig.class})
+@Import({TestDbUtilsConfig.class, TestTransactionsConfig.class})
 @Slf4j
 @MergedResource
 class ResourceTransactionTest {

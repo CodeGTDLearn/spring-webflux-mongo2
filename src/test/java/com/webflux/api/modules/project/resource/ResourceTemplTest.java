@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.config.testdb.TestDbUtilsConfig;
+import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -8,7 +8,7 @@ import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.core.config.annotations.MergedResourceTcompose;
 import com.webflux.api.core.config.databuilders.ProjectChildBuilder;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
-import com.webflux.api.core.config.testdb.TestDbUtils;
+import com.webflux.api.core.config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

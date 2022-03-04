@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 /*
-    APPLICATION.YML MUST HAVE THIS CONVERTER
-    APPLICATION.PROPERTIES DOES NOT HAVE THE NECESSITY OF THIS CONVERTER
+    APPLICATION.YML "MUST HAVE" THIS CONVERTER
+    APPLICATION.PROPERTIES "NO NEED" THIS CONVERTER
  */
 public class YamlFileConverter implements PropertySourceFactory {
 

@@ -2,7 +2,7 @@ package com.webflux.api.modules.project.resource;
 
 import com.webflux.api.modules.project.core.dto.ResultProjectTasks;
 import com.webflux.api.modules.project.service.IServiceLookupProjection;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +21,13 @@ import static org.springframework.http.HttpStatus.OK;
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(TEMPL_ROOT_LOOKUP)
 public class ResourceLookupProjection {
 
   private final MediaType JSON = MediaType.APPLICATION_JSON;
 
-  IServiceLookupProjection serviceLookupProjection;
+  private final IServiceLookupProjection serviceLookupProjection;
 
   @GetMapping(TEMPL_LOOKUP_PROJ)
   @ResponseStatus(OK)
