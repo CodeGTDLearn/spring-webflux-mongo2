@@ -1,12 +1,13 @@
 package com.webflux.api.core.config.testconfigs;
 
-//@Import({TestDbUtilsConfig.class, TestTransactionsConfig.class})
-//@TestConfiguration(value = "testCoreConfig")
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Import;
+
+@Import({
+     TestDbUtilsConfig.class,
+     TransactionManagerTestConfig.class
+})
+@TestConfiguration(value = "testCoreConfig")
 public class TestCoreConfig {
-//https://www.baeldung.com/spring-import-annotation
-//  @Bean
-//  ReactiveMongoTransactionManager transactionManager(ReactiveMongoDatabaseFactory factory) {
-//
-//    return new ReactiveMongoTransactionManager(factory);
-//  }
+
 }

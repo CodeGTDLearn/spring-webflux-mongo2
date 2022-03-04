@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 
-@TestConfiguration(value = "testTransactionsConfig")
-public class TestTransactionsConfig {
+@TestConfiguration
+public class TransactionManagerTestConfig {
 
   /*╔════════════════════════════════════════════════╗
     ║           TRANSACTION-MANAGER-BEAN             ║

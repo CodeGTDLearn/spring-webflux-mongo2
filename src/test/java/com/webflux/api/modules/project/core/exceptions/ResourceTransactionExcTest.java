@@ -1,9 +1,8 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.annotations.MergedResource;
-import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
-import com.webflux.api.core.config.testconfigs.TestTransactionsConfig;
+import com.webflux.api.core.config.annotations.ResourceTcContainer;
+import com.webflux.api.core.config.testconfigs.TestCoreConfig;
 import com.webflux.api.core.config.testcontainer.container.TcContainer;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -59,12 +58,12 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
  ║    assim seu "importe" ja a iniciara, independente da anotacao  ║
  ╚═════════════════════════════════════════════════════════════════╝
 */
-@Import({TestDbUtilsConfig.class, TestTransactionsConfig.class})
-//@Import({TestCoreConfig.class})
+@Import({TestCoreConfig.class})
 @Slf4j
-@MergedResource
+@ResourceTcContainer
 @TcContainer
 @DisplayName("ResourceTransactionExcTest")
+public
 class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║

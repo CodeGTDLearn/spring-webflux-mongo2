@@ -1,13 +1,13 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
+import com.webflux.api.core.config.annotations.ResourceTcCompose;
 import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
+import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
+import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.MergedResourceTcompose;
-import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
-import com.webflux.api.core.config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -36,7 +36,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceCrudExcTest")
-@MergedResourceTcompose
+@ResourceTcCompose
+public
 class ResourceCrudExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
@@ -244,7 +245,8 @@ class ResourceCrudExcTest {
          .log()
          .everything()
 
-         .statusCode(BAD_REQUEST.value())
+//         .statusCode(BAD_REQUEST.value())
+         .statusCode(NOT_FOUND.value())
          .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/UpdateOptExc.json"))
     ;
   }

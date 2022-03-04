@@ -3,7 +3,7 @@ package com.webflux.api.core.exception;
 import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.MergedResourceTcompose;
+import com.webflux.api.core.config.annotations.ResourceTcCompose;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
@@ -40,7 +40,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @Import({TestDbUtilsConfig.class})
 @DisplayName("GlobalExceptionTest")
-@MergedResourceTcompose
+@ResourceTcCompose
+public
 class GlobalExceptionTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER

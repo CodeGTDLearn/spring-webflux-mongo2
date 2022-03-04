@@ -4,7 +4,7 @@ import com.webflux.api.core.config.utils.TestDbUtils;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-@TestConfiguration(value = "testDbUtilsConfig")
+@TestConfiguration
 public class TestDbUtilsConfig {
 
   @Bean
