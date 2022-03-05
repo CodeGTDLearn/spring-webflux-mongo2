@@ -42,6 +42,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpStatus.CREATED;
 
 
+
 /*
   ╔══════════════════════════════════════════════════════════════════════╗
   ║                         SILAEV + TRANSACTIONS                        ║
@@ -57,8 +58,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Import({TestCoreConfig.class})
 @Slf4j
 @ResourceTcContainer
-public
-class ResourceTransactionTest {
+@DisplayName("ResourceTransactionTest")
+public class ResourceTransactionTest {
   /*
 ╔════════════════════════════════════════════════════════════╗
 ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║

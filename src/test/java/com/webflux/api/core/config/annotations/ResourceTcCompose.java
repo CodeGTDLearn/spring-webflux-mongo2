@@ -15,11 +15,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 
+@Retention(RUNTIME)
+@Target(TYPE)
 @AutoConfigureWebTestClient(timeout = "3600000")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
-@Retention(RUNTIME)
-@Target(TYPE)
 @TestPropertySource("classpath:application.yml")
 @ActiveProfiles("gr-test-tc")
 @TcCompose

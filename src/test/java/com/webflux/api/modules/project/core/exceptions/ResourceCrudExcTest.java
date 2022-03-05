@@ -37,8 +37,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Import({TestDbUtilsConfig.class})
 @DisplayName("ResourceCrudExcTest")
 @ResourceTcCompose
-public
-class ResourceCrudExcTest {
+public class ResourceCrudExcTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test

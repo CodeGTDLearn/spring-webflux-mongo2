@@ -1,9 +1,7 @@
 package com.webflux.api.modules.project.core.exceptions;
-
 import com.github.javafaker.Faker;
 import com.webflux.api.core.config.annotations.ResourceTcContainer;
 import com.webflux.api.core.config.testconfigs.TestCoreConfig;
-import com.webflux.api.core.config.testcontainer.container.TcContainer;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -35,7 +33,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
-
 /*
   ╔══════════════════════════════════════════════════════════════════════╗
   ║                         SILAEV + TRANSACTIONS                        ║
@@ -47,7 +44,6 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
   ║ d) define @ContextConfiguration with 'static class Initializer'      ║
   ╚══════════════════════════════════════════════════════════════════════╝
 */
-
 /*
  ╔═════════════════════════════════════════════════════════════════╗
  ║                    ANOTACAO DE TCCONTAINER                      ║
@@ -61,10 +57,8 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 @Import({TestCoreConfig.class})
 @Slf4j
 @ResourceTcContainer
-@TcContainer
 @DisplayName("ResourceTransactionExcTest")
-public
-class ResourceTransactionExcTest {
+public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
   ╠════════════════════════════════════════════════════════════╣
