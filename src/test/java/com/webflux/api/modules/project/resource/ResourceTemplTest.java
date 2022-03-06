@@ -39,7 +39,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceTemplTest")
+@DisplayName("4.0 ResourceTemplTest")
 @ResourceTcCompose
 public
 class ResourceTemplTest {

@@ -118,5 +118,12 @@
                     1. Do not need "@Value" annotation
 
 
-11. MultiThread/Parallel Test
-    1. Aborted: Because server-costs in CI/CD  
+11. Tests - Junit 5:
+    1. MultiThread/Parallel Test
+       1. Aborted: Because server-costs in CI/CD
+    2. RestAssured: 
+       1. RestAssuredWebTestClient:
+          1. Reactive RestAssured
+       2. JsonSchemaValidator
+          1. Validate Responses
+    3. Ordered tests (Junit 5.8.2)

@@ -39,7 +39,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceColectionsTest")
+@DisplayName("4.3 ResourceColectionsTest")
 @ResourceTcCompose
 public
 class ResourceColectionsTest {

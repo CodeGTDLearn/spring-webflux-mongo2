@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.*;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceCrudTest")
+@DisplayName("1.0 ResourceCrudTest")
 @ResourceTcCompose
 public
 class ResourceCrudTest {

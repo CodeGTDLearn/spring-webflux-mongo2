@@ -58,7 +58,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Import({TestCoreConfig.class})
 @Slf4j
 @ResourceTcContainer
-@DisplayName("ResourceTransactionTest")
+@DisplayName("6.0 ResourceTransactionTest")
 public class ResourceTransactionTest {
   /*
 ╔════════════════════════════════════════════════════════════╗

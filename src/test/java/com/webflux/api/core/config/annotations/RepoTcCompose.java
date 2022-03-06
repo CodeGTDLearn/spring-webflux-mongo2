@@ -15,9 +15,9 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 
 @Retention(RUNTIME)
 @Target(TYPE)
-@TcCompose
 @TestPropertySource("classpath:application.yml")
 @DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
-public @interface MergedRepo {
+@TcCompose
+public @interface RepoTcCompose {
 }

@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceChildArrayTest")
+@DisplayName("4.2 ResourceChildArrayTest")
 @ResourceTcCompose
 public
 class ResourceChildArrayTest {

@@ -35,7 +35,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceAggregTest")
+@DisplayName("4.1 ResourceAggregTest")
 @ResourceTcCompose
 public
 class ResourceAggregTest {

@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceLookupProjectionTest")
+@DisplayName("4.4 ResourceLookupProjectionTest")
 @ResourceTcCompose
 public
 class ResourceLookupProjectionTest {

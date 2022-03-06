@@ -31,7 +31,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceTaskTest")
+@DisplayName("5.0 ResourceTaskTest")
 @ResourceTcCompose
 public
 class ResourceTaskTest {

@@ -35,7 +35,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Import({TestDbUtilsConfig.class})
-@DisplayName("ResourceCrudExcTest")
+@DisplayName("1.1 ResourceCrudExcTest")
 @ResourceTcCompose
 public class ResourceCrudExcTest {
 
@@ -244,8 +244,8 @@ public class ResourceCrudExcTest {
          .log()
          .everything()
 
-//         .statusCode(BAD_REQUEST.value())
-         .statusCode(NOT_FOUND.value())
+         .statusCode(BAD_REQUEST.value())
+//         .statusCode(NOT_FOUND.value())
          .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/UpdateOptExc.json"))
     ;
   }

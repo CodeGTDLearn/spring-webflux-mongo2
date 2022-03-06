@@ -57,7 +57,7 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 @Import({TestCoreConfig.class})
 @Slf4j
 @ResourceTcContainer
-@DisplayName("ResourceTransactionExcTest")
+@DisplayName("6.1 ResourceTransactionExcTest")
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
