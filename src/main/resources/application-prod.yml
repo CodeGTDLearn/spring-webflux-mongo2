@@ -7,13 +7,13 @@ spring:
 udemy:
   mongodb:
     replicaset:
-      username: ${MONGO_INITDB_ROOT_USERNAME}
-      password: ${MONGO_INITDB_ROOT_PASSWORD}
-      database: ${MONGO_INITDB_DATABASE}
       name: ${MONGO_RS_NAME}
+      username: ${MONGO_RS_USERNAME}
+      password: ${MONGO_RS_PASSWORD}
+      database: ${MONGO_RS_DB}
       primary: ${MONGO_RS_PRIMARY}
       port: ${MONGO_RS_PORT}
-      authentication-database: ${MONGO_AUTH_MAN}
+      authentication-database: ${MONGO_RS_AUTH}
 #  MONGO_RS_NAME: docker-rs
 #  MONGO_RS_USERNAME: admin
 #  MONGO_RS_PASSWORD: admin

@@ -39,8 +39,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({TestDbUtilsConfig.class})
 @DisplayName("4.5 ResourceProjectionTest")
 @ResourceTcCompose
-public
-class ResourceProjectionTest {
+public class ResourceProjectionTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test

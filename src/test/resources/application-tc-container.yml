@@ -1,0 +1,26 @@
+# MongoDBContainer(TestContainer)
+# SETS-UP REPLICASET AUTOMATICALLY
+# REPLICASET IS NEEDED TO TEST/USE 'TRANSACTIONS'
+# NO PROPERTIES MUST BE DEFINED HERE, WHEN USE MongoDBContainer
+
+# TEST-TC_COMPOSE - NO-PROPERTIES
+# DEV-DOCKER_COMPOSE
+#spring:
+#  data:
+#    mongodb:
+#      host: mongo1
+#      port: 27017
+#      database: api-db
+#      username: root
+#      password: root
+#      authentication-database: admin
+
+#spring:
+#  data:
+#    mongodb:
+#      host: localhost
+#      port: 27017
+#      database: test-db
+#      username: root
+#      password: root
+#      authentication-database: admin

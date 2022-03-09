@@ -11,7 +11,7 @@ x-common-variables:
   AUTH_MAN: admin
 
 networks:
-  mongo-cluster:
+  api-net:
 
 services:
   mongo1:
@@ -21,7 +21,7 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - mongo-cluster
+      - api-net
     volumes:
       - ../docker/mongo-data-db:/data/db
     environment:
@@ -43,7 +43,7 @@ services:
     depends_on:
       - mongo1
     networks:
-      - mongo-cluster
+      - api-net
     environment:
       # API MANAGE AUTOMATICALLY THE PROFILES:
       # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -

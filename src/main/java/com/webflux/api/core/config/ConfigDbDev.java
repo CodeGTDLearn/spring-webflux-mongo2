@@ -50,8 +50,7 @@ public class ConfigDbDev extends AbstractReactiveMongoConfiguration {
     String connectionURI = "mongodb://" +
          username + ":" + password + "@" +
          host + ":" + port + "/" + database +
-         "?authSource=" + authenticationDatabase +
-         "&authMechanism=SCRAM-SHA-1";
+         "?authSource=" + authenticationDatabase;
 
     System.out.println("Connection --------------->  URI  ---------------> :" + connectionURI);
 

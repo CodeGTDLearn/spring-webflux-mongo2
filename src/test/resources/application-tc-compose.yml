@@ -1,13 +1,25 @@
-# IN ORDER TO, USE TEST-CONTAINER DOCKER-COMPOSE-MODULE
-# THE PROPERTIES MUST BE USED/DEFINED
+# DOCKER-COMPOSE-MODULE(TestContainer)
+# HERE, THE PROPERTIES MUST BE USED/DEFINED
 # HOWEVER, TRANSACTIONS WILL NOT WORK
-# TRANSACTIONS MUST HAVE SPECIFIC PROPERTIES-FILE
+# TRANSACTIONS MUST HAVE SPECIFIC PROPERTIES-FILE(MongoDBContainer)
+
+# TEST-TC_COMPOSE
+# DEV-DOCKER_COMPOSE
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: test-db
-      username: root
-      password: root
+      username: admin
+      password: admin
       authentication-database: admin
+#      host: mongo1
+#      port: 9042
+#      database: api-db
+#spring:
+#  data:
+#    mongodb:
+#      host: localhost
+#      port: 27017
+#      database: test-db
+#      username: root
+#      password: root
+#      authentication-database: admin

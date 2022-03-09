@@ -1,6 +1,5 @@
 package com.webflux.api.core.config.annotations;
 
-import com.webflux.api.core.config.testcontainer.compose.TcCompose;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,11 +37,11 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 */
 @Retention(RUNTIME)
 @Target(TYPE)
-@AutoConfigureWebTestClient(timeout = "3600000")
+@AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @TestPropertySource("classpath:application.yml")
-@ActiveProfiles("gr-test-tc")
-@TcCompose
+@ActiveProfiles("test-cm")
+//@TcCompose
 public @interface ResourceTcCompose {
 }

@@ -1,6 +1,5 @@
 package com.webflux.api.core.config.annotations;
 
-import com.webflux.api.core.config.testcontainer.container.TcContainer;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -32,15 +31,16 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
      ║   B.2) "COMMENT" TEST-CONTAINER-ANNOTATION (TcContainer) ║
      ║   B.3) START DOCKER-CONTAINER (DOCKER-BAT-SCRIPT-PROFILE)║
      ║   B.4) RUN THE TESTS                                     ║
+     ║   B.5) UNCOMMENT THE APPLICATION-TC-TRANSACTIONS.YML     ║
      ╚══════════════════════════════════════════════════════════╝
 */
 @Retention(RUNTIME)
 @Target(TYPE)
-@AutoConfigureWebTestClient(timeout = "3600000")
+@AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @DirtiesContext(classMode = BEFORE_CLASS)
 @TestPropertySource("classpath:application.yml")
-@ActiveProfiles("gr-test-tr")
-@TcContainer
+@ActiveProfiles("test-ct")
+//@TcContainer
 public @interface ResourceTcContainer {
 }

@@ -2,5 +2,5 @@ spring:
   profiles:
 #    active: gr-test-tr
     group:
-      gr-test-tc: tc-compose, log
-      gr-test-tr: tc-transactions, log
+      test-cm: tc-compose, log
+      test-ct: tc-container, log

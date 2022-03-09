@@ -37,8 +37,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({TestDbUtilsConfig.class})
 @DisplayName("4.1 ResourceAggregTest")
 @ResourceTcCompose
-public
-class ResourceAggregTest {
+public class ResourceAggregTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test

@@ -35,8 +35,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({TestDbUtilsConfig.class})
 @DisplayName("2.0 ResourceRepoTest")
 @ResourceTcCompose
-public
-class ResourceRepoTest {
+public class ResourceRepoTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test

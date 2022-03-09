@@ -40,8 +40,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({TestDbUtilsConfig.class})
 @DisplayName("4.2 ResourceChildArrayTest")
 @ResourceTcCompose
-public
-class ResourceChildArrayTest {
+public class ResourceChildArrayTest {
 
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
