@@ -177,7 +177,7 @@ class ResourceAggregTest {
   }
 
   @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
+  @EnabledIf(expression = "false", loadContext = true)
   @DisplayName("findCostsGroupByStartDateForProjectsCostGreaterThan")
   public void findCostsGroupByStartDateForProjectsCostGreaterThan() {
 

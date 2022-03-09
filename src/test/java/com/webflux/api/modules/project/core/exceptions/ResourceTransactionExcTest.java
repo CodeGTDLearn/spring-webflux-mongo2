@@ -1,4 +1,5 @@
 package com.webflux.api.modules.project.core.exceptions;
+
 import com.github.javafaker.Faker;
 import com.webflux.api.core.config.annotations.ResourceTcContainer;
 import com.webflux.api.core.config.testconfigs.TestCoreConfig;
@@ -33,6 +34,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+
 /*
   ╔══════════════════════════════════════════════════════════════════════╗
   ║                         SILAEV + TRANSACTIONS                        ║
@@ -91,7 +93,7 @@ public class ResourceTransactionExcTest {
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
-
+//    startTcContainer();
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
 

@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 public class ServiceTempl implements IServiceTempl {
 
 
-  Templ repoTempl;
+  Templ templ;
 
   /*╔══════════════════════════════════╗
     ║ REACTIVE-MONGO-TEMPLATE-CRITERIA ║
@@ -20,7 +20,7 @@ public class ServiceTempl implements IServiceTempl {
   @Override
   public Flux<Project> findProjectByNameQueryWithCriteriaTemplate(String projectName) {
 
-    return repoTempl.findProjectByNameQueryWithCriteriaTemplate(projectName);
+    return templ.findProjectByNameQueryWithCriteriaTemplate(projectName);
   }
 
   @Override
@@ -28,27 +28,27 @@ public class ServiceTempl implements IServiceTempl {
        Long projectCostFrom,
        Long projectCostTo) {
 
-    return repoTempl.findByEstimatedCostBetweenQueryWithCriteriaTemplate(projectCostFrom,
-                                                                         projectCostTo
-                                                                        );
+    return templ.findByEstimatedCostBetweenQueryWithCriteriaTemplate(projectCostFrom,
+                                                                     projectCostTo
+                                                                    );
   }
 
   @Override
   public Flux<Project> findByNameRegexQueryWithCriteriaTemplate(String regexpProjectName) {
 
-    return repoTempl.findByNameRegexQueryWithCriteriaTemplate(regexpProjectName);
+    return templ.findByNameRegexQueryWithCriteriaTemplate(regexpProjectName);
   }
 
   @Override
   public Mono<Void> UpdateCostWithCritTemplUpsert(String projectId, Long projectCost) {
 
-    return repoTempl.UpdateCostWithCritTemplUpsert(projectId, projectCost);
+    return templ.UpdateCostWithCritTemplUpsert(projectId, projectCost);
   }
 
   @Override
   public Mono<Void> deleteWithCriteriaTemplate(String projectId) {
 
-    return repoTempl.deleteWithCriteriaTemplate(projectId);
+    return templ.deleteWithCriteriaTemplate(projectId);
   }
 
 }

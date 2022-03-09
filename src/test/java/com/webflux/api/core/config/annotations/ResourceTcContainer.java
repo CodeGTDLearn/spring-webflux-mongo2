@@ -1,5 +1,6 @@
 package com.webflux.api.core.config.annotations;
 
+import com.webflux.api.core.config.testcontainer.container.TcContainer;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -40,6 +41,6 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 @DirtiesContext(classMode = BEFORE_CLASS)
 @TestPropertySource("classpath:application.yml")
 @ActiveProfiles("gr-test-tr")
-//@TcContainer
+@TcContainer
 public @interface ResourceTcContainer {
 }

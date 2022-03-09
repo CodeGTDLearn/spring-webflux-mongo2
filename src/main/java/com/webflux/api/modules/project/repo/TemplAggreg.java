@@ -10,7 +10,6 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class TemplAggreg {
 
-
   private final ReactiveMongoTemplate reactiveRepoTemplate;
 
   public <T> Flux<T> aggregs(

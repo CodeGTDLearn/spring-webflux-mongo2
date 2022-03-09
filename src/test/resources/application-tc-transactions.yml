@@ -5,3 +5,9 @@
 spring:
   data:
     mongodb:
+#      host: mongo1
+#      port: 27017
+#      database: api-db
+#      username: root
+#      password: root
+#      authentication-database: admin

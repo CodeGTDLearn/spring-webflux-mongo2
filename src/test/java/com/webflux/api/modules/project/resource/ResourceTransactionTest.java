@@ -12,18 +12,11 @@ import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.utility.DockerImageName;
 import reactor.core.publisher.Flux;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
@@ -54,7 +47,6 @@ import static org.springframework.http.HttpStatus.CREATED;
   ║ d) define @ContextConfiguration with 'static class Initializer'      ║
   ╚══════════════════════════════════════════════════════════════════════╝
 */
-@ContextConfiguration(initializers = ResourceTransactionTest.Initializer.class)
 @Import({TestCoreConfig.class})
 @Slf4j
 @ResourceTcContainer
@@ -75,8 +67,6 @@ public class ResourceTransactionTest {
 */
   // STATIC-@Container: one service for ALL tests -> SUPER FASTER
   // NON-STATIC-@Container: one service for EACH test
-  private static final MongoDBContainer MONGO_DB_CONTAINER =
-       new MongoDBContainer(DockerImageName.parse("mongo:4.4.2"));
 
   final String enabledTest = "true";
 
@@ -95,15 +85,9 @@ public class ResourceTransactionTest {
   @Autowired
   IServiceTask taskService;
 
-  private Project projetoWithId;
-
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
-
-    MONGO_DB_CONTAINER.start();
-
-    globalContainerMessage(MONGO_DB_CONTAINER, "container-start");
 
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
@@ -118,8 +102,7 @@ public class ResourceTransactionTest {
   @AfterAll
   static void afterAll(TestInfo testInfo) {
 
-    if (! MONGO_DB_CONTAINER.isShouldBeReused()) MONGO_DB_CONTAINER.stop();
-
+//    closeTcContainer();
     globalAfterAll();
     globalTestMessage(testInfo.getDisplayName(), "class-end");
   }
@@ -138,12 +121,12 @@ public class ResourceTransactionTest {
                                   of("UK", "USA")
                                  ).create();
 
-    projetoWithId = projectWithID("C",
-                                  "2020-05-05",
-                                  "2021-05-05",
-                                  1000L,
-                                  of("HOL", "CAN")
-                                 ).create();
+    Project projetoWithId = projectWithID("C",
+                                          "2020-05-05",
+                                          "2021-05-05",
+                                          1000L,
+                                          of("HOL", "CAN")
+                                         ).create();
 
     List<Project> projectList = asList(project1, projetoWithId);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -171,7 +154,7 @@ public class ResourceTransactionTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("checkContentWithExc.json")
+  @DisplayName("createProjectTransaction")
   public void createProjectTransaction() {
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
@@ -221,15 +204,4 @@ public class ResourceTransactionTest {
     blockHoundTestCheck();
   }
 
-  static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-    @Override
-    public void initialize(@NotNull ConfigurableApplicationContext configurableApplicationContext) {
-
-      TestPropertyValues.of(String.format(
-                             "spring.data.mongodb.uri: %s",
-                             MONGO_DB_CONTAINER.getReplicaSetUrl()
-                                         ))
-                        .applyTo(configurableApplicationContext);
-    }
-  }
 }

@@ -13,10 +13,9 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Repository("repoTempl")
+@Repository("templ")
 @RequiredArgsConstructor
 public class Templ {
-
 
   private final ReactiveMongoTemplate reactiveMongoTemplate;
 

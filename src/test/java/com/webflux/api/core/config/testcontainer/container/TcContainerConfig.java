@@ -21,7 +21,7 @@ import static java.lang.System.setProperty;
 public class TcContainerConfig implements Extension {
 
   private final static String IMAGE = "mongo:4.4.2";
-  private final static String PROPERTY_URI = "spring.data.mongodb.uri";
+  private final static String URI = "spring.data.mongodb.uri";
 
   /*╔════════════════════════════════════════════════╗
     ║            TEST-CONTAINER-STATIC               ║
@@ -34,8 +34,8 @@ public class TcContainerConfig implements Extension {
     ║    -> One service/container for EACH TEST      ║
     ║    -> SLOW                                     ║
     ╚════════════════════════════════════════════════╝*/
-  private static final MongoDBContainer
-       MONGO_DB_CONTAINER = new MongoDBContainer(DockerImageName.parse(IMAGE));
+  private static final MongoDBContainer CONTAINER = new MongoDBContainer(
+       DockerImageName.parse(IMAGE));
 
   /*
    ╔════════════════════════════════════════════════════════════════════════════╗
@@ -52,9 +52,9 @@ public class TcContainerConfig implements Extension {
 
   public static void startTcContainer() {
 
-    MONGO_DB_CONTAINER.isHealthy();
-    MONGO_DB_CONTAINER.start();
-    setProperty(PROPERTY_URI, MONGO_DB_CONTAINER.getReplicaSetUrl());
+    CONTAINER.isHealthy();
+    CONTAINER.start();
+    setProperty(URI, CONTAINER.getReplicaSetUrl());
     globalContainerMessage(getTcContainer(), "container-start");
     globalContainerMessage(getTcContainer(), "container-state");
   }
@@ -63,22 +63,21 @@ public class TcContainerConfig implements Extension {
   public static void restartTcContainer() {
 
     globalContainerMessage(getTcContainer(), "container-end");
-    MONGO_DB_CONTAINER.close();
+    CONTAINER.close();
     startTcContainer();
   }
 
 
   public static void closeTcContainer() {
-
+    setReuseTcContainer(false);
     globalContainerMessage(getTcContainer(), "container-end");
-    if (! MONGO_DB_CONTAINER.isShouldBeReused()) MONGO_DB_CONTAINER.stop();
-    //    testContainer.close();
+    if (! CONTAINER.isShouldBeReused()) CONTAINER.stop();
   }
 
 
   public static void setReuseTcContainer(boolean reuse) {
 
-    MONGO_DB_CONTAINER.withReuse(reuse);
+    CONTAINER.withReuse(reuse);
   }
 
   public static void checkTcContainer() {
@@ -86,13 +85,12 @@ public class TcContainerConfig implements Extension {
     getTcContainer().isHealthy();
     getTcContainer().isCreated();
     getTcContainer().isRunning();
-    setProperty(PROPERTY_URI, MONGO_DB_CONTAINER.getReplicaSetUrl());
     globalContainerMessage(getTcContainer(), "container-start");
     globalContainerMessage(getTcContainer(), "container-state");
   }
 
   public static MongoDBContainer getTcContainer() {
 
-    return MONGO_DB_CONTAINER;
+    return CONTAINER;
   }
 }

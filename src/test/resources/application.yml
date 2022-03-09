@@ -3,4 +3,4 @@ spring:
 #    active: gr-test-tr
     group:
       gr-test-tc: tc-compose, log
-      gr-test-tr: tr-transactions, log
+      gr-test-tr: tc-transactions, log
