@@ -109,8 +109,14 @@
 
 
 10. Exceptions:
-    1. Global
-    2. Custom
+    1. Exceptions must be in  Controller/Resource:
+       1. Reason:
+          1. Como stream pode ser manipulado por diferentes grupos de thread,          caso um erro aconteça em uma thread que não é a que operou a controller,              o ControllerAdvice não vai ser notificado "
+          2. As stream can be handled by different thread groups, if an error happens on a thread other than the one that operated the controller, ControllerAdvice will not be notified "
+       2. Source: medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de
+          -sofrer-f92fb64517c3 // github.com/netshoes/blog-spring-reactive
+    2. Global
+    3. Custom
         1. Importation/validation of properties:
             1. @PropertySource
             2. @ConfigurationProperties:

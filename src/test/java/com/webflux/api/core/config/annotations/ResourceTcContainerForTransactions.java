@@ -27,11 +27,11 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
      ║   A.3) RUN THE TESTS                                     ║
      ║                                                          ║
      ║B) DOCKER-CONTAINERS:                                     ║
-     ║   B.1) SET PROFILE-ACTIVE IN APPLICATION.YML             ║
+     ║   B.1) SET PROFILE-ACTIVE IN SRC/MAIN/APPLICATION.YML    ║
      ║   B.2) "COMMENT" TEST-CONTAINER-ANNOTATION (TcContainer) ║
      ║   B.3) START DOCKER-CONTAINER (DOCKER-BAT-SCRIPT-PROFILE)║
      ║   B.4) RUN THE TESTS                                     ║
-     ║   B.5) UNCOMMENT THE APPLICATION-TC-TRANSACTIONS.YML     ║
+     ║   B.5) UNCOMMENT THE APPLICATION-TC-CONTAINER.YML        ║
      ╚══════════════════════════════════════════════════════════╝
 */
 @Retention(RUNTIME)
@@ -40,7 +40,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @DirtiesContext(classMode = BEFORE_CLASS)
 @TestPropertySource("classpath:application.yml")
-@ActiveProfiles("test-ct")
-//@TcContainer
-public @interface ResourceTcContainer {
+@ActiveProfiles("tconttransc") // PROFILE FOR TEST TRANSACTIONS(test-container-container)
+//@TcContainer // ALLOW TEST-CONTAINER TEST TRANSACTIONS
+public @interface ResourceTcContainerForTransactions {
 }

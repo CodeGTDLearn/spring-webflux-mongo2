@@ -1,6 +1,6 @@
 spring:
   profiles:
-#    active: gr-test-tr
+#    active: test-comp
     group:
-      test-cm: tc-compose, log
-      test-ct: tc-container, log
+      tcomp: tc-compose, log
+      tconttransc: tc-container, log

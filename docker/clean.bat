@@ -1,13 +1,13 @@
 @echo off
 echo ===========================================================================
-echo                        DOCKER CLEAN-UP - STARTING
+echo                           CLEAN-UP: starting
 echo ===========================================================================
 
 cd
 docker system df
 
 echo ===========================================================================
-echo               DOCKER-COMPOSE CLEANING-UP %parameter1% %parameter2%
+echo           CLEAN-UP: compose cleaning-up %parameter1% %parameter2%
 echo ===========================================================================
 ::set parameter1=%1
 ::set parameter2=%2
@@ -28,12 +28,12 @@ docker image rm pauloportfolio/mongo3
 ::------------------------------------------------------------------------------
 
 echo ===========================================================================
-echo                        DOCKER IMAGES - LISTING
+echo                      CLEAN-UP: listing images
 echo ===========================================================================
 docker image ls
 
 echo ===========================================================================
-echo                        DOCKER SYSTEM - LISTING
+echo                      CLEAN-UP: listing system
 echo ===========================================================================
 docker system df
 
@@ -45,5 +45,5 @@ docker system df
 
 :: exit
 echo ===========================================================================
-echo                      DOCKER CLEAN-UP - FINISHING
+echo                         CLEAN-UP: finishing
 echo ===========================================================================

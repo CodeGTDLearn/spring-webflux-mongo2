@@ -1,36 +1,28 @@
 @echo off
 echo ===========================================================================
-echo                     DOCKER-COMPOSE-UP SCRIPT: STARTING
+echo                        1) DOCKER-COMPOSE: Starts...
 echo ===========================================================================
 
-:: MAVEN CLEAN PACKAGE
+echo ===========================================================================
+echo                         2) DOCKER-COMPOSE: Maven
+echo ===========================================================================
 cd ..
 call mvn clean package -DskipTests
 
-:: DOCKER CLEAN-UP SYSTEM
+echo ===========================================================================
+echo                        3) DOCKER-COMPOSE: Cleaning
+echo ===========================================================================
 cd docker
 call clean.bat compose
-
 docker scan --version --json --group-issues
 
-:: DOCKER-COMPOSE UP
+echo ===========================================================================
+echo    4) DOCKER-COMPOSE: Uping the follow Compose-Service(s): %parameter1%
+echo ===========================================================================
 set parameter1=%1
-echo ===========================================================================
-echo                       DOCKER-COMPOSE UPs: %parameter1%
-echo ===========================================================================
-if %parameter1%==dev  (docker-compose -f dev-compose.yml  up --build --force-recreate)
-if %parameter1%==prod (docker-compose -f prod-compose.yml up --build --force-recreate)
-
-REM TIMEOUT 05
-timeout 5
+if %parameter1%==dev   (docker-compose -f dev-compose.yml    up --build --force-recreate)
+if %parameter1%==prod  (docker-compose -f prod-compose.yml   up --build --force-recreate)
 
 echo ===========================================================================
-echo                             DOCKER-EXEC-CHMOD
-echo ===========================================================================
-::echo %parameter1%
-::if %parameter1%==prod (docker exec mongo1 bash -c "chmod +x /scripts/rs-init.sh && sh /scripts/rs-init.sh")
-
-pause
-echo ===========================================================================
-echo                     DOCKER-COMPOSE-UP SCRIPT: FINISHING
+echo                     5) DOCKER-COMPOSE: ...Ending
 echo ===========================================================================

@@ -5,22 +5,18 @@
 
 # TEST-TC_COMPOSE - NO-PROPERTIES
 # DEV-DOCKER_COMPOSE
+spring:
+  data:
+    mongodb:
+#      username: admin
+#      password: admin
+#      authentication-database: admin
 #spring:
 #  data:
 #    mongodb:
 #      host: mongo1
 #      port: 27017
 #      database: api-db
-#      username: root
-#      password: root
-#      authentication-database: admin
-
-#spring:
-#  data:
-#    mongodb:
-#      host: localhost
-#      port: 27017
-#      database: test-db
 #      username: root
 #      password: root
 #      authentication-database: admin

@@ -23,6 +23,7 @@ import static org.springframework.http.HttpStatus.*;
 //     - caso um erro aconteça em uma thread que não é a que operou a controller,
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
+//     - https://github.com/netshoes/blog-spring-reactive/blob/master/src/main/java/com/netshoes/products/gateways/http/ProductController.java
 @RestController
 @RequestMapping(PROJ_ROOT_CRUD)
 @RequiredArgsConstructor

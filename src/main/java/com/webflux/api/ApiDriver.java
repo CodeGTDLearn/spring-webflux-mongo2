@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ApiDriver {
   static {
-    BlockhoundUtils.blockhoundInstallAllowAllCalls();
+    BlockhoundUtils.blockhoundInstallWithAllAllowedCalls();
   }
 
   public static void main(String[] args) {

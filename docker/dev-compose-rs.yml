@@ -1,0 +1,78 @@
+version: "3.4"
+
+x-common-variables:
+  &env-vars
+  PORT_API: 8080
+  MONGO_INITDB_DATABASE: mongo1
+  HOST: mongo1
+  PORT: 9042
+  MONGO_INITDB_ROOT_USERNAME: admin
+  MONGO_INITDB_ROOT_PASSWORD: admin
+  AUTH_MAN: admin
+
+networks:
+  api-net:
+
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4.4
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "docker-rs", "--port", "9042" ]
+#    command: >-
+#      bash -c "mongod --replSet docker-rs --port 9042;\
+#        sleep 5;\
+#        chmod +x /scripts/rs-init.sh;\
+#        /scripts/rs-init.sh"
+    ports:
+      - "9042:9042"
+    networks:
+      - mongo-cluster
+    volumes:
+      - ~/mongors/data1:/data/db
+    environment:
+      *env-vars
+#    healthcheck:
+#      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9042/api-db --quiet
+#      interval: 20s
+#      timeout: 10s
+#      start_period: 10s
+    networks:
+      - api-net
+
+  mongo-setup:
+    image: mongo:4.4.4
+    command: [
+        "bash",
+        "-c",
+        "mongo --host mongo1:9042 --eval 'rs.initiate();' && exit"
+    ]
+    depends_on:
+      - mongo1
+    networks:
+      - api-net
+
+  api:
+    container_name: api
+    image: pauloportfolio/api
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      args:
+        JAR_FILE: target/*.jar
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ../docker/mongo-data-db:/data/db
+    depends_on:
+      - mongo-setup
+    networks:
+      - api-net
+    environment:
+      # API MANAGE AUTOMATICALLY THE PROFILES:
+      # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -
+      #      PROFILE: dev
+      PORT_DEBUG: 5005
+      <<: *env-vars
+      DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

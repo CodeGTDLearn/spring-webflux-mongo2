@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.resource;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.annotations.ResourceTcContainer;
+import com.webflux.api.core.config.annotations.ResourceTcContainerForTransactions;
 import com.webflux.api.core.config.testconfigs.TestCoreConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -49,8 +49,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 */
 @Import({TestCoreConfig.class})
 @Slf4j
-@ResourceTcContainer
 @DisplayName("6.0 ResourceTransactionTest")
+@ResourceTcContainerForTransactions
 public class ResourceTransactionTest {
   /*
 ╔════════════════════════════════════════════════════════════╗

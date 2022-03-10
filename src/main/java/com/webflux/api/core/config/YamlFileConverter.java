@@ -9,10 +9,13 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import java.io.IOException;
 import java.util.Properties;
 
-/*
-    APPLICATION.YML "MUST HAVE" THIS CONVERTER
-    APPLICATION.PROPERTIES "NO NEED" THIS CONVERTER
- */
+/*╔══════════════════════════════════════════════════════════════╗
+  ║                     YAML-FILE-CONVERTER                      ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║ APPLICATION.YML "MUST HAVE" THIS 'YAML-FILE-CONVERTER'       ║
+  ║ APPLICATION.PROPERTIES "NO NEED" THIS 'YAML-FILE-CONVERTER'  ║
+  ║ Source: https://www.baeldung.com/spring-yaml-propertysource  ║
+  ╚══════════════════════════════════════════════════════════════╝*/
 public class YamlFileConverter implements PropertySourceFactory {
 
   @Override

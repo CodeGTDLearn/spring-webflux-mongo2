@@ -51,7 +51,6 @@ public class TcContainerConfig implements Extension {
   }
 
   public static void startTcContainer() {
-
     CONTAINER.isHealthy();
     CONTAINER.start();
     setProperty(URI, CONTAINER.getReplicaSetUrl());

@@ -52,6 +52,13 @@ public class ConfigDbDev extends AbstractReactiveMongoConfiguration {
          host + ":" + port + "/" + database +
          "?authSource=" + authenticationDatabase;
 
+//    String connectionURI = "mongodb://"
+//         + username + ":" + password +
+//         "@" + host + ":" + port + "/"
+//         + database
+//         + "?replicaSet=" + "docker-rs"
+//         + "&authSource=" + authenticationDatabase;
+
     System.out.println("Connection --------------->  URI  ---------------> :" + connectionURI);
 
     return MongoClients.create(connectionURI);

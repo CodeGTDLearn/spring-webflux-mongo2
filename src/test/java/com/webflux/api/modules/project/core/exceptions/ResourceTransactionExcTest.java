@@ -1,7 +1,7 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.annotations.ResourceTcContainer;
+import com.webflux.api.core.config.annotations.ResourceTcContainerForTransactions;
 import com.webflux.api.core.config.testconfigs.TestCoreConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -58,7 +58,7 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 */
 @Import({TestCoreConfig.class})
 @Slf4j
-@ResourceTcContainer
+@ResourceTcContainerForTransactions
 @DisplayName("6.1 ResourceTransactionExcTest")
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗

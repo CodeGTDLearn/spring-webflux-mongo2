@@ -1,74 +1,97 @@
-version: "3.4"
+#https://github.com/shoridevel/mongo-replicaset-docker-compose/blob/main/docker-compose.yaml
+version: '3.8'
 
 x-common-variables:
   &env-vars
-  MONGO_RS_NAME: docker-rs
-  MONGO_RS_USERNAME: root
-  MONGO_RS_PASSWORD: root
-  MONGO_RS_PRIMARY: mongo1
-  MONGO_RS_PORT: 9042
-  MONGO_RS_DB: udemy
-  MONGO_RS_AUTH: admin
+  RS_NAME: docker-rs
+  RS_USERNAME: admin
+  RS_PASSWORD: admin
+  RS_PRIMARY: mongo1
+  RS_PORT: 9042
+  RS_DB: test-db
+  RS_AUTH: admin
   PORT_API: 8080
+#  MONGO_INITDB_ROOT_USERNAME: admin
+#  MONGO_INITDB_ROOT_PASSWORD: admin
+
+networks:
+  api-net:
+    driver: bridge
 
 volumes:
   api_vol:
 
-networks:
-  mongo-cluster:
-#https://github.com/search?q=mongo+replicaset+compose:
 services:
   mongo1:
     container_name: mongo1
     image: mongo:4.4.4
-    restart: always
-#    command: mongod --replSet docker-rs --port 9042
-    #    OPTION 01 - DO NOT REMOVE:
-#    command: >
-#      bash -c "chmod +x /scripts/rs-init.sh
-#      && sh /scripts/rs-init.sh"
-    #    OPTION 02 - DO NOT REMOVE:
-    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && /scripts/rs-init.sh" ]
-    ports:
-      - "9042:9042"
-    networks:
-      - mongo-cluster
     volumes:
       - ~/mongors/data1:/data/db
-      - ./rs-init.sh:/scripts/rs-init.sh
-    #      - api_vol:/data/db
-    environment:
-      *env-vars
+      - ./rs-scripts/rs-init.sh:/scripts/rs-init.sh
+    networks:
+      - api-net
+    ports:
+      - 9042:9042
+    restart: always
     depends_on:
       - mongo2
       - mongo3
+    command: >-
+      bash -c "mongod --replSet docker-rs --port 9042;\
+        sleep 5;\
+        chmod +x /scripts/rs-init.sh;\
+        /scripts/rs-init.sh"
+#    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && /scripts/rs-init.sh" ]
+    environment:
+      *env-vars
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9042/test --quiet
+      interval: 20s
+      timeout: 10s
+      start_period: 10s
 
   mongo2:
     container_name: mongo2
     image: mongo:4.4.4
-    restart: always
-    command: mongod --replSet docker-rs --port 9142
-    ports:
-      - "9142:9142"
-    networks:
-      - mongo-cluster
     volumes:
       - ~/mongors/data2:/data/db
+    networks:
+      - api-net
+    ports:
+      - 9142:9142
+    restart: always
+    depends_on:
+      - mongo3
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "docker-rs", "--port", "9142" ]
+    environment:
+      *env-vars
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo2:9142/test --quiet
+      interval: 20s
+      timeout: 10s
+      start_period: 10s
 
   mongo3:
     container_name: mongo3
     image: mongo:4.4.4
-    restart: always
-    ports:
-      - "9242:9242"
-    command: mongod --replSet docker-rs --port 9242
-    networks:
-      - mongo-cluster
     volumes:
       - ~/mongors/data3:/data/db
+    networks:
+      - api-net
+    ports:
+      - 9242:9242
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "docker-rs", "--port", "9242" ]
+    environment:
+      *env-vars
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo3:9242/test --quiet
+      interval: 20s
+      timeout: 10s
+      start_period: 10s
 
   api:
-    container_name: api
+#    container_name: api
     image: pauloportfolio/api
     build:
       context: ../
@@ -80,10 +103,17 @@ services:
       - "5005:5005"
     volumes:
       - api_vol:/data/db
+    restart: always
     depends_on:
       - mongo1
     networks:
-      - mongo-cluster
+      - api-net
+#    healthcheck:
+#      test: echo 'db.runCommand("ping").ok' | mongo mongo:9242/test --quiet
+#      interval: 20s
+#      timeout: 10s
+#      start_period: 10s
+#      retries: 3
     environment:
       # API MANAGE AUTOMATICALLY THE PROFILES:
       # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -

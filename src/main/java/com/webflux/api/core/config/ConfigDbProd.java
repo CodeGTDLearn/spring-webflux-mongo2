@@ -51,17 +51,25 @@ public class ConfigDbProd extends AbstractReactiveMongoConfiguration {
      ╚═══════════════════════════════╝
 */
     String connectionURI = "mongodb://"
-         + username + ":" + password + "@"
-         + "localhost" + ":" + port + "/"
+         + username + ":" + password +
+         "@" + primary + ":" + port + "/"
          + database
          + "?replicaSet=" + name
-         + "&authSource=" + authenticationDatabase
-//          + "&authMechanism=SCRAM-SHA-1"
-         ;
-    //    String xx = "mongodb://localhost:9042/" + database +
-    //         "?replicaSet=" + name+ "&authSource=" + authenticationDatabase;
+         + "&authSource=" + authenticationDatabase;
 
-    System.out.println("Connection --------------->  URI ---------------> :" + connectionURI);
+    String connectionURI2 = "mongodb://"
+         + username + ":" + password + "@"
+         + primary + ":" + port + ","
+         + username + ":" + password + "@"
+         + "node2" + ":" + "9142,"
+         + username + ":" + password + "@"
+         + "node3" + ":" + "9242/"
+         + database
+         + "?replicaSet=" + name
+         + "&authSource=" + authenticationDatabase;
+
+    System.out.println("Connection ------>  URI ------> :" + connectionURI);
+    System.out.println("Connection ------>  URI ------> :" + connectionURI2);
 
     return MongoClients.create(connectionURI);
   }
