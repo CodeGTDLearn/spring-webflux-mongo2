@@ -1,0 +1,16 @@
+version: "3.4"
+
+x-common-variables:
+  &env-vars
+  MONGO_AUTH_DB: admin
+  MONGO_INITDB_ROOT_USERNAME: root
+  MONGO_INITDB_ROOT_PASSWORD: root
+
+services:
+  api-test-db:
+    image: mongo:4.4.4
+    ports:
+      - 27017:27017
+    restart: always
+    environment:
+      *env-vars

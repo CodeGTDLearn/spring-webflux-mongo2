@@ -1,8 +1,8 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.annotations.ResourceTcContainerForTransactions;
-import com.webflux.api.core.config.testconfigs.TestCoreConfig;
+import com.webflux.api.core.config.annotations.ResourceConfig;
+import com.webflux.api.core.config.config.ReplicasetConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -56,10 +57,13 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
  ║    assim seu "importe" ja a iniciara, independente da anotacao  ║
  ╚═════════════════════════════════════════════════════════════════╝
 */
-@Import({TestCoreConfig.class})
+@Import({ReplicasetConfig.class})
 @Slf4j
-@ResourceTcContainerForTransactions
 @DisplayName("6.1 ResourceTransactionExcTest")
+@ResourceConfig
+@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-tc-rs")
+//@TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
@@ -73,7 +77,7 @@ public class ResourceTransactionExcTest {
   ║      B.2) DO NOT USE TEST-CONTAINER-DOCKER-COMPOSE-MODULE  ║
   ╚════════════════════════════════════════════════════════════╝*/
 
-  final String enabledTest = "true";
+  final static String enabledTest = "true";
 
   // MOCKED-SERVER: WEB-TEST-CLIENT(non-blocking client)'
   // SHOULD BE USED WITH 'TEST-CONTAINERS'
@@ -93,7 +97,9 @@ public class ResourceTransactionExcTest {
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
-//    startTcContainer();
+    System.clearProperty("runTest");
+    System.setProperty("runTest", enabledTest);
+
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
 
@@ -152,12 +158,12 @@ public class ResourceTransactionExcTest {
   }
 
   @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
+  @EnabledIf(expression =
+       "#{systemProperties[runTest] == 'true' " +
+            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
+       loadContext = true)
   @DisplayName("checkContentWithExc")
   public void checkContentWithExceptions() {
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
     var newTaskName = Faker.instance()
                            .name()
@@ -196,12 +202,12 @@ public class ResourceTransactionExcTest {
   }
 
   @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
+  @EnabledIf(expression =
+       "#{systemProperties[runTest] == 'true' " +
+            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
+       loadContext = true)
   @DisplayName("transactionsClassicExcTaskLessThree")
   public void transactionsClassicExcTaskLessThanThree() {
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
     var newTaskName = Faker.instance()
                            .name()
@@ -241,12 +247,12 @@ public class ResourceTransactionExcTest {
   }
 
   @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
+  @EnabledIf(expression =
+       "#{systemProperties[runTest] == 'true' " +
+            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
+       loadContext = true)
   @DisplayName("transactionsClassicExcTaskEmpty")
   public void transactionsClassicExcTaskEmpty() {
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
     var newTaskName = Faker.instance()
                            .name()
@@ -286,12 +292,12 @@ public class ResourceTransactionExcTest {
   }
 
   @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
+  @EnabledIf(expression =
+       "#{systemProperties[runTest] == 'true' " +
+            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
+       loadContext = true)
   @DisplayName("transactionsClassicExcProjectEmpty")
   public void transactionsClassicExcProjectEmpty() {
-
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
 
     var newTaskName = Faker.instance()
                            .name()

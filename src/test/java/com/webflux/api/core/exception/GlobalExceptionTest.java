@@ -1,31 +1,31 @@
 package com.webflux.api.core.exception;
 
-import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
-import com.webflux.api.modules.project.entity.Project;
-import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.ResourceTcCompose;
+import com.webflux.api.core.config.annotations.ResourceConfig;
+import com.webflux.api.core.config.config.DbUtilsConfig;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
+import com.webflux.api.modules.project.entity.Project;
+import com.webflux.api.modules.task.entity.Task;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.ERROR_PATH;
-import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.modules.project.core.routes.RoutesCrud.ERROR_PATH;
+import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
@@ -38,15 +38,16 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 //     - caso um erro aconteça em uma thread que não é a que operou a controller,
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
-@Import({TestDbUtilsConfig.class})
+@Import({DbUtilsConfig.class})
 @DisplayName("3.0 GlobalExceptionTest")
-@ResourceTcCompose
+@ResourceConfig
+@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-tc-comp")
+//@TcCompose
 public
 class GlobalExceptionTest {
 
-  // STATIC-@Container: one service for ALL tests -> SUPER FASTER
-  // NON-STATIC-@Container: one service for EACH test
-  @Container
+  //@Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getContainer();
 
   final String enabledTest = "true";

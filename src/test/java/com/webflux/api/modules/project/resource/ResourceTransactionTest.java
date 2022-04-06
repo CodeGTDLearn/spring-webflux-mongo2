@@ -1,8 +1,8 @@
 package com.webflux.api.modules.project.resource;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.annotations.ResourceTcContainerForTransactions;
-import com.webflux.api.core.config.testconfigs.TestCoreConfig;
+import com.webflux.api.core.config.annotations.ResourceConfig;
+import com.webflux.api.core.config.config.ReplicasetConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -47,26 +48,14 @@ import static org.springframework.http.HttpStatus.CREATED;
   ║ d) define @ContextConfiguration with 'static class Initializer'      ║
   ╚══════════════════════════════════════════════════════════════════════╝
 */
-@Import({TestCoreConfig.class})
+@Import({ReplicasetConfig.class})
 @Slf4j
 @DisplayName("6.0 ResourceTransactionTest")
-@ResourceTcContainerForTransactions
+@ResourceConfig
+@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-tc-rs")
+//@TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionTest {
-  /*
-╔════════════════════════════════════════════════════════════╗
-║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
-╠════════════════════════════════════════════════════════════╣
-║ a) TRANSACTIONS IN MONGO-DB DEPENDS ON THE REPLICASET      ║
-║    - MEANING: TRANSACTIONS ONLY WILL WORK WITH REPLICASET  ║
-║                                                            ║
-║ b) MongoDBContainer provides REPLICASET automatically      ║
-║    - MEANING:                                              ║
-║      B.1) TESTS MUST BE DONE WITH "MongoDBContainer"       ║
-║      B.2) DO NOT USE TEST-CONTAINER-DOCKER-COMPOSE-MODULE  ║
-╚════════════════════════════════════════════════════════════╝
-*/
-  // STATIC-@Container: one service for ALL tests -> SUPER FASTER
-  // NON-STATIC-@Container: one service for EACH test
 
   final String enabledTest = "true";
 
@@ -157,12 +146,8 @@ public class ResourceTransactionTest {
   @DisplayName("createProjectTransaction")
   public void createProjectTransaction() {
 
-    dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
-    dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
-
     var newTaskName = Faker.instance()
-                           .name()
-                           .firstName();
+                           .name().fullName();
 
     Project project = projectWithID("C",
                                     "2020-05-05",

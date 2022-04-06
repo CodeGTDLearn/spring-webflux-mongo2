@@ -26,24 +26,13 @@ services:
       - ../docker/mongo-data-db:/data/db
     environment:
       *env-vars
-    command: bash -c "
-        mongod --replSet docker-rs --port 27017
-        && sleep 5
-        && mongo --host mongo1:27017 --eval 'rs.initiate();'
-        && exit
-      "
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo mongo1:27017/api-db --quiet
-      interval: 20s
-      timeout: 10s
-      start_period: 10s
 
   api:
     container_name: api
     image: pauloportfolio/api
     build:
-      context: ../
-      dockerfile: ./docker/Dockerfile
+      context: ../..
+      dockerfile: Dockerfile
       args:
         JAR_FILE: target/*.jar
     ports:

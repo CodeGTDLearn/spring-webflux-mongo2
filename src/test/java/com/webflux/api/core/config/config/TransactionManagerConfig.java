@@ -1,4 +1,4 @@
-package com.webflux.api.core.config.testconfigs;
+package com.webflux.api.core.config.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 
 @TestConfiguration
-public class TransactionManagerTestConfig {
+public class TransactionManagerConfig {
 
   /*╔════════════════════════════════════════════════╗
     ║           TRANSACTION-MANAGER-BEAN             ║

@@ -3,7 +3,6 @@ package com.webflux.api.core.config.annotations;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.lang.annotation.Retention;
@@ -41,7 +40,5 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @TestPropertySource("classpath:application.yml")
-@ActiveProfiles("tcomp")// PROFILE FOR TEST ALL TESTS[EXCEPT TRANSACTIONS] (test-container-compose)
-//@TcCompose // ALLOW TEST-CONTAINER RUN ALL TESTS, EXCEPT TRANSACTIONS
-public @interface ResourceTcCompose {
+public @interface ResourceConfig {
 }

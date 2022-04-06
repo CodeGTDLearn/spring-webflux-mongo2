@@ -4,9 +4,9 @@ spring:
       secret: mysecret
   data:
     mongodb:
+      host: ${HOST_DB}
+      port: ${PORT_DB}
+      authentication-database: ${AUTH_DB}
       database: ${MONGO_INITDB_DATABASE}
-      host: ${HOST}
-      port: ${PORT}
       username: ${MONGO_INITDB_ROOT_USERNAME}
       password: ${MONGO_INITDB_ROOT_PASSWORD}
-      authentication-database: ${AUTH_MAN}

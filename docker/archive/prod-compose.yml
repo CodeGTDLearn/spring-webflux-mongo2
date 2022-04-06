@@ -94,8 +94,8 @@ services:
 #    container_name: api
     image: pauloportfolio/api
     build:
-      context: ../
-      dockerfile: ./docker/Dockerfile
+      context: ../..
+      dockerfile: Dockerfile
       args:
         JAR_FILE: target/*.jar
     ports:

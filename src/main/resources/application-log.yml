@@ -12,6 +12,8 @@ logging:
         cache: TRACE
         web: DEBUG
         data:
+          convert:
+            CustomConversions: ERROR
           mongodb:
             core:
               ReactiveMongoTemplates: DEBUG

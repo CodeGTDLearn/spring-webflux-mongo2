@@ -5,7 +5,6 @@ import com.webflux.api.modules.project.core.dto.ResultCount;
 import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.service.IServiceAggreg;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -23,7 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(TEMPL_ROOT_AGGREG)
 public class ResourceAggreg {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
+
   private final ProjectExceptionsThrower projectExceptionsThrower;
   IServiceAggreg serviceAggreg;
 

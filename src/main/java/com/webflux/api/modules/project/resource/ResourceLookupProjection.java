@@ -3,7 +3,6 @@ package com.webflux.api.modules.project.resource;
 import com.webflux.api.modules.project.core.dto.ResultProjectTasks;
 import com.webflux.api.modules.project.service.IServiceLookupProjection;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,7 +24,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(TEMPL_ROOT_LOOKUP)
 public class ResourceLookupProjection {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
+
 
   private final IServiceLookupProjection serviceLookupProjection;
 

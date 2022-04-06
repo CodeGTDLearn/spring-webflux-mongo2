@@ -2,18 +2,16 @@ package com.webflux.api.modules.task.service;
 
 import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.repo.ITaskRepo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service("taskService")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ServiceTask implements IServiceTask {
 
-
-  ITaskRepo taskRepo;
-
+  private final ITaskRepo taskRepo;
 
   @Override
   public Mono<Task> save(Task task) {

@@ -4,7 +4,6 @@ import com.webflux.api.modules.project.core.dto.ProjectDto;
 import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.service.IServiceProjection;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,7 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(TEMPL_ROOT_PROJECTION)
 public class ResourceProjection {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
+
   private final ProjectExceptionsThrower projectExceptionsThrower;
   IServiceProjection serviceProjection;
 

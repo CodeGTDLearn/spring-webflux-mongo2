@@ -4,7 +4,6 @@ import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceTempl;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,7 +23,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(TEMPL_ROOT)
 public class ResourceTempl {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
+
   private final ProjectExceptionsThrower projectExceptionsThrower;
   IServiceTempl serviceTempl;
 

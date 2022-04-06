@@ -1,34 +1,34 @@
 package com.webflux.api.modules.project.resource;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.testconfigs.TestDbUtilsConfig;
+import com.webflux.api.core.config.annotations.ResourceConfig;
+import com.webflux.api.core.config.config.DbUtilsConfig;
+import com.webflux.api.core.config.databuilders.ProjectChildBuilder;
+import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
+import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.entity.ProjectChild;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
-import com.webflux.api.core.config.annotations.ResourceTcCompose;
-import com.webflux.api.core.config.databuilders.ProjectChildBuilder;
-import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
-import com.webflux.api.core.config.utils.TestDbUtils;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.webflux.api.modules.project.core.routes.template.RoutesChildArray.*;
 import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID;
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.modules.project.core.routes.template.RoutesChildArray.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -37,14 +37,15 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({TestDbUtilsConfig.class})
+@Import({DbUtilsConfig.class})
 @DisplayName("4.2 ResourceChildArrayTest")
-@ResourceTcCompose
+@ResourceConfig
+@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-tc-comp")
+//@TcCompose
 public class ResourceChildArrayTest {
 
-  // STATIC-@Container: one service for ALL tests -> SUPER FASTER
-  // NON-STATIC-@Container: one service for EACH test
-  @Container
+  //@Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getContainer();
   final String enabledTest = "true";
 

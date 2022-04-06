@@ -20,19 +20,19 @@ import static java.lang.System.setProperty;
   ╚════════════════════════════════════════════════════════════╝*/
 public class TcContainerConfig implements Extension {
 
-  private final static String IMAGE = "mongo:4.4.2";
-  private final static String URI = "spring.data.mongodb.uri";
+  private final static String IMAGE = "mongo:4.4.4";
+  private final static String URI_TEST_APPLICATION_PROPERTY = "spring.data.mongodb.uri";
 
   /*╔════════════════════════════════════════════════╗
     ║            TEST-CONTAINER-STATIC               ║
     ╠════════════════════════════════════════════════╣
     ║ A) STATIC:                                     ║
-    ║    -> One service/container for the TEST-CLASS ║
-    ║    -> SUPER FASTER                             ║
+    ║ -> One service/container for each TEST-CLASS   ║
+    ║ -> SUPER FASTER                                ║
     ║                                                ║
     ║ B) NON-STATIC:                                 ║
-    ║    -> One service/container for EACH TEST      ║
-    ║    -> SLOW                                     ║
+    ║ -> One service/container for 'EACH' TEST-METHOD║
+    ║ -> SLOW                                        ║
     ╚════════════════════════════════════════════════╝*/
   private static final MongoDBContainer CONTAINER = new MongoDBContainer(
        DockerImageName.parse(IMAGE));
@@ -51,9 +51,10 @@ public class TcContainerConfig implements Extension {
   }
 
   public static void startTcContainer() {
+
     CONTAINER.isHealthy();
     CONTAINER.start();
-    setProperty(URI, CONTAINER.getReplicaSetUrl());
+    setProperty(URI_TEST_APPLICATION_PROPERTY, CONTAINER.getReplicaSetUrl());
     globalContainerMessage(getTcContainer(), "container-start");
     globalContainerMessage(getTcContainer(), "container-state");
   }
@@ -68,6 +69,7 @@ public class TcContainerConfig implements Extension {
 
 
   public static void closeTcContainer() {
+
     setReuseTcContainer(false);
     globalContainerMessage(getTcContainer(), "container-end");
     if (! CONTAINER.isShouldBeReused()) CONTAINER.stop();

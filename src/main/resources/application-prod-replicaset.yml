@@ -4,13 +4,12 @@ spring:
       - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
       - org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration
 
-udemy:
+db:
   mongodb:
     replicaset:
-      name: ${RS_NAME}
+      root_uri: ${RS_ROOT_URI}
+      db: ${RS_DB}
+      rs_name: ${RS_NAME}
+      auth_db: ${RS_AUTH}
       username: ${RS_USERNAME}
       password: ${RS_PASSWORD}
-      database: ${RS_DB}
-      primary: ${RS_PRIMARY}
-      port: ${RS_PORT}
-      authentication-database: ${RS_AUTH}

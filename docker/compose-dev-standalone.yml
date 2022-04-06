@@ -3,12 +3,12 @@ version: "3.4"
 x-common-variables:
   &env-vars
   PORT_API: 8080
-  MONGO_INITDB_DATABASE: api-db
-  HOST: mongo1
-  PORT: 27017
+  HOST_DB: mongo1
+  PORT_DB: 27017
+  AUTH_DB: admin
+  MONGO_INITDB_DATABASE: dev-std-db
   MONGO_INITDB_ROOT_USERNAME: root
   MONGO_INITDB_ROOT_PASSWORD: root
-  AUTH_MAN: admin
 
 networks:
   api-net:
@@ -26,6 +26,13 @@ services:
       - ../docker/mongo-data-db:/data/db
     environment:
       *env-vars
+    healthcheck:
+      test: [ 'CMD', 'mongo', '-u', 'root', '-p', 'root', '--port', '27017' ]
+      interval: 20s
+      timeout: 10s
+      start_period: 5s
+      retries: 5
+
 
   api:
     container_name: api

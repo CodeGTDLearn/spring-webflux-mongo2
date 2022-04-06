@@ -4,8 +4,8 @@ import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyE
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVersionException;
 import com.webflux.api.modules.project.core.exceptions.types.UpdateSimpleException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 @Component("projectExceptionsThrower")
 @Getter
 @Setter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProjectExceptionsThrower {
 
   private ProjectExceptionsCustomAttributes projectExceptionsCustomAttributes;

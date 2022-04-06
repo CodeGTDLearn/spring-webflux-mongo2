@@ -2,9 +2,8 @@ package com.webflux.api.modules.task.resource;
 
 import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,14 +19,12 @@ import static org.springframework.http.HttpStatus.OK;
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(TASK_ROOT)
 public class TaskResource {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
-
   @Autowired
-  IServiceTask taskService;
+  private final IServiceTask taskService;
 
   @PostMapping(TASK_CREATE)
   @ResponseStatus(CREATED)

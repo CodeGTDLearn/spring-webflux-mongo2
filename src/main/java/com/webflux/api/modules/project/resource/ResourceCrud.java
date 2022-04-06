@@ -6,7 +6,6 @@ import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
@@ -29,7 +28,6 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 public class ResourceCrud {
 
-  private final MediaType JSON = MediaType.APPLICATION_JSON;
   private final ProjectExceptionsThrower projectExceptionsThrower;
   private final IServiceCrud serviceCrud;
 
