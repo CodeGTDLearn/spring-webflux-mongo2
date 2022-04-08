@@ -3,7 +3,8 @@ server:
 
 spring:
   profiles:
-    active: dev-std
+    active: production
     group:
-      dev-std: dev-standalone, log
-      prod-rs: prod-replicaset, log
+      development-replicaset: development-rs1, log
+      development-standalone: development-std, log
+      production: production-rs3, log

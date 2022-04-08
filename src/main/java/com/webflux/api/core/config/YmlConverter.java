@@ -12,8 +12,8 @@ import java.util.Properties;
 /*╔══════════════════════════════════════════════════════════════╗
   ║                     YAML-FILE-CONVERTER                      ║
   ╠══════════════════════════════════════════════════════════════╣
-  ║ APPLICATION.YML "MUST HAVE" THIS 'YAML-FILE-CONVERTER'       ║
-  ║ APPLICATION.PROPERTIES "NO NEED" THIS 'YAML-FILE-CONVERTER'  ║
+  ║ APPLICATION.YML "MUST HAVE" THIS 'YAML-FILE-CONVERSION'      ║
+  ║ APPLICATION.PROPERTIES "NO NEED" CONVERSION                  ║
   ║ Source: https://www.baeldung.com/spring-yaml-propertysource  ║
   ╚══════════════════════════════════════════════════════════════╝*/
 public class YmlConverter implements PropertySourceFactory {

@@ -2,7 +2,7 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
-  RS_ROOT_URI: mongodb://mongo1:9042,mongo2:9142,mongo3:9242
+  RS_ROOT_URI: mongodb://mongo-prod1:9042,mongo-prod2:9142,mongo-prod3:9242
   RS_DB: prod-db
   RS_NAME: docker-rs
   RS_AUTH: admin
@@ -19,7 +19,7 @@ networks:
 
 services:
   mongo1:
-    container_name: mongo1
+    container_name: mongo-prod1
     image: mongo:4.4.4
     restart: always
     command: mongod --replSet docker-rs --port 9042
@@ -31,17 +31,9 @@ services:
       - ~/mongors/data1:/data/db
     depends_on:
       - mongo2
-    healthcheck:
-#      test: [ 'CMD', 'mongo', '-u', 'prod-rs', '-p', 'prod-rs', '--port', '9042' ]
-      test: mongo --user=$$RS_USERNAME --password=$$RS_PASSWORD --port=9042
-#      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9042/test --quiet
-      interval: 20s
-      timeout: 10s
-      start_period: 5s
-      retries: 5
 
   mongo2:
-    container_name: mongo2
+    container_name: mongo-prod2
     image: mongo:4.4.4
     restart: always
     command: mongod --replSet docker-rs --port 9142
@@ -53,17 +45,9 @@ services:
       - ~/mongors/data2:/data/db
     depends_on:
       - mongo3
-    healthcheck:
-#      test: [ 'CMD', 'mongo', '-u', 'prod-rs', '-p', 'prod-rs', '--port', '9142' ]
-      test: mongo --user=$$RS_USERNAME --password=$$RS_PASSWORD --port=9142
-#      test: echo 'db.runCommand("ping").ok' | mongo mongo2:9142/test --quiet
-      interval: 20s
-      timeout: 10s
-      start_period: 5s
-      retries: 5
 
   mongo3:
-    container_name: mongo3
+    container_name: mongo-prod3
     image: mongo:4.4.4
     restart: always
     ports:
@@ -73,14 +57,6 @@ services:
       - api_net
     volumes:
       - ~/mongors/data3:/data/db
-    healthcheck:
-#      test: [ 'CMD', 'mongo', '-u', 'prod-rs', '-p', 'prod-rs', '--port', '9242' ]
-      test: mongo --user=$$RS_USERNAME --password=$$RS_PASSWORD --port=9242
-#      test: echo 'db.runCommand("ping").ok' | mongo mongo3:9242/test --quiet
-      interval: 20s
-      timeout: 10s
-      start_period: 5s
-      retries: 5
 
   api:
     container_name: api

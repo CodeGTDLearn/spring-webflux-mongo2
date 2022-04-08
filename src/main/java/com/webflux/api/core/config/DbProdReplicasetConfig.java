@@ -22,8 +22,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Setter
 @Getter
 // =================================================================================================
-
-@Profile("prod-rs")
+@Profile("production")
 @Import({DbTransactionManagerConfig.class})
 @Slf4j
 @Configuration
@@ -42,22 +41,22 @@ public class DbProdReplicasetConfig extends AbstractReactiveMongoConfiguration {
 
   @Override
   public MongoClient reactiveMongoClient() {
-    /*
-         ╔═══════════════════════════════╗
-         ║    REPLICASET-MONGO-DB URL    ║
-         ╚═══════════════════════════════╝
-    */
-    //"mongodb://mongo1:9042,mongo2:9142,mongo3:9242/api-db?replicaSet=docker-rs&authSource=admin"
+    /*╔════════════════════════════════════════════════╗
+      ║ REPLICASET-THREE-NODES-MONGO-DB PRODUCTION URL ║
+      ╠════════════════════════════════════════════════╩═════╗
+      ║ mongodb://mongo1:9042,mongo2:9142,mongo3:9242/api-db ║
+      ║           ?replicaSet=docker-rs&authSource=admin     ║
+      ╚══════════════════════════════════════════════════════╝*/
 
-    final String appPropertiesDbConnection =
-         rootUri + "/" +
-              db + "?" +
-              "replicaSet=" + rsName +
+    final String appDbConnection =
+         rootUri +
+              "/" + db +
+              "?replicaSet=" + rsName +
               "&authSource=" + authDb;
 
-    System.out.println("Connection Replicaset ---> " + appPropertiesDbConnection);
+    System.out.println("Connection Replicaset ---> " + appDbConnection);
 
-    return MongoClients.create(appPropertiesDbConnection);
+    return MongoClients.create(appDbConnection);
   }
 
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
@@ -17,41 +18,42 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Getter+Setter are CRUCIAL for PropertySource + ConfigurationProperties works properly
 @PropertySource(value = "classpath:application.yml", factory = YmlConverter.class)
-@ConfigurationProperties(prefix = "spring.data.mongodb")
+@ConfigurationProperties(prefix = "db.mongodb.replicaset")
 @Setter
 @Getter
 // =================================================================================================
-@Profile("development-standalone")
+@Profile("development-replicaset")
+@Import({DbTransactionManagerConfig.class})
 @Slf4j
 @Configuration
 @EnableReactiveMongoRepositories(
      basePackages = {
           "com.webflux.api.modules.project.repo",
           "com.webflux.api.modules.task.repo"})
-public class DbDevStandaloneConfig extends AbstractReactiveMongoConfiguration {
-  private String host;
-  private String port;
-  private String authenticationDatabase;
-  private String database;
+public class DbDevReplicasetConfig extends AbstractReactiveMongoConfiguration {
+
+  private String rootUri;
+  private String db;
+  private String rsName;
+  private String authDb;
   private String username;
   private String password;
 
   @Override
   public MongoClient reactiveMongoClient() {
-    /*╔════════════════════════════════╗
-      ║    STANDALONE-MONGO-DB  URL    ║
-      ╠════════════════════════════════╩═══════════════════════════╗
-      ║ mongodb://user:password@host:port/database?authSource=auth ║
-      ╚════════════════════════════════════════════════════════════╝*/
-    String appDbConnection =
-         "mongodb://" +
-              username + ":" + password +
-              "@" + host + ":" + port +
-              "/" + database +
-              "?authSource=" + authenticationDatabase;
+/*╔═══════════════════════════════════════════════════╗
+  ║  REPLICASET-SINGLE-NODE-MONGO-DB DEVELOPMENT URL  ║
+  ╠═══════════════════════════════════════════════════╩═════════════════╗
+  ║ mongodb://myservice-mongodb:27017/                                  ║
+  ║ ?connect=direct&replicaSet=singleNodeReplSet&readPreference=primary ║
+  ╚═════════════════════════════════════════════════════════════════════╝*/
+    final String appDbConnection =
+         rootUri +
+              "/?connect=direct" +
+              "&replicaSet=" + rsName +
+              "&readPreference=primary";
 
-
-    System.out.println("Connection Standalone ---> " + appDbConnection);
+    System.out.println("Connect DB Replicaset-Single-Node ---> " + appDbConnection);
 
     return MongoClients.create(appDbConnection);
   }
@@ -60,6 +62,6 @@ public class DbDevStandaloneConfig extends AbstractReactiveMongoConfiguration {
   @Override
   protected String getDatabaseName() {
 
-    return database;
+    return db;
   }
 }

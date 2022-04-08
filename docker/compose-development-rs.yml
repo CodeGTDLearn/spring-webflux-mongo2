@@ -2,37 +2,40 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
+  RS_ROOT_URI: mongodb://mongo-dev-rs:27017
+  RS_DB: dev-rs-db
+  RS_NAME: devSingleNodeRs
+  RS_AUTH: admin
+  RS_USERNAME: dev-rs
+  RS_PASSWORD: dev-rs
   PORT_API: 8080
-  HOST_DB: mongo1
-  PORT_DB: 27017
-  AUTH_DB: admin
-  MONGO_INITDB_DATABASE: dev-std-db
-  MONGO_INITDB_ROOT_USERNAME: root
-  MONGO_INITDB_ROOT_PASSWORD: root
 
 networks:
   api-net:
 
 services:
   mongo1:
-    container_name: mongo1
-    image: mongo:4.4.4
-    restart: always
+    container_name: mongo-dev-rs
+    image: mongo:latest
+    command: --replSet devSingleNodeRs
     ports:
       - "27017:27017"
     networks:
       - api-net
-    volumes:
-      - ../docker/mongo-data-db:/data/db
-    environment:
-      *env-vars
-    healthcheck:
-      test: [ 'CMD', 'mongo', '-u', 'root', '-p', 'root', '--port', '27017' ]
-      interval: 20s
-      timeout: 10s
-      start_period: 5s
-      retries: 5
 
+  replicaset-setup:
+    container_name: replicaset-setup
+    image: mongo:latest
+    command: bash -c "
+      sleep 5 &&
+      mongo --host mongo-dev-rs --port 27017 --eval \"rs.initiate()\" &&
+      sleep 2 &&
+      mongo --host mongo-dev-rs --port 27017 --eval \"rs.status()\" &&
+      sleep infinity"
+    depends_on:
+      - mongo1
+    networks:
+      - api-net
 
   api:
     container_name: api
@@ -48,13 +51,10 @@ services:
     volumes:
       - ../docker/mongo-data-db:/data/db
     depends_on:
-      - mongo1
+      - replicaset-setup
     networks:
       - api-net
     environment:
-      # API MANAGE AUTOMATICALLY THE PROFILES:
-      # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -
-      #      PROFILE: dev
       PORT_DEBUG: 5005
       <<: *env-vars
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
