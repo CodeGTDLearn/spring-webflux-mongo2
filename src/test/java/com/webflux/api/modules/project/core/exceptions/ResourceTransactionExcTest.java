@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -57,11 +56,15 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
  ║    assim seu "importe" ja a iniciara, independente da anotacao  ║
  ╚═════════════════════════════════════════════════════════════════╝
 */
+@Tags(value = {
+     @Tag("replicaset"),
+     @Tag("testcontainer")
+})
 @Import({ReplicasetConfig.class})
 @Slf4j
 @DisplayName("6.1 ResourceTransactionExcTest")
 @ResourceConfig
-@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-std")
 //@ActiveProfiles("test-dev-tc-rs")
 //@TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionExcTest {

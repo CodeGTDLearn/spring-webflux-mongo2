@@ -10,7 +10,6 @@ import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
@@ -38,14 +37,18 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 //     - caso um erro aconteça em uma thread que não é a que operou a controller,
 //     - o ControllerAdvice não vai ser notificado "
 //     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
+@Tags(value = {
+     @Tag("replicaset"),
+     @Tag("standalone"),
+     @Tag("testcontainer")
+})
 @Import({DbUtilsConfig.class})
 @DisplayName("3.0 GlobalExceptionTest")
 @ResourceConfig
-@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-std")
 //@ActiveProfiles("test-dev-tc-comp")
 //@TcCompose
-public
-class GlobalExceptionTest {
+public class GlobalExceptionTest {
 
   //@Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getContainer();

@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -48,11 +47,16 @@ import static org.springframework.http.HttpStatus.CREATED;
   ║ d) define @ContextConfiguration with 'static class Initializer'      ║
   ╚══════════════════════════════════════════════════════════════════════╝
 */
+@Tags(value = {
+     @Tag("replicaset"),
+     @Tag("standalone"),
+     @Tag("testcontainer")
+})
 @Import({ReplicasetConfig.class})
 @Slf4j
 @DisplayName("6.0 ResourceTransactionTest")
 @ResourceConfig
-@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-std")
 //@ActiveProfiles("test-dev-tc-rs")
 //@TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionTest {

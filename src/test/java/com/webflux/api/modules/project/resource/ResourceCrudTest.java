@@ -11,7 +11,6 @@ import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
@@ -32,10 +31,15 @@ import static java.util.List.of;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.*;
 
+@Tags(value = {
+     @Tag("replicaset"),
+     @Tag("standalone"),
+     @Tag("testcontainer")
+})
 @Import({DbUtilsConfig.class})
 @DisplayName("1.0 ResourceCrudTest")
 @ResourceConfig
-@ActiveProfiles("test-dev-std")
+//@ActiveProfiles("test-dev-std")
 //@ActiveProfiles("test-dev-tc-comp")
 //@TcCompose
 public class ResourceCrudTest {

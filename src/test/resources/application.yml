@@ -1,10 +1,11 @@
 spring:
   profiles:
+    active: test-dev-tc-rs
     group:
       # ALLOW Transactions - REPLICASET
       # Testcontainer: ContainerModule + ComposeModule
-      test-dev-tc-rs: log, dev-tc-container
+      test-dev-tc-rs: log, development-tc-container
 
       # NOT ALLOW Transactions - STAND-ALONE
-      test-dev-std: log, dev-standalone
-      test-dev-tc-comp: log, dev-tc-compose # Testcontainer-ComposeModule
+      test-dev-std: log, development-std
+      test-dev-tc-comp: log, development-tc-compose # Testcontainer-ComposeModule
