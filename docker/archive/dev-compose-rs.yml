@@ -19,11 +19,11 @@ services:
     image: mongo:4.4.4
     restart: always
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "docker-rs", "--port", "9042" ]
-#    command: >-
-#      bash -c "mongod --replSet docker-rs --port 9042;\
-#        sleep 5;\
-#        chmod +x /scripts/rs-init.sh;\
-#        /scripts/rs-init.sh"
+    #    command: >-
+    #      bash -c "mongod --replSet docker-rs --port 9042;\
+    #        sleep 5;\
+    #        chmod +x /scripts/rs-init.sh;\
+    #        /scripts/rs-init.sh"
     ports:
       - "9042:9042"
     networks:
@@ -32,20 +32,20 @@ services:
       - ~/mongors/data1:/data/db
     environment:
       *env-vars
-#    healthcheck:
-#      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9042/api-db --quiet
-#      interval: 20s
-#      timeout: 10s
-#      start_period: 10s
+    #    healthcheck:
+    #      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9042/api-db --quiet
+    #      interval: 20s
+    #      timeout: 10s
+    #      start_period: 10s
     networks:
       - api-net
 
   mongo-setup:
     image: mongo:4.4.4
     command: [
-        "bash",
-        "-c",
-        "mongo --host mongo1:9042 --eval 'rs.initiate();' && exit"
+      "bash",
+      "-c",
+      "mongo --host mongo1:9042 --eval 'rs.initiate();' && exit"
     ]
     depends_on:
       - mongo1

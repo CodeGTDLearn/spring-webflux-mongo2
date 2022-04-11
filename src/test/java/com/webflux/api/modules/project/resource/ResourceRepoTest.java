@@ -1,7 +1,9 @@
 package com.webflux.api.modules.project.resource;
 
+import com.webflux.api.core.config.profiles.ProfileGeneral;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.DbUtilsConfig;
+import com.webflux.api.core.config.testcontainer.compose.TcCompose;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -39,12 +42,11 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({DbUtilsConfig.class})
 @DisplayName("2.0 ResourceRepoTest")
 @ResourceConfig
-//@ActiveProfiles("test-dev-std")
-//@ActiveProfiles("test-dev-tc-comp")
-//@TcCompose
+@ProfileGeneral
+@TcCompose
 public class ResourceRepoTest {
 
-  //@Container
+  @Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getContainer();
 
   final String enabledTest = "true";
@@ -65,10 +67,10 @@ public class ResourceRepoTest {
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
 
-//    globalComposeServiceContainerMessage(compose,
-//                                         compose.get,
-//                                         TC_COMPOSE_SERVICE_PORT
-//                                        );
+    //    globalComposeServiceContainerMessage(compose,
+    //                                         compose.get,
+    //                                         TC_COMPOSE_SERVICE_PORT
+    //                                        );
     globalBeforeAll();
     globalTestMessage(testInfo.getDisplayName(), "class-start");
     RestAssuredWebTestClient.reset();

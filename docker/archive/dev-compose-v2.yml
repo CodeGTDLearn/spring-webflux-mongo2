@@ -27,10 +27,10 @@ services:
     environment:
       *env-vars
     command: bash -c "
-        mongod --replSet docker-rs --port 27017
-        && sleep 5
-        && mongo --host mongo1:27017 --eval 'rs.initiate();'
-        && exit
+      mongod --replSet docker-rs --port 27017
+      && sleep 5
+      && mongo --host mongo1:27017 --eval 'rs.initiate();'
+      && exit
       "
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo mongo1:27017/api-db --quiet

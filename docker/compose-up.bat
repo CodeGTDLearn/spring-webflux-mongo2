@@ -20,8 +20,8 @@ set parameter1=%1
 echo ===========================================================================
 echo       4) DOCKER-COMPOSE: Uping the Compose-Service(s): %parameter1%
 echo ===========================================================================
-if %parameter1%==devrs  (docker-compose -f compose-development-rs.yml up --build --force-recreate)
-if %parameter1%==devstd (docker-compose -f compose-development-std.yml up --build --force-recreate)
+if %parameter1%==devrs  (docker-compose -f compose-dev-replicaset.yml up --build --force-recreate)
+if %parameter1%==devstd (docker-compose -f compose-dev-standalone.yml up --build --force-recreate)
 if %parameter1%==prodrs (docker-compose -f compose-production.yml   up --build --force-recreate)
 
 echo ===========================================================================

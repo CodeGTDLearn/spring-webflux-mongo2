@@ -25,7 +25,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class ResourceChildArray {
 
 
-
   private final IServiceChildArray serviceChildArray;
 
   private final ProjectExceptionsThrower projectExceptionsThrower;

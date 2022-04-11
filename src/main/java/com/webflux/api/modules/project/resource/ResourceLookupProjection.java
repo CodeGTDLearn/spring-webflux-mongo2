@@ -25,7 +25,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class ResourceLookupProjection {
 
 
-
   private final IServiceLookupProjection serviceLookupProjection;
 
   @GetMapping(TEMPL_LOOKUP_PROJ)

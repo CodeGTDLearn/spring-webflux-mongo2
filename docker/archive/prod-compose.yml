@@ -41,7 +41,7 @@ services:
         sleep 5;\
         chmod +x /scripts/rs-init.sh;\
         /scripts/rs-init.sh"
-#    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && /scripts/rs-init.sh" ]
+    #    entrypoint: [ "bash", "-c", "chmod +x /scripts/rs-init.sh && /scripts/rs-init.sh" ]
     environment:
       *env-vars
     healthcheck:
@@ -91,7 +91,7 @@ services:
       start_period: 10s
 
   api:
-#    container_name: api
+    #    container_name: api
     image: pauloportfolio/api
     build:
       context: ../..
@@ -108,12 +108,12 @@ services:
       - mongo1
     networks:
       - api-net
-#    healthcheck:
-#      test: echo 'db.runCommand("ping").ok' | mongo mongo:9242/test --quiet
-#      interval: 20s
-#      timeout: 10s
-#      start_period: 10s
-#      retries: 3
+    #    healthcheck:
+    #      test: echo 'db.runCommand("ping").ok' | mongo mongo:9242/test --quiet
+    #      interval: 20s
+    #      timeout: 10s
+    #      start_period: 10s
+    #      retries: 3
     environment:
       # API MANAGE AUTOMATICALLY THE PROFILES:
       # A) PROFILES ARE MANAGED/ACTIVATED IN API-APPLICATION.YML -

@@ -16,10 +16,11 @@ public class TestUtils {
 
   @BeforeAll
   public static void globalBeforeAll() {
+
     requestSpecs();
     responseSpecs();
     blockhoundInstallWithSpecificAllowedCalls();
-//        blockhoundInstallWithAllAllowedCalls();
+    //        blockhoundInstallWithAllAllowedCalls();
   }
 
 
@@ -110,34 +111,34 @@ public class TestUtils {
   }
 
 
-    public static void globalComposeServiceContainerMessage(
-         DockerComposeContainer<?> compose,
-         String service,
-         Integer port) {
+  public static void globalComposeServiceContainerMessage(
+       DockerComposeContainer<?> compose,
+       String service,
+       Integer port) {
 
-      if (compose != null) {
-        System.out.printf(
+    if (compose != null) {
+      System.out.printf(
 
-             "╔═══════════════════════════════════════════════════════════════════════\n" +
-                  "║                           %s                        ║\n" +
-                  "║ --> Service: %s\n" +
-                  "║ --> Host: %s\n" +
-                  "║ --> Port: %s\n" +
-                  "║ --> Created: %s\n" +
-                  "║ --> Running: %s\n" +
-                  "╚═══════════════════════════════════════════════════════════════════════\n\n"
-             ,
-             "TC-CONTAINER-COMPOSE",
-             service,
-             compose.getServiceHost(service, port),
-             compose.getServicePort(service, port),
-             compose.getContainerByServiceName(service + "_1")
-                    .get()
-                    .isCreated(),
-             compose.getContainerByServiceName(service + "_1")
-                    .get()
-                    .isRunning()
-                         );
-      }
+           "╔═══════════════════════════════════════════════════════════════════════\n" +
+                "║                           %s                        ║\n" +
+                "║ --> Service: %s\n" +
+                "║ --> Host: %s\n" +
+                "║ --> Port: %s\n" +
+                "║ --> Created: %s\n" +
+                "║ --> Running: %s\n" +
+                "╚═══════════════════════════════════════════════════════════════════════\n\n"
+           ,
+           "TC-CONTAINER-COMPOSE",
+           service,
+           compose.getServiceHost(service, port),
+           compose.getServicePort(service, port),
+           compose.getContainerByServiceName(service + "_1")
+                  .get()
+                  .isCreated(),
+           compose.getContainerByServiceName(service + "_1")
+                  .get()
+                  .isRunning()
+                       );
     }
+  }
 }

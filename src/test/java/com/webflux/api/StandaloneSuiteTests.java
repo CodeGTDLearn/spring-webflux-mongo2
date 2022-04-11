@@ -1,9 +1,6 @@
 package com.webflux.api;
 
-import org.junit.platform.suite.api.IncludeTags;
-import org.junit.platform.suite.api.SelectPackages;
-import org.junit.platform.suite.api.Suite;
-import org.junit.platform.suite.api.SuiteDisplayName;
+import org.junit.platform.suite.api.*;
 
 @Suite
 @SuiteDisplayName("DockerCompose: StandaloneSuite")
@@ -14,5 +11,6 @@ import org.junit.platform.suite.api.SuiteDisplayName;
      "com.webflux.api.modules.task",
 })
 @IncludeTags({"standalone"})
+@ExcludeTags("no-standalone")
 public class StandaloneSuiteTests {
 }

@@ -1,8 +1,10 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
+import com.webflux.api.core.config.profiles.ProfileTransaction;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.ReplicasetConfig;
+import com.webflux.api.core.config.testcontainer.container.TcContainerReplicaset;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
@@ -34,6 +36,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /*
   ╔══════════════════════════════════════════════════════════════════════╗
@@ -58,15 +61,15 @@ import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 */
 @Tags(value = {
      @Tag("replicaset"),
+     @Tag("standalone"),
      @Tag("testcontainer")
 })
 @Import({ReplicasetConfig.class})
 @Slf4j
 @DisplayName("6.1 ResourceTransactionExcTest")
 @ResourceConfig
-//@ActiveProfiles("test-dev-std")
-//@ActiveProfiles("test-dev-tc-rs")
-//@TcContainerReplicaset // TEST TRANSACTIONS
+@ProfileTransaction
+@TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
@@ -100,6 +103,7 @@ public class ResourceTransactionExcTest {
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
+
     System.clearProperty("runTest");
     System.setProperty("runTest", enabledTest);
 
@@ -160,10 +164,11 @@ public class ResourceTransactionExcTest {
                               .toString(), "method-end");
   }
 
+  // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
   @Test
   @EnabledIf(expression =
        "#{systemProperties[runTest] == 'true' " +
-            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
+            "&& !environment.acceptsProfiles('test-dev-std')}",
        loadContext = true)
   @DisplayName("checkContentWithExc")
   public void checkContentWithExceptions() {
@@ -204,10 +209,11 @@ public class ResourceTransactionExcTest {
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
+  // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
   @Test
   @EnabledIf(expression =
        "#{systemProperties[runTest] == 'true' " +
-            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
+            "&& !environment.acceptsProfiles('test-dev-std')}",
        loadContext = true)
   @DisplayName("transactionsClassicExcTaskLessThree")
   public void transactionsClassicExcTaskLessThanThree() {
@@ -249,11 +255,10 @@ public class ResourceTransactionExcTest {
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
+  // STYLE 02: ExcludeTags in Suite
   @Test
-  @EnabledIf(expression =
-       "#{systemProperties[runTest] == 'true' " +
-            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
-       loadContext = true)
+  @Tag("no-standalone")
+  @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("transactionsClassicExcTaskEmpty")
   public void transactionsClassicExcTaskEmpty() {
 
@@ -294,11 +299,10 @@ public class ResourceTransactionExcTest {
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
   }
 
+  // STYLE 02: ExcludeTags in Suite
   @Test
-  @EnabledIf(expression =
-       "#{systemProperties[runTest] == 'true' " +
-            "&& environment.acceptsProfiles('test-dev-tc-rs')}",
-       loadContext = true)
+  @Tag("no-standalone")
+  @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("transactionsClassicExcProjectEmpty")
   public void transactionsClassicExcProjectEmpty() {
 
@@ -330,7 +334,8 @@ public class ResourceTransactionExcTest {
          .log()
          .everything()
 
-         .statusCode(NOT_ACCEPTABLE.value())
+//         .statusCode(NOT_ACCEPTABLE.value())
+         .statusCode(NOT_FOUND.value())
          .body(matchesJsonSchemaInClasspath(
               "contracts/transactions/transactionsClassicExcProjectEmpty.json"))
     ;

@@ -5,10 +5,10 @@ x-common-variables:
   PORT_API: 8080
   HOST_DB: mongo-dev-std
   PORT_DB: 27017
-  AUTH_DB: admin
   MONGO_INITDB_DATABASE: dev-std-db
   MONGO_INITDB_ROOT_USERNAME: root
   MONGO_INITDB_ROOT_PASSWORD: root
+  AUTH_DB: admin
 
 networks:
   api-net:

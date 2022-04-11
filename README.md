@@ -48,10 +48,10 @@
 
 4. Testcontainers:
     * Containers:
-      - Annotation (TcContainerConfig)
-        - EX.: ResourceTransactionExcTest 
-      - ContextConfiguration - initializers
-        - EX.: ResourceTransactionTest 
+        - Annotation (TcContainerConfig)
+            - EX.: ResourceTransactionExcTest
+        - ContextConfiguration - initializers
+            - EX.: ResourceTransactionTest
     * Compose - Annotation
 
 
@@ -109,13 +109,15 @@
 
 
 10. Exceptions:
-    1. Exceptions must be in  Controller/Resource:
-       1. Reason:
-          1. Como stream pode ser manipulado por diferentes grupos de thread,          caso um erro aconteça em uma thread que não é a que operou a controller,              o ControllerAdvice não vai ser notificado "
-          2. As stream can be handled by different thread groups, if an error happens on a thread other than the one that operated the controller, ControllerAdvice will not be notified "
-       2. Source:
-          1. [medium](https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3)
-          2. [Github](https://github.com/netshoes/blog-spring-reactive)
+    1. Exceptions must be in Controller/Resource:
+        1. Reason:
+            1. Como stream pode ser manipulado por diferentes grupos de thread, caso um erro aconteça em uma thread que
+               não é a que operou a controller, o ControllerAdvice não vai ser notificado "
+            2. As stream can be handled by different thread groups, if an error happens on a thread other than the one
+               that operated the controller, ControllerAdvice will not be notified "
+        2. Source:
+            1. [medium](https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3)
+            2. [Github](https://github.com/netshoes/blog-spring-reactive)
     2. Global
     3. Custom
         1. Importation/validation of properties:
@@ -127,13 +129,23 @@
 
 11. Tests - Junit 5:
     1. MultiThread/Parallel Test
-       1. Aborted: Because server-costs in CI/CD
-    2. RestAssured: 
-       1. RestAssuredWebTestClient:
-          1. Reactive RestAssured
-       2. JsonSchemaValidator
-          1. Validate Responses
+        1. Aborted: Because server-costs in CI/CD
+    2. RestAssured:
+        1. RestAssuredWebTestClient:
+            1. Reactive RestAssured
+        2. JsonSchemaValidator
+            1. Validate Responses
     3. Ordered tests (Junit 5.8.2)
     4. Suites
         1. [junit5-test-suites-examples](https://howtodoinjava.com/junit5/junit5-test-suites-examples/)
     5. Tags
+    6. System.setProperty:
+        1. Get environment.getActiveProfiles() for detect ReplicasetProfile
+    7. EnabledIfSystemProperty
+        1.
+        Source:  [junit5-enabledifsystempropert](https://self-learning-java-tutorial.blogspot.com/2021/07/junit5-enabledifsystemproperty.html)
+    8. Spring Expression Language (SpEL) expressions:
+        1. EnabledIf + SpEL
+            1. Sources:
+                1. [spring-5-enabledIf](https://www.baeldung.com/spring-5-enabledIf)
+                2. [junit-5-conditional-test-execution](https://www.baeldung.com/junit-5-conditional-test-execution)

@@ -1,7 +1,9 @@
 package com.webflux.api.modules.project.resource;
 
+import com.webflux.api.core.config.profiles.ProfileGeneral;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.DbUtilsConfig;
+import com.webflux.api.core.config.testcontainer.compose.TcCompose;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.junit.jupiter.Container;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
@@ -43,12 +46,11 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({DbUtilsConfig.class})
 @DisplayName("4.4 ResourceLookupProjectionTest")
 @ResourceConfig
-//@ActiveProfiles("test-dev-std")
-//@ActiveProfiles("test-dev-tc-comp")
-//@TcCompose
+@ProfileGeneral
+@TcCompose
 public class ResourceLookupProjectionTest {
 
-  //@Container
+  @Container
   private static final DockerComposeContainer<?> compose = new TcComposeConfig().getContainer();
   final String enabledTest = "true";
 

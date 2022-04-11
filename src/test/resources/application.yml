@@ -1,11 +1,12 @@
+# TESTS MUST BE DONE WITH TEST-CONTAINERS
+# EXCEPTIONALLY: STAND-ALONE OR REPLICASET-SINGLE-NODE SHOULD BE USED
 spring:
   profiles:
-    active: test-dev-tc-rs
     group:
-      # ALLOW Transactions - REPLICASET
-      # Testcontainer: ContainerModule + ComposeModule
-      test-dev-tc-rs: log, development-tc-container
+      # A) TRANSACTION-PROFILE(ALLOW General-MongoDB-Operation + Transactions):
+      test-development-dockercompose-singlenode-replicaset: log, dev-replicaset
+      test-development-testcontainer-containermodule-replicaset: log, dev-tc-container
 
-      # NOT ALLOW Transactions - STAND-ALONE
-      test-dev-std: log, development-std
-      test-dev-tc-comp: log, development-tc-compose # Testcontainer-ComposeModule
+      # B) GENERAL-PROFILE(ALLOW only General-MongoDB-Operation):
+      test-development-dockercompose-standalone-noreplicaset: log, dev-standalone
+      test-development-testcontainer-composemodule-noreplicaset: log, dev-tc-compose
