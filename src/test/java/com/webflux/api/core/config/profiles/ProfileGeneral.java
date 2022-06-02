@@ -36,8 +36,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
   ╚══════════════════════════════════════════════════════════╝*/
 @Retention(RUNTIME)
 @Target(TYPE)
-//@ActiveProfiles("test-development-testcontainer-composemodule-noreplicaset")
+@ActiveProfiles("test-development-testcontainer-composemodule-noreplicaset")
 //@ActiveProfiles("test-development-dockercompose-standalone-noreplicaset")
-@ActiveProfiles("test-development-dockercompose-singlenode-replicaset")
+//@ActiveProfiles("test-development-dockercompose-singlenode-replicaset")
 public @interface ProfileGeneral {
 }

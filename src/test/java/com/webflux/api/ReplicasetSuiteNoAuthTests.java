@@ -6,7 +6,7 @@ import org.junit.platform.suite.api.Suite;
 import org.junit.platform.suite.api.SuiteDisplayName;
 
 @Suite
-@SuiteDisplayName("DockerCompose: ReplicasetSuite")
+@SuiteDisplayName("DockerCompose: ReplicasetSuiteNoAuth")
 @SelectPackages({
      "com.webflux.api.modules.project.core.exceptions",
      "com.webflux.api.core.exceptions",
@@ -14,5 +14,5 @@ import org.junit.platform.suite.api.SuiteDisplayName;
      "com.webflux.api.modules.task",
 })
 @IncludeTags({"replicaset"})
-public class ReplicasetSuiteTests {
+public class ReplicasetSuiteNoAuthTests {
 }

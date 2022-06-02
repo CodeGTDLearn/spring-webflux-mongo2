@@ -16,7 +16,7 @@ networks:
 services:
   mongo1:
     container_name: mongo-dev-rs
-    image: mongo:latest
+    image: mongo:4.4.4
     command: --replSet devSingleNodeRs
     ports:
       - "27017:27017"
