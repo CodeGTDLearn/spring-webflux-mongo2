@@ -168,7 +168,9 @@ public class ResourceTransactionExcTest {
   @Test
   @EnabledIf(expression =
        "#{systemProperties[runTest] == 'true' " +
-            "&& !environment.acceptsProfiles('test-dev-std')}",
+            "&& !environment.acceptsProfiles('"+
+            "test-development-dockercompose-standalone-noreplicaset"+
+            "')}",
        loadContext = true)
   @DisplayName("checkContentWithExc")
   public void checkContentWithExceptions() {
@@ -213,7 +215,9 @@ public class ResourceTransactionExcTest {
   @Test
   @EnabledIf(expression =
        "#{systemProperties[runTest] == 'true' " +
-            "&& !environment.acceptsProfiles('test-dev-std')}",
+            "&& !environment.acceptsProfiles('"+
+            "test-development-dockercompose-standalone-noreplicaset"+
+            "')}",
        loadContext = true)
   @DisplayName("transactionsClassicExcTaskLessThree")
   public void transactionsClassicExcTaskLessThanThree() {

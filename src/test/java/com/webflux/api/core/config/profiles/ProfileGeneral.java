@@ -36,8 +36,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
   ╚══════════════════════════════════════════════════════════╝*/
 @Retention(RUNTIME)
 @Target(TYPE)
-@ActiveProfiles("test-development-testcontainer-composemodule-noreplicaset")
-//@ActiveProfiles("test-development-dockercompose-standalone-noreplicaset")
+//https://stackoverflow.com/questions/52100384/conditionally-set-activeprofile-before-database-test-in-spring-boot
+//@ActiveProfiles("test-development-testcontainer-composemodule-noreplicaset")
+@ActiveProfiles("test-development-dockercompose-standalone-noreplicaset")
 //@ActiveProfiles("test-development-dockercompose-singlenode-replicaset")
 public @interface ProfileGeneral {
 }
