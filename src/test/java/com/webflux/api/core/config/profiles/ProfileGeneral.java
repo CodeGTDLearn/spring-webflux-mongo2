@@ -1,7 +1,5 @@
 package com.webflux.api.core.config.profiles;
 
-import org.springframework.test.context.ActiveProfiles;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -36,9 +34,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
   ╚══════════════════════════════════════════════════════════╝*/
 @Retention(RUNTIME)
 @Target(TYPE)
-//https://stackoverflow.com/questions/52100384/conditionally-set-activeprofile-before-database-test-in-spring-boot
-//@ActiveProfiles("test-development-testcontainer-composemodule-noreplicaset")
-@ActiveProfiles("test-development-dockercompose-standalone-noreplicaset")
-//@ActiveProfiles("test-development-dockercompose-singlenode-replicaset")
+//@ActiveProfiles("testcontainer-compose-noreplicaset")
+//@ActiveProfiles("test-dockercompose-standalone")
+//@ActiveProfiles("test-dockercompose-singlenode-replicaset")
 public @interface ProfileGeneral {
 }

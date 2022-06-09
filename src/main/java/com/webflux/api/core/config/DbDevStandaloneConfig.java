@@ -21,7 +21,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Setter
 @Getter
 // =================================================================================================
-@Profile("development-standalone")
+@Profile("std-alone")
 @Slf4j
 @Configuration
 @EnableReactiveMongoRepositories(

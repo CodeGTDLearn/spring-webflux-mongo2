@@ -2,11 +2,12 @@
 # EXCEPTIONALLY: STAND-ALONE OR REPLICASET-SINGLE-NODE SHOULD BE USED
 spring:
   profiles:
+    active: test-rs1-noauth
     group:
       # A) TRANSACTION-PROFILE(ALLOW General-MongoDB-Operation + Transactions):
-      test-development-dockercompose-singlenode-replicaset: log, dev-replicaset
-      test-development-testcontainer-containermodule-replicaset: log, dev-tc-container
+      test-rs1-noauth: log, test-replicaset
+      testcontainer-replicaset: log, testcontainer
 
       # B) GENERAL-PROFILE(ALLOW only General-MongoDB-Operation):
-      test-development-dockercompose-standalone-noreplicaset: log, dev-standalone
-      test-development-testcontainer-composemodule-noreplicaset: log, dev-tc-compose
+      test-std-alone: log, test-standalone
+      testcontainer-noreplicaset: log, testcontainer-compose

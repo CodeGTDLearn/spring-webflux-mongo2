@@ -3,7 +3,7 @@ package com.webflux.api.modules.project.resource;
 import com.github.javafaker.Faker;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.ReplicasetConfig;
-import com.webflux.api.core.config.profiles.MyActiveProfilesResolver;
+import com.webflux.api.core.config.profiles.ProfileTransaction;
 import com.webflux.api.core.config.testcontainer.container.TcContainerReplicaset;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -58,8 +57,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Slf4j
 @DisplayName("6.0 ResourceTransactionTest")
 @ResourceConfig
-//@ProfileTransaction
-@ActiveProfiles(resolver = MyActiveProfilesResolver.class)
+@ProfileTransaction
 @TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionTest {
 
@@ -151,7 +149,7 @@ public class ResourceTransactionTest {
   @EnabledIf(expression =
        "#{systemProperties[runTest] == 'true' " +
             "&& !environment.acceptsProfiles('"+
-            "test-development-dockercompose-standalone-noreplicaset"+
+            "test-std-alone"+
             "')}",
        loadContext = true)
   @DisplayName("createProjectTransaction")

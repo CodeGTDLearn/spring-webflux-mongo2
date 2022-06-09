@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 
 
-@Profile("prod-rs")
+@Profile("rs3-noauth")
 @Slf4j
 @Configuration
 public class DbTransactionManagerConfig {

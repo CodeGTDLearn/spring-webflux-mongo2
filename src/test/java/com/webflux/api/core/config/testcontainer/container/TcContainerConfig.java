@@ -91,7 +91,6 @@ public class TcContainerConfig implements Extension {
   }
 
   public static MongoDBContainer getTcContainer() {
-
     return CONTAINER;
   }
 }

@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Setter
 @Getter
 // =================================================================================================
-@Profile("production")
+@Profile("rs3-noauth")
 @Import({DbTransactionManagerConfig.class})
 @Slf4j
 @Configuration
