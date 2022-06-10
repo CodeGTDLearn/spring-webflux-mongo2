@@ -62,7 +62,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Tags(value = {
      @Tag("replicaset"),
      @Tag("standalone"),
-     @Tag("testcontainer")
+     @Tag("testcontainer"),
+     @Tag("ddeletar")
 })
 @Import({ReplicasetConfig.class})
 @Slf4j

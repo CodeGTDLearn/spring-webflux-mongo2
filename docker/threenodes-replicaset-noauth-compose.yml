@@ -3,30 +3,28 @@ version: "3.4"
 x-common-variables:
   &env-vars
   RS_ROOT_URI: mongodb://mongo-prod1:9042,mongo-prod2:9142,mongo-prod3:9242
-  RS_DB: prod-db
-  RS_NAME: docker-rs
+  RS_DB: rs-db
+  RS_NAME: devThreeNodesRs
   RS_AUTH: admin
-  RS_USERNAME: prod-rs
-  RS_PASSWORD: prod-rs
+  RS_USERNAME: dev-rs
+  RS_PASSWORD: dev-rs
   PORT_API: 8080
-  PORT_DEBUG: 5005
 
 volumes:
-  api_vol:
+  api-vol:
 
 networks:
-  api_net:
+  api-net:
 
 services:
   mongo1:
     container_name: mongo-prod1
     image: mongo:4.4.4
-    restart: always
-    command: mongod --replSet docker-rs --port 9042
+    command: --replSet devThreeNodesRs --port 9042
     ports:
       - "9042:9042"
     networks:
-      - api_net
+      - api-net
     volumes:
       - ~/mongors/data1:/data/db
     depends_on:
@@ -36,11 +34,11 @@ services:
     container_name: mongo-prod2
     image: mongo:4.4.4
     restart: always
-    command: mongod --replSet docker-rs --port 9142
+    command: mongod --replSet devThreeNodesRs --port 9142
     ports:
       - "9142:9142"
     networks:
-      - api_net
+      - api-net
     volumes:
       - ~/mongors/data2:/data/db
     depends_on:
@@ -52,9 +50,9 @@ services:
     restart: always
     ports:
       - "9242:9242"
-    command: mongod --replSet docker-rs --port 9242
+    command: mongod --replSet devThreeNodesRs --port 9242
     networks:
-      - api_net
+      - api-net
     volumes:
       - ~/mongors/data3:/data/db
 
@@ -63,18 +61,19 @@ services:
     image: pauloportfolio/api
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: ./docker/Dockerfile
       args:
         JAR_FILE: target/*.jar
     ports:
       - "8080:8080"
       - "5005:5005"
     volumes:
-      - api_vol:/data/db
-    networks:
-      - api_net
+      - api-vol
     depends_on:
       - mongo1
+    networks:
+      - api-net
     environment:
+      PORT_DEBUG: 5005
       <<: *env-vars
       DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m

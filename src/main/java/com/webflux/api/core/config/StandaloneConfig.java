@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
@@ -18,51 +17,49 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Getter+Setter are CRUCIAL for PropertySource + ConfigurationProperties works properly
 @PropertySource(value = "classpath:application.yml", factory = YmlConverter.class)
-@ConfigurationProperties(prefix = "db.mongodb.replicaset")
+@ConfigurationProperties(prefix = "spring.data.mongodb")
 @Setter
 @Getter
 // =================================================================================================
-@Profile("rs3-noauth")
-@Import({DbTransactionManagerConfig.class})
+@Profile("std-alone")
 @Slf4j
 @Configuration
 @EnableReactiveMongoRepositories(
      basePackages = {
           "com.webflux.api.modules.project.repo",
           "com.webflux.api.modules.task.repo"})
-public class DbProdReplicasetConfig extends AbstractReactiveMongoConfiguration {
-
-  private String rootUri;
-  private String db;
-  private String rsName;
-  private String authDb;
+public class StandaloneConfig extends AbstractReactiveMongoConfiguration {
+  private String host;
+  private String port;
+  private String authenticationDatabase;
+  private String database;
   private String username;
   private String password;
 
   @Override
   public MongoClient reactiveMongoClient() {
-    /*╔════════════════════════════════════════════════╗
-      ║ REPLICASET-THREE-NODES-MONGO-DB PRODUCTION URL ║
-      ╠════════════════════════════════════════════════╩═════╗
-      ║ mongodb://mongo1:9042,mongo2:9142,mongo3:9242/api-db ║
-      ║           ?replicaSet=docker-rs&authSource=admin     ║
-      ╚══════════════════════════════════════════════════════╝*/
+    /*╔════════════════════════════════╗
+      ║    STANDALONE-MONGO-DB  URL    ║
+      ╠════════════════════════════════╩═══════════════════════════╗
+      ║ mongodb://user:password@host:port/database?authSource=auth ║
+      ╚════════════════════════════════════════════════════════════╝*/
+    String connection =
+         "mongodb://" +
+              username + ":" + password +
+              "@" + host + ":" + port +
+              "/" + database +
+              "?authSource=" + authenticationDatabase;
 
-    final String appDbConnection =
-         rootUri +
-              "/" + db +
-              "?replicaSet=" + rsName +
-              "&authSource=" + authDb;
 
-    System.out.println("Connection Replicaset ---> " + appDbConnection);
+    System.out.println("Connection Standalone ---> " + connection);
 
-    return MongoClients.create(appDbConnection);
+    return MongoClients.create(connection);
   }
 
 
   @Override
   protected String getDatabaseName() {
 
-    return db;
+    return database;
   }
 }

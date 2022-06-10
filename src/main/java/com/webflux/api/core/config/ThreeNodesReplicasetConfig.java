@@ -22,15 +22,15 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Setter
 @Getter
 // =================================================================================================
-@Profile("rs1-noauth")
-@Import({DbTransactionManagerConfig.class})
+@Profile("rs3-noauth")
+@Import({TransactionManagerConfig.class})
 @Slf4j
 @Configuration
 @EnableReactiveMongoRepositories(
      basePackages = {
           "com.webflux.api.modules.project.repo",
           "com.webflux.api.modules.task.repo"})
-public class DbDevReplicasetConfig extends AbstractReactiveMongoConfiguration {
+public class ThreeNodesReplicasetConfig extends AbstractReactiveMongoConfiguration {
 
   private String rootUri;
   private String db;
@@ -39,23 +39,25 @@ public class DbDevReplicasetConfig extends AbstractReactiveMongoConfiguration {
   private String username;
   private String password;
 
+
   @Override
   public MongoClient reactiveMongoClient() {
-/*╔═══════════════════════════════════════════════════╗
-  ║  REPLICASET-SINGLE-NODE-MONGO-DB DEVELOPMENT URL  ║
-  ╠═══════════════════════════════════════════════════╩═════════════════╗
-  ║ mongodb://myservice-mongodb:27017/                                  ║
-  ║ ?connect=direct&replicaSet=singleNodeReplSet&readPreference=primary ║
-  ╚═════════════════════════════════════════════════════════════════════╝*/
-    final String appDbConnection =
+    /*╔════════════════════════════════════════════════╗
+      ║ REPLICASET-THREE-NODES-MONGO-DB URL            ║
+      ╠════════════════════════════════════════════════╩═════╗
+      ║ mongodb://mongo1:9042,mongo2:9142,mongo3:9242/api-db ║
+      ║           ?replicaSet=docker-rs&authSource=admin     ║
+      ╚══════════════════════════════════════════════════════╝*/
+
+    final String connection =
          rootUri +
-              "/?connect=direct" +
-              "&replicaSet=" + rsName +
-              "&readPreference=primary";
+              "/" + db +
+              "?replicaSet=" + rsName +
+              "&authSource=" + authDb;
 
-    System.out.println("Connect DB Replicaset-Single-Node ---> " + appDbConnection);
+    System.out.println("Connect RS-Three-Node---> " + connection);
 
-    return MongoClients.create(appDbConnection);
+    return MongoClients.create(connection);
   }
 
 

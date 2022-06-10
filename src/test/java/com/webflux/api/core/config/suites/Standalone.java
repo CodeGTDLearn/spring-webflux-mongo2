@@ -1,4 +1,4 @@
-package com.webflux.api;
+package com.webflux.api.core.config.suites;
 
 import org.junit.platform.suite.api.*;
 
@@ -12,5 +12,5 @@ import org.junit.platform.suite.api.*;
 })
 @IncludeTags({"standalone"})
 @ExcludeTags("no-standalone")
-public class StandaloneSuiteTests {
+public class Standalone {
 }

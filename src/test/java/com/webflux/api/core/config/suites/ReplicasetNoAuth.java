@@ -1,4 +1,4 @@
-package com.webflux.api;
+package com.webflux.api.core.config.suites;
 
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectPackages;
@@ -14,5 +14,5 @@ import org.junit.platform.suite.api.SuiteDisplayName;
      "com.webflux.api.modules.task",
 })
 @IncludeTags({"replicaset"})
-public class ReplicasetSuiteNoAuthTests {
+public class ReplicasetNoAuth {
 }

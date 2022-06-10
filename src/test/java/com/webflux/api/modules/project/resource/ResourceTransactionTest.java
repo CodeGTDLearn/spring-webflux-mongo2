@@ -51,7 +51,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Tags(value = {
      @Tag("replicaset"),
      @Tag("standalone"),
-     @Tag("testcontainer")
+     @Tag("testcontainer"),
+     @Tag("ddeletar")
 })
 @Import({ReplicasetConfig.class})
 @Slf4j

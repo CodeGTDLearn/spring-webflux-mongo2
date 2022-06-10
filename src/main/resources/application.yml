@@ -3,8 +3,10 @@ server:
 
 spring:
   profiles:
+#    active: rs1-noauth
     active: rs3-noauth
+#    active: std-alone
     group:
-      rs1-noauth: singlenode-replicaset-noauth, log
+      rs1-noauth: replicaset-noauth, log
+      rs3-noauth: replicaset-noauth, log
       std-alone: standalone, log
-      rs3-noauth: threenodes-replicaset-noauth, log

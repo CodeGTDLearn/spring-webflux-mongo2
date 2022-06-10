@@ -1,4 +1,4 @@
-package com.webflux.api;
+package com.webflux.api.core.config.suites;
 
 
 import org.junit.platform.suite.api.IncludeTags;
@@ -15,5 +15,5 @@ import org.junit.platform.suite.api.SuiteDisplayName;
      "com.webflux.api.modules.task",
 })
 @IncludeTags({"testcontainer"})
-public class TestcontainerSuiteTests {
+public class Testcontainer {
 }

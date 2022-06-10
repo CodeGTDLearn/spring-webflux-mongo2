@@ -2,20 +2,23 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
-  RS_ROOT_URI: mongodb://mongo-dev-rs:27017
-  RS_DB: dev-rs-db
+  RS_ROOT_URI: mongodb://mongo-prod1:27017
+  RS_DB: rs-db
   RS_NAME: devSingleNodeRs
   RS_AUTH: admin
   RS_USERNAME: dev-rs
   RS_PASSWORD: dev-rs
   PORT_API: 8080
 
+volumes:
+  api-vol:
+
 networks:
   api-net:
 
 services:
   mongo1:
-    container_name: mongo-dev-rs
+    container_name: mongo-prod1
     image: mongo:4.4.4
     command: --replSet devSingleNodeRs
     ports:
@@ -28,9 +31,9 @@ services:
     image: mongo:latest
     command: bash -c "
       sleep 5 &&
-      mongo --host mongo-dev-rs --port 27017 --eval \"rs.initiate()\" &&
+      mongo --host mongo-prod1 --port 27017 --eval \"rs.initiate()\" &&
       sleep 2 &&
-      mongo --host mongo-dev-rs --port 27017 --eval \"rs.status()\" &&
+      mongo --host mongo-prod1 --port 27017 --eval \"rs.status()\" &&
       sleep infinity"
     depends_on:
       - mongo1
@@ -49,7 +52,7 @@ services:
       - "8080:8080"
       - "5005:5005"
     volumes:
-      - ../docker/mongo-data-db:/data/db
+      - api-vol:/data/db
     depends_on:
       - replicaset-setup
     networks:
