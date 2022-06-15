@@ -6,11 +6,14 @@ import com.mongodb.reactivestreams.client.MongoClients;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
@@ -33,11 +36,14 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 public class ThreeNodesReplicasetConfig extends AbstractReactiveMongoConfiguration {
 
   private String rootUri;
-  private String db;
+  private String database;
   private String rsName;
-  private String authDb;
+  private String authenticationDatabase;
   private String username;
   private String password;
+
+  @Autowired
+  private Environment environment;
 
 
   @Override
@@ -49,21 +55,56 @@ public class ThreeNodesReplicasetConfig extends AbstractReactiveMongoConfigurati
       ║           ?replicaSet=docker-rs&authSource=admin     ║
       ╚══════════════════════════════════════════════════════╝*/
 
-    final String connection =
-         rootUri +
-              "/" + db +
-              "?replicaSet=" + rsName +
-              "&authSource=" + authDb;
-
-    System.out.println("Connect RS-Three-Node---> " + connection);
+    final String connection = getConnection(environment.getActiveProfiles()[0]);
 
     return MongoClients.create(connection);
+  }
+
+  @NotNull
+  private String getConnection(String profile) {
+
+    String connection;
+
+    switch (profile) {
+
+      case "rs3-noauth":
+        connection =
+             rootUri +
+                  "/" + database +
+                  "?replicaSet=" + rsName +
+                  "&authSource=" + authenticationDatabase;
+        break;
+
+      case "rs1-noauth":
+        connection =
+             rootUri +
+                  "/?connect=direct" +
+                  "&replicaSet=" + rsName +
+                  "&readPreference=primary";
+        break;
+      default:
+        connection =
+             rootUri +
+                  "/?connect=direct" +
+                  "&replicaSet=" + rsName +
+                  "&readPreference=primary";
+
+    }
+
+    System.out.println("Connect " + profile + "-Profile---> " + connection);
+    return connection;
   }
 
 
   @Override
   protected String getDatabaseName() {
 
-    return db;
+    return database;
   }
 }
+
+    //    connection =
+    //         rootUri +
+    //              "/" + database +
+    //              "?replicaSet=" + rsName +
+    //              "&authSource=" + authenticationDatabase;

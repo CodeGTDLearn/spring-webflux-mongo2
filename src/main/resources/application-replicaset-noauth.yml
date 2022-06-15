@@ -8,8 +8,8 @@ db:
   mongodb:
     replicaset:
       root_uri: ${RS_ROOT_URI}
-      db: ${RS_DB}
+      database: ${RS_DB}
       rs_name: ${RS_NAME}
-      auth_db: ${RS_AUTH}
+      authentication-database: ${RS_AUTH}
       username: ${RS_USERNAME}
       password: ${RS_PASSWORD}
