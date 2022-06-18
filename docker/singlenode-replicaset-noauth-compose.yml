@@ -2,9 +2,7 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
-  RS_ROOT_URI: mongodb://mongo-prod1:27017
-  RS_DB: rs-db
-  RS_NAME: devSingleNodeRs
+  URI: mongodb://mongo-prod1:27017/rs-db?replicaSet=singleRs
   RS_AUTH: admin
   RS_USERNAME: dev-rs
   RS_PASSWORD: dev-rs
@@ -20,7 +18,7 @@ services:
   mongo1:
     container_name: mongo-prod1
     image: mongo:4.4.4
-    command: --replSet devSingleNodeRs
+    command: --replSet singleRs
     ports:
       - "27017:27017"
     networks:

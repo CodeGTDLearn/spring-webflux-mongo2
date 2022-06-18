@@ -2,13 +2,13 @@
 # EXCEPTIONALLY: STAND-ALONE OR REPLICASET-SINGLE-NODE SHOULD BE USED
 spring:
   profiles:
-    active: test-rs-noauth
-#    active: test-std-alone
+    active: test-replicaset-gr
+#    active: test-standalone-gr
     group:
       # A) TRANSACTION-PROFILE(ALLOW Transactions):
-      test-rs-noauth: log, test-replicaset
+      test-replicaset-gr: log, test-replicaset
       testcontainer-replicaset: log, testcontainer
 
       # B) GENERAL-PROFILE(ALLOW only General-DB-Operation):
-      test-std-alone: log, test-standalone
+      test-standalone-gr: log, test-standalone
       testcontainer-noreplicaset: log, testcontainer-compose

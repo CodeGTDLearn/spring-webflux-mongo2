@@ -2,9 +2,9 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
-  RS_ROOT_URI: mongodb://mongo-prod1:9042,mongo-prod2:9142,mongo-prod3:9242
+  URI: mongodb://mongo-prod1:9042,mongo-prod2:9142,mongo-prod3:9242/rs-db?threeRs
   RS_DB: rs-db
-  RS_NAME: devThreeNodesRs
+  RS_NAME: threeRs
   RS_AUTH: admin
   RS_USERNAME: dev-rs
   RS_PASSWORD: dev-rs
@@ -20,7 +20,7 @@ services:
   mongo1:
     container_name: mongo-prod1
     image: mongo:4.4.4
-    command: --replSet devThreeNodesRs --port 9042
+    command: --replSet threeRs --port 9042
     ports:
       - "9042:9042"
     networks:
@@ -34,7 +34,7 @@ services:
     container_name: mongo-prod2
     image: mongo:4.4.4
     restart: always
-    command: mongod --replSet devThreeNodesRs --port 9142
+    command: mongod --replSet threeRs --port 9142
     ports:
       - "9142:9142"
     networks:
@@ -50,7 +50,7 @@ services:
     restart: always
     ports:
       - "9242:9242"
-    command: mongod --replSet devThreeNodesRs --port 9242
+    command: mongod --replSet threeRs --port 9242
     networks:
       - api-net
     volumes:

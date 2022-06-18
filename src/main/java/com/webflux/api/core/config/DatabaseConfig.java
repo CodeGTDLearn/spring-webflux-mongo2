@@ -21,11 +21,11 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Getter+Setter are CRUCIAL for PropertySource + ConfigurationProperties works properly
 @PropertySource(value = "classpath:application.yml", factory = YmlConverter.class)
-@ConfigurationProperties(prefix = "db.mongodb.replicaset")
+@ConfigurationProperties(prefix = "spring.data.mongodb")
 @Setter
 @Getter
 // =================================================================================================
-@Profile("rs3-noauth")
+@Profile({"dev-replicaset", "dev-standalone"})
 @Import({TransactionManagerConfig.class})
 @Slf4j
 @Configuration
@@ -33,11 +33,12 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
      basePackages = {
           "com.webflux.api.modules.project.repo",
           "com.webflux.api.modules.task.repo"})
-public class ThreeNodesReplicasetConfig extends AbstractReactiveMongoConfiguration {
+public class DatabaseConfig extends AbstractReactiveMongoConfiguration {
 
-  private String rootUri;
+  private String uri;
+  private String host;
+  private String port;
   private String database;
-  private String rsName;
   private String authenticationDatabase;
   private String username;
   private String password;
@@ -67,6 +68,31 @@ public class ThreeNodesReplicasetConfig extends AbstractReactiveMongoConfigurati
 
     switch (profile) {
 
+      case "replicaset1":
+        connection = uri + "&authSource=" + authenticationDatabase;
+        break;
+      default:
+        connection =
+             "mongodb://" +
+                  username + ":" + password +
+                  "@" + host + ":" + port +
+                  "/" + database +
+                  "?authSource=" + authenticationDatabase;
+
+    }
+
+    System.out.println("Connecting " + profile + "-Profile ---> " + connection);
+    return connection;
+  }
+
+
+  @Override
+  protected String getDatabaseName() {
+
+    return database;
+  }
+}
+/*
       case "rs3-noauth":
         connection =
              rootUri +
@@ -81,30 +107,4 @@ public class ThreeNodesReplicasetConfig extends AbstractReactiveMongoConfigurati
                   "/?connect=direct" +
                   "&replicaSet=" + rsName +
                   "&readPreference=primary";
-        break;
-      default:
-        connection =
-             rootUri +
-                  "/?connect=direct" +
-                  "&replicaSet=" + rsName +
-                  "&readPreference=primary";
-
-    }
-
-    System.out.println("Connect " + profile + "-Profile---> " + connection);
-    return connection;
-  }
-
-
-  @Override
-  protected String getDatabaseName() {
-
-    return database;
-  }
-}
-
-    //    connection =
-    //         rootUri +
-    //              "/" + database +
-    //              "?replicaSet=" + rsName +
-    //              "&authSource=" + authenticationDatabase;
+ */

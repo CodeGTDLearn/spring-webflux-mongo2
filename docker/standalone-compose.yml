@@ -3,19 +3,19 @@ version: "3.4"
 x-common-variables:
   &env-vars
   PORT_API: 8080
-  HOST_DB: mongo-dev-std
+  HOST_DB: cont-std
   PORT_DB: 27017
-  MONGO_INITDB_DATABASE: dev-std-db
+  AUTH_DB: admin
+  MONGO_INITDB_DATABASE: std-db
   MONGO_INITDB_ROOT_USERNAME: root
   MONGO_INITDB_ROOT_PASSWORD: root
-  AUTH_DB: admin
 
 networks:
   api-net:
 
 services:
   mongo1:
-    container_name: mongo-dev-std
+    container_name: cont-std
     image: mongo:4.4.4
     restart: always
     ports:
