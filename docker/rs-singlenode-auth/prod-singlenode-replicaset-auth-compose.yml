@@ -1,0 +1,104 @@
+version: "3.5"
+
+x-common-variables:
+  &env-vars
+  PORT_API: 8080
+
+volumes:
+  mongo-keys:
+  mongo-db0:
+
+networks:
+  api-net:
+
+services:
+
+  mongo-key:
+    image: mongo:4.4.4
+    command: 'bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; 
+             chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile"'
+    networks:
+      - api-net
+    volumes:
+      - mongo-keys:/mongo-conf
+
+  mongo1:
+    container_name: mongo1-db
+    image: mongo:4.4.4
+    command: 'mongod --auth --keyFile /opt/keyfile/mongodb-keyfile --replSet devSingleNodeAuthRs'
+    ports:
+      - "27017:27017"
+    networks:
+      - api-net
+    depends_on:
+      - mongo-key
+    volumes:
+      - mongo-keys:/opt/keyfile
+      - mongo-db0:/data/db
+    environment:
+      MONGO_INITDB_DATABASE_FILE: /run/secrets/db_name
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_name
+      - db_username
+      - db_password
+
+  rs-setup:
+    container_name: rs-setup
+    image: mongo:4.4.4
+#    db + app_db_username + app_db_password were not passed in this command as 'arguments'
+#    because safety reasons - please check script
+    command: bash -c "chmod +x /scripts/rs-setup.sh; /scripts/rs-setup.sh mongo1-db 27017;"
+    volumes:
+      - ./rs-setup.sh:/scripts/rs-setup.sh
+    networks:
+      - api-net
+    depends_on:
+      - mongo1
+    #HARD-CODING STYLE: WORKS PERFECTLY AS WELL
+    #command: bash -c "
+    #sleep 5 &&
+    #mongo -u "root" -p "pass" --host mongo1-db --port 27017 --eval \"rs.initiate()\" &&
+    #sleep 5 &&
+    #mongo -u "root" -p "pass" --host mongo1-db --port 27017 --eval \"rs.status()\" &&
+    #sleep 5 &&
+    #mongo -u "root" -p "pass" --host mongo1-db --port 27017 --eval \"rs.conf()\" &&
+    #sleep infinity"
+  apisinglenodeauth:
+    container_name: apisinglenodeauth
+    image: pauloportfolio/apisinglenodeauth
+    build:
+      context: ../..
+      dockerfile: ./docker/rs-singlenode-auth/Dockerfile
+      args:
+        JAR_FILE: target/*.jar
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    networks:
+      - api-net
+    depends_on:
+      - rs-setup
+    env_file:
+      - envs/env-rs-general.env
+      - envs/env-rs-admin-auth.env
+    environment:
+      MONGO_DATABASE: db_name
+      MONGO_USERNAME: db_username
+      MONGO_PASSWORD: db_password
+      PORT_DEBUG: 5005
+      <<: *env-vars
+      DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
+    secrets:
+      - db_name
+      - db_username
+      - db_password
+
+secrets:
+  db_name:
+    file: secrets/app_db_name.txt
+  db_username:
+    file: secrets/app_db_username.txt
+  db_password:
+    file: secrets/app_db_password.txt

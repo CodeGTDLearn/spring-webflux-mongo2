@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 // ========================== PropertySource + ConfigurationProperties =============================
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Getter+Setter are CRUCIAL for PropertySource + ConfigurationProperties works properly
-@PropertySource(value = "classpath:application.yml", factory = YmlConverter.class)
+@PropertySource(value = "classpath:application.yml", factory = YamlProcessor.class)
 @ConfigurationProperties(prefix = "spring.data.mongodb")
 @Setter
 @Getter

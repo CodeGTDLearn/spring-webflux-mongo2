@@ -2,8 +2,8 @@
 # EXCEPTIONALLY: STAND-ALONE OR REPLICASET-SINGLE-NODE SHOULD BE USED
 spring:
   profiles:
-    active: test-replicaset-gr
-#    active: test-standalone-gr
+#    active: test-replicaset-gr
+    active: test-standalone-gr
     group:
       # A) TRANSACTION-PROFILE(ALLOW Transactions):
       test-replicaset-gr: log, test-replicaset

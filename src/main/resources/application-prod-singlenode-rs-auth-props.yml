@@ -1,0 +1,15 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration
+
+db:
+  mongodb:
+    replicaset:
+      uri: ${REPLICASET_URL}
+      database: ${MONGO_DATABASE}
+      replicaset_name: ${REPLICASET_NAME}
+      authentication-database: ${REPLICASET_AUTH}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}

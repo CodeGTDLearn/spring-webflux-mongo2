@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.core.exceptions;
 
-import com.webflux.api.core.config.YmlConverter;
+import com.webflux.api.core.config.YamlProcessor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @ConfigurationProperties(prefix = "modules.exception.project")
 @PropertySource(value = "classpath:exceptions-messages.yml", factory =
-     YmlConverter.class)
+     YamlProcessor.class)
 public class ProjectExceptionsCustomAttributes {
 
   // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT

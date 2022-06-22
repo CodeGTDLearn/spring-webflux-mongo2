@@ -1,0 +1,102 @@
+version: "3.8"
+
+x-common-variables:
+  &env-vars
+  PORT_API: 8080
+  PORT_DEBUG: 5005
+
+volumes:
+  api_vol:
+  secrets:
+    driver: local
+
+networks:
+  api_net:
+
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:4.4.4
+    restart: always
+    command: mongod --replSet docker-rs --port 9042
+    ports:
+      - "9042:9042"
+    networks:
+      - api_net
+    volumes:
+      - ~/mongors/data1:/data/db
+    depends_on:
+      - mongo2
+    healthcheck:
+      # test: [ 'CMD', 'mongo', '-u', 'app_db_name.txt', '-p', 'app_db_name.txt', '--port', '9042' ]
+      # test: mongo --user=$$RS_USERNAME --app_db_password=$$RS_PASSWORD --port=9042
+      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9042/test --quiet
+      interval: 20s
+      timeout: 10s
+      start_period: 5s
+      retries: 5
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:4.4.4
+    restart: always
+    command: mongod --replSet docker-rs --port 9142
+    ports:
+      - "9142:9142"
+    networks:
+      - api_net
+    volumes:
+      - ~/mongors/data2:/data/db
+    depends_on:
+      - mongo3
+    healthcheck:
+      # test: [ 'CMD', 'mongo', '-u', 'app_db_name.txt', '-p', 'app_db_name.txt', '--port', '9142' ]
+      # test: mongo --user=$$RS_USERNAME --app_db_password=$$RS_PASSWORD --port=9142
+      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9142/test --quiet
+      interval: 20s
+      timeout: 10s
+      start_period: 5s
+      retries: 5
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:4.4.4
+    restart: always
+    ports:
+      - "9242:9242"
+    command: mongod --replSet docker-rs --port 9242
+    networks:
+      - api_net
+    volumes:
+      - ~/mongors/data3:/data/db
+    healthcheck:
+      # test: [ 'CMD', 'mongo', '-u', 'app_db_name.txt', '-p', 'app_db_name.txt', '--port', '9242' ]
+      # test: mongo --user=$$RS_USERNAME --app_db_password=$$RS_PASSWORD --port=9242
+      test: echo 'db.runCommand("ping").ok' | mongo mongo1:9242/test --quiet
+      interval: 20s
+      timeout: 10s
+      start_period: 5s
+      retries: 5
+
+  dev-three-nodes-rs:
+    container_name: dev-three-nodes-rs
+    image: pauloportfolio/api3nodes
+    build:
+      context: ../..
+      dockerfile: ./docker/rs-threenodes/Dockerfile
+      args:
+        JAR_FILE: target/*.jar
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - api_vol:/data/db
+    networks:
+      - api_net
+    depends_on:
+      - mongo1
+    env_file:
+      - dev-threenodes-replicaset-noauth.env
+    environment:
+      <<: *env-vars
+      DEBUG_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
