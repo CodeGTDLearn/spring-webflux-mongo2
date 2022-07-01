@@ -24,8 +24,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @ConfigurationProperties(prefix = "spring.data.mongodb")
 @Setter
 @Getter
-// =================================================================================================
-@Profile({"dev-replicaset", "dev-standalone"})
+@Profile({"replica-set", "stand-alone"})
 @Import({TransactionManagerConfig.class})
 @Slf4j
 @Configuration
@@ -67,10 +66,10 @@ public class DatabaseConfig extends AbstractReactiveMongoConfiguration {
     String connection;
 
     switch (profile) {
-
-      case "replicaset1":
+      case "replica-set":
         connection = uri + "&authSource=" + authenticationDatabase;
         break;
+
       default:
         connection =
              "mongodb://" +

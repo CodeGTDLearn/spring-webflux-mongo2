@@ -3,8 +3,7 @@ server:
 
 spring:
   profiles:
-#    active: dev-replicaset
-    active: dev-standalone
+    active: replica-set
     group:
-      dev-replicaset: replicaset, log
-      dev-standalone: standalone, log
+      replica-set: replicaset, log
+      stand-alone: standalone, log

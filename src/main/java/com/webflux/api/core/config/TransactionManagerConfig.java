@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager;
 
 
-@Profile("rs-noauth")
+@Profile("replica-set")
 @Slf4j
 @Configuration
 public class TransactionManagerConfig {

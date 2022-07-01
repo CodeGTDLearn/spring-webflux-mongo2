@@ -3,30 +3,21 @@ package com.webflux.api.core.config;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@PropertySource(value = "classpath:application.yml", factory = YamlProcessor.class)
-@ConfigurationProperties(prefix = "db.mongodb.replicaset")
-@Setter
-@Getter
-@Profile("prod-single-node-rs-auth")
-@Import({TransactionManagerConfig.class})
-@Slf4j
-@Configuration
-@EnableReactiveMongoRepositories(basePackages = {"com.mongo.rs.modules.user"})
+//@PropertySource(value = "classpath:application.yml", factory = YamlProcessor.class)
+//@ConfigurationProperties(prefix = "db.mongodb.replicaset")
+//@Setter
+//@Getter
+//@Profile("prod-single-node-rs-auth")
+//@Import({TransactionManagerConfig.class})
+//@Slf4j
+//@Configuration
+//@EnableReactiveMongoRepositories(basePackages = {"com.mongo.rs.modules.user"})
 public class ReplicasetSingleNodeAuthConfig extends AbstractReactiveMongoConfiguration {
 
   private String uri;

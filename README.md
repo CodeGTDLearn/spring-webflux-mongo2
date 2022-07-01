@@ -49,14 +49,16 @@
             1. dynamic mongodb-keyfile (generate as a service in compose)
             2. [3Nodes - Base for single node authentication](https://www.youtube.com/watch?v=-XzMfd4XQak)
                 1. [GitHub](https://github.com/willitscale/learning-docker)
-2. Three nodes:
+2. Three nodes: (Aborted - Archived)
     1. **NOTE**:
         1. This replica set is for *Local Development* purposes ONLY.
             1. Run multiple nodes within a single machine is an anti-pattern, and MUST BE AVOIDED in Production.
         2. Multiple nodes requires:
             1. Multiple Vm's in the cloud
                 1. IT CAN _**INCREASE**_ THE COST "CONSIDERABLY"
-    2. Types:
+        3. Only for test-reason because in production:
+            1. Each node must be in a different host
+    3. Types:
         1. NoAuthentication
         2. Three nodes - Authenticated:
             1. [ProfileProduction](https://sntnupl.com/mongodb-replicaset-for-development-using-docker)
@@ -70,7 +72,12 @@
     1. Only archive because:
         1. it does not allow transactions, therefore:
             1. it does not run queues(CREATE+DELETE+UPDATE)
-
+4. Database Configurations:
+    1. Select programattically the URI Database 
+    2. based on the Application-Profiles:
+       1. replicaset
+       2. replicaset auth 
+       3. standalone
 
 
 ### Application_Yml

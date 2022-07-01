@@ -2,7 +2,7 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
-  URI: mongodb://mongo-prod1:27017/rs-db?replicaSet=singleRs
+  URI: mongodb://mongo-prod1:27017/rs-db-1?replicaSet=singleRs
   RS_AUTH: admin
   RS_USERNAME: dev-rs
   RS_PASSWORD: dev-rs
