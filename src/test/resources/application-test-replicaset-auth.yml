@@ -1,0 +1,11 @@
+# SAME PROPERTIES AS:
+# - ./DOCKER/RS-SINGLENODE-AUTH/DB-SCRETS
+# - ./DOCKER/RS-SINGLENODE-AUTH/ENVS
+spring:
+  data:
+    mongodb:
+      host: mongo1
+      port: 27017
+      username: usern
+      password: passxxx
+      authentication-database: admin

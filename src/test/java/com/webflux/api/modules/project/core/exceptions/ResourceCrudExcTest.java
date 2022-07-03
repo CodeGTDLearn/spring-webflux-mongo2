@@ -1,7 +1,6 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.profiles.ProfileGeneral;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.DbUtilsConfig;
 import com.webflux.api.core.config.testcontainer.compose.TcCompose;
@@ -44,7 +43,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Import({DbUtilsConfig.class})
 @DisplayName("1.1 ResourceCrudExcTest")
 @ResourceConfig
-@ProfileGeneral
 @TcCompose
 public class ResourceCrudExcTest {
 

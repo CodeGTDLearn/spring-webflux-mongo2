@@ -1,12 +1,12 @@
 # TESTS MUST BE DONE WITH TEST-CONTAINERS
-# EXCEPTIONALLY: STAND-ALONE OR REPLICASET-SINGLE-NODE SHOULD BE USED
+# EXCEPTIONALLY: STAND-ALONE OR REPLICASET SHOULD BE USED
 spring:
   profiles:
-    active: test-replica-set
-#    active: test-stand-alone
+    active: testcontainer-noreplicaset
     group:
       # A) TRANSACTION-PROFILE(ALLOW Transactions):
       test-replica-set: log, test-replicaset
+      test-replica-set-auth: log, test-replicaset-auth
       testcontainer-replicaset: log, testcontainer
 
       # B) GENERAL-PROFILE(ALLOW only General-DB-Operation):

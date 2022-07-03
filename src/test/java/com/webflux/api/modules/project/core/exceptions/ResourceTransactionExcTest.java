@@ -1,7 +1,6 @@
 package com.webflux.api.modules.project.core.exceptions;
 
 import com.github.javafaker.Faker;
-import com.webflux.api.core.config.profiles.ProfileTransaction;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.ReplicasetConfig;
 import com.webflux.api.core.config.testcontainer.container.TcContainerReplicaset;
@@ -69,7 +68,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Slf4j
 @DisplayName("6.1 ResourceTransactionExcTest")
 @ResourceConfig
-@ProfileTransaction
 @TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗

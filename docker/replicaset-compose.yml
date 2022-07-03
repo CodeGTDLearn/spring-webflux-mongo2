@@ -2,10 +2,11 @@ version: "3.4"
 
 x-common-variables:
   &env-vars
-  URI: mongodb://mongo-prod1:27017/rs-db-1?replicaSet=singleRs
-  RS_AUTH: admin
-  RS_USERNAME: dev-rs
-  RS_PASSWORD: dev-rs
+  REPLICASET_URI: mongodb://mongo-prod1:27017/rs-db-1?replicaSet=singleRs
+  REPLICASET_AUTH: admin
+  REPLICASET_DB_NAME: rs-db-1
+  REPLICASET_USERNAME: dev-rs
+  REPLICASET_PASSWORD: dev-rs
   PORT_API: 8080
 
 volumes:
@@ -24,8 +25,8 @@ services:
     networks:
       - api-net
 
-  replicaset-setup:
-    container_name: replicaset-setup
+  rs-setup:
+    container_name: rs-setup
     image: mongo:latest
     command: bash -c "
       sleep 5 &&
@@ -38,9 +39,9 @@ services:
     networks:
       - api-net
 
-  api:
-    container_name: api
-    image: pauloportfolio/api
+  api-rs:
+    container_name: api-rs
+    image: pauloportfolio/api-rs
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
@@ -52,7 +53,7 @@ services:
     volumes:
       - api-vol:/data/db
     depends_on:
-      - replicaset-setup
+      - rs-setup
     networks:
       - api-net
     environment:

@@ -5,7 +5,8 @@ spring:
       - org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration
   data:
     mongodb:
-      uri: ${URI}
-      authentication-database: ${RS_AUTH}
-      username: ${RS_USERNAME}
-      password: ${RS_PASSWORD}
+      uri: ${REPLICASET_URI}
+      authentication-database: ${REPLICASET_AUTH}
+      username: ${REPLICASET_USERNAME}
+      password: ${REPLICASET_PASSWORD}
+      database: ${REPLICASET_DB_NAME}

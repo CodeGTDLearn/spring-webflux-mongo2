@@ -2,7 +2,6 @@ package com.webflux.api.modules.project.resource;
 
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.DbUtilsConfig;
-import com.webflux.api.core.config.profiles.ProfileGeneral;
 import com.webflux.api.core.config.testcontainer.compose.TcCompose;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
@@ -42,7 +41,6 @@ import static org.springframework.http.HttpStatus.*;
 @Import({DbUtilsConfig.class})
 @DisplayName("1.0 ResourceCrudTest")
 @ResourceConfig
-@ProfileGeneral
 @TcCompose
 public class ResourceCrudTest {
 

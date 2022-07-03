@@ -27,9 +27,9 @@ services:
     environment:
       *env-vars
 
-  api:
-    container_name: api
-    image: pauloportfolio/api
+  api-standalone:
+    container_name: api-standalone
+    image: pauloportfolio/api-standalone
     build:
       context: ../
       dockerfile: ./docker/Dockerfile

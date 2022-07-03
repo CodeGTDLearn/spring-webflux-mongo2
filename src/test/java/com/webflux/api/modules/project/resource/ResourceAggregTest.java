@@ -1,6 +1,5 @@
 package com.webflux.api.modules.project.resource;
 
-import com.webflux.api.core.config.profiles.ProfileGeneral;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.DbUtilsConfig;
 import com.webflux.api.core.config.databuilders.ProjectChildBuilder;
@@ -44,7 +43,6 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({DbUtilsConfig.class})
 @DisplayName("4.1 ResourceAggregTest")
 @ResourceConfig
-@ProfileGeneral
 @TcCompose
 public class ResourceAggregTest {
 

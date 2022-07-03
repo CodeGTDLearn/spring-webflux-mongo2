@@ -3,7 +3,6 @@ package com.webflux.api.modules.project.resource;
 import com.github.javafaker.Faker;
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.ReplicasetConfig;
-import com.webflux.api.core.config.profiles.ProfileTransaction;
 import com.webflux.api.core.config.testcontainer.container.TcContainerReplicaset;
 import com.webflux.api.core.config.utils.TestDbUtils;
 import com.webflux.api.modules.project.entity.Project;
@@ -58,7 +57,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Slf4j
 @DisplayName("6.0 ResourceTransactionTest")
 @ResourceConfig
-@ProfileTransaction
 @TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionTest {
 
