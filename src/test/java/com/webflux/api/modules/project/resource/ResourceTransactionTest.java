@@ -50,8 +50,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Tags(value = {
      @Tag("replicaset"),
      @Tag("standalone"),
-     @Tag("testcontainer"),
-     @Tag("ddeletar")
+     @Tag("testcontainer")
 })
 @Import({ReplicasetConfig.class})
 @Slf4j
@@ -76,7 +75,6 @@ public class ResourceTransactionTest {
 
   @Autowired
   IServiceTask taskService;
-
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
@@ -146,11 +144,10 @@ public class ResourceTransactionTest {
 
   @Test
   @EnabledIf(expression =
-       "#{systemProperties[runTest] == 'true' " +
-            "&& !environment.acceptsProfiles('"+
-            "test-std-alone"+
-            "')}",
-       loadContext = true)
+       "#{systemProperties[runTest] == 'true' && " +
+            "!environment.acceptsProfiles('test-std-alone') ||" +
+            "!environment.acceptsProfiles('test-std-alone')" +
+            "}", loadContext = true)
   @DisplayName("createProjectTransaction")
   public void createProjectTransaction() {
 

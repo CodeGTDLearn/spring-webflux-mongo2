@@ -34,8 +34,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Tags(value = {
      @Tag("replicaset"),
      @Tag("standalone"),
-     @Tag("testcontainer"),
-     @Tag("ddeletar")
+     @Tag("testcontainer")
 })
 @Import({DbUtilsConfig.class})
 @DisplayName("5.0 ResourceTaskTest")

@@ -58,17 +58,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
  ║    assim seu "importe" ja a iniciara, independente da anotacao  ║
  ╚═════════════════════════════════════════════════════════════════╝
 */
-@Tags(value = {
-     @Tag("replicaset"),
-     @Tag("standalone"),
-     @Tag("testcontainer"),
-     @Tag("ddeletar")
-})
+@Tags(value = {@Tag("replicaset"), @Tag("standalone"), @Tag("testcontainer")})
 @Import({ReplicasetConfig.class})
 @Slf4j
 @DisplayName("6.1 ResourceTransactionExcTest")
 @ResourceConfig
-@TcContainerReplicaset // TEST TRANSACTIONS
+@TcContainerReplicaset
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
@@ -89,16 +84,12 @@ public class ResourceTransactionExcTest {
   // BECAUSE THERE IS NO 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
   @Autowired
   WebTestClient mockedWebClient;
-
   @Autowired
   TestDbUtils dbUtils;
-
   @Autowired
   IServiceCrud serviceCrud;
-
   @Autowired
   IServiceTask taskService;
-
 
   @BeforeAll
   static void beforeAll(TestInfo testInfo) {
@@ -110,8 +101,8 @@ public class ResourceTransactionExcTest {
     globalTestMessage(testInfo.getDisplayName(), "class-start");
 
     RestAssuredWebTestClient.reset();
-    RestAssuredWebTestClient.requestSpecification =
-         requestSpecsSetPath("http://localhost:8080" + PROJ_ROOT_CRUD);
+    RestAssuredWebTestClient.requestSpecification = requestSpecsSetPath(
+         "http://localhost:8080" + PROJ_ROOT_CRUD);
     RestAssuredWebTestClient.responseSpecification = responseSpecs();
   }
 
@@ -130,17 +121,9 @@ public class ResourceTransactionExcTest {
     globalTestMessage(testInfo.getTestMethod()
                               .toString(), "method-start");
 
-    Project project1 = projecNoID("C",
-                                  "2020-05-05",
-                                  "2021-05-05",
-                                  1000L,
-                                  of("UK", "USA")
-                                 ).create();
+    Project project1 = projecNoID("C", "2020-05-05", "2021-05-05", 1000L, of("UK", "USA")).create();
 
-    Project projetoWithId = projectWithID("C",
-                                          "2020-05-05",
-                                          "2021-05-05",
-                                          1000L,
+    Project projetoWithId = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                           of("HOL", "CAN")
                                          ).create();
 
@@ -148,10 +131,7 @@ public class ResourceTransactionExcTest {
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
-    Task task1 = taskWithID("3",
-                            "Mark",
-                            1000L
-                           ).create();
+    Task task1 = taskWithID("3", "Mark", 1000L).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -165,12 +145,8 @@ public class ResourceTransactionExcTest {
 
   // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
   @Test
-  @EnabledIf(expression =
-       "#{systemProperties[runTest] == 'true' " +
-            "&& !environment.acceptsProfiles('"+
-            "test-dockercompose-standalone"+
-            "')}",
-       loadContext = true)
+  @EnabledIf(expression = "#{systemProperties[runTest] == 'true' && " + "!environment" +
+       ".acceptsProfiles('test-stand-alone')}", loadContext = true)
   @DisplayName("checkContentWithExc")
   public void checkContentWithExceptions() {
 
@@ -178,33 +154,29 @@ public class ResourceTransactionExcTest {
                            .name()
                            .firstName();
 
-    Project project = projectWithID("C",
-                                    "2020-05-05",
-                                    "2021-05-05",
-                                    1000L,
+    Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
                                    ).create();
 
     project.setName("xx");
     newTaskName = "XX";
 
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient.given()
+                            .webTestClient(mockedWebClient)
 
-         .body(project)
-         .queryParam("taskNameInitial", newTaskName)
+                            .body(project)
+                            .queryParam("taskNameInitial", newTaskName)
 
-         .when()
-         .post(REPO_TRANSACT_CLASSIC)
+                            .when()
+                            .post(REPO_TRANSACT_CLASSIC)
 
-         .then()
-         .log()
-         .everything()
+                            .then()
+                            .log()
+                            .everything()
 
-         .statusCode(NOT_ACCEPTABLE.value())
-         .body(matchesJsonSchemaInClasspath("contracts/transactions/checkContentWithExc.json"))
-    ;
+                            .statusCode(NOT_ACCEPTABLE.value())
+                            .body(matchesJsonSchemaInClasspath(
+                                 "contracts/transactions/checkContentWithExc.json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -212,12 +184,8 @@ public class ResourceTransactionExcTest {
 
   // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
   @Test
-  @EnabledIf(expression =
-       "#{systemProperties[runTest] == 'true' " +
-            "&& !environment.acceptsProfiles('"+
-            "test-std-alone"+
-            "')}",
-       loadContext = true)
+  @EnabledIf(expression = "#{systemProperties[runTest] == 'true' " + "&& !environment" +
+       ".acceptsProfiles('test-stand-alone')}", loadContext = true)
   @DisplayName("transactionsClassicExcTaskLessThree")
   public void transactionsClassicExcTaskLessThanThree() {
 
@@ -225,34 +193,30 @@ public class ResourceTransactionExcTest {
                            .name()
                            .firstName();
 
-    Project project = projectWithID("C",
-                                    "2020-05-05",
-                                    "2021-05-05",
-                                    1000L,
+    Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
                                    ).create();
 
     project.setName("NOT-EMPTY");
     newTaskName = "XX";
 
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient.given()
+                            .webTestClient(mockedWebClient)
 
-         .body(project)
-         .queryParam("taskNameInitial", newTaskName)
+                            .body(project)
+                            .queryParam("taskNameInitial", newTaskName)
 
-         .when()
-         .post(REPO_TRANSACT_CLASSIC)
+                            .when()
+                            .post(REPO_TRANSACT_CLASSIC)
 
-         .then()
-         .log()
-         .everything()
+                            .then()
+                            .log()
+                            .everything()
 
-         .statusCode(NOT_ACCEPTABLE.value())
-         .body(matchesJsonSchemaInClasspath(
-              "contracts/transactions/transactionsClassicExcTaskLessThanThree.json"))
-    ;
+                            .statusCode(NOT_ACCEPTABLE.value())
+                            .body(matchesJsonSchemaInClasspath(
+                                 "contracts/transactions/transactionsClassicExcTaskLessThanThree" +
+                                      ".json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -269,34 +233,29 @@ public class ResourceTransactionExcTest {
                            .name()
                            .firstName();
 
-    Project project = projectWithID("C",
-                                    "2020-05-05",
-                                    "2021-05-05",
-                                    1000L,
+    Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
                                    ).create();
 
     project.setName("NOT-EMPTY");
     newTaskName = "";
 
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient.given()
+                            .webTestClient(mockedWebClient)
 
-         .body(project)
-         .queryParam("taskNameInitial", newTaskName)
+                            .body(project)
+                            .queryParam("taskNameInitial", newTaskName)
 
-         .when()
-         .post(REPO_TRANSACT_CLASSIC)
+                            .when()
+                            .post(REPO_TRANSACT_CLASSIC)
 
-         .then()
-         .log()
-         .everything()
+                            .then()
+                            .log()
+                            .everything()
 
-         .statusCode(NOT_ACCEPTABLE.value())
-         .body(matchesJsonSchemaInClasspath(
-              "contracts/transactions/transactionsClassicExcTaskEmpty.json"))
-    ;
+                            .statusCode(NOT_ACCEPTABLE.value())
+                            .body(matchesJsonSchemaInClasspath(
+                                 "contracts/transactions/transactionsClassicExcTaskEmpty.json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -313,35 +272,30 @@ public class ResourceTransactionExcTest {
                            .name()
                            .firstName();
 
-    Project project = projectWithID("C",
-                                    "2020-05-05",
-                                    "2021-05-05",
-                                    1000L,
+    Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
                                    ).create();
 
     project.setName("");
     newTaskName = "";
 
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient.given()
+                            .webTestClient(mockedWebClient)
 
-         .body(project)
-         .queryParam("taskNameInitial", newTaskName)
+                            .body(project)
+                            .queryParam("taskNameInitial", newTaskName)
 
-         .when()
-         .post(REPO_TRANSACT_CLASSIC)
+                            .when()
+                            .post(REPO_TRANSACT_CLASSIC)
 
-         .then()
-         .log()
-         .everything()
+                            .then()
+                            .log()
+                            .everything()
 
-//         .statusCode(NOT_ACCEPTABLE.value())
-         .statusCode(NOT_FOUND.value())
-         .body(matchesJsonSchemaInClasspath(
-              "contracts/transactions/transactionsClassicExcProjectEmpty.json"))
-    ;
+                            //         .statusCode(NOT_ACCEPTABLE.value())
+                            .statusCode(NOT_FOUND.value())
+                            .body(matchesJsonSchemaInClasspath(
+                                 "contracts/transactions/transactionsClassicExcProjectEmpty.json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);

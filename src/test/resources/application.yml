@@ -2,13 +2,17 @@
 # EXCEPTIONALLY: STAND-ALONE OR REPLICASET SHOULD BE USED
 spring:
   profiles:
-    active: testcontainer-noreplicaset
+    active: testcontainer-replicaset
     group:
-      # A) TRANSACTION-PROFILE(ALLOW Transactions):
-      test-replica-set: log, test-replicaset
-      test-replica-set-auth: log, test-replicaset-auth
-      testcontainer-replicaset: log, testcontainer
+      # DOCKER-COMPOSE TESTING:
+      # - COMMENT TcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
+      # - COMMENT TcCompose[@Testcontainers]
+      test-replica-set: log, test-replicaset # ALLOW Transactions
+      test-replica-set-auth: log, test-replicaset-auth # ALLOW Transactions
+      test-stand-alone: log, test-standalone # ALLOW only General-DB-Operation
 
-      # B) GENERAL-PROFILE(ALLOW only General-DB-Operation):
-      test-stand-alone: log, test-standalone
+      # TESTCONTAINER (NO NEED DOCKER-COMPOSE) TESTING:
+      # - "UN"COMMENT TcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
+      # - "UN"COMMENT TcCompose[@Testcontainers]
+      testcontainer-replicaset: log, testcontainer
       testcontainer-noreplicaset: log, testcontainer-compose

@@ -27,7 +27,7 @@ services:
 
   rs-setup:
     container_name: rs-setup
-    image: mongo:latest
+    image: mongo:4.4.4
     command: bash -c "
       sleep 5 &&
       mongo --host mongo-prod1 --port 27017 --eval \"rs.initiate()\" &&
