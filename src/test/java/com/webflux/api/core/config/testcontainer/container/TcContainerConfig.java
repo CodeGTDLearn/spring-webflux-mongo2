@@ -52,8 +52,10 @@ public class TcContainerConfig implements Extension {
 
   public static void startTcContainer() {
 
+
     CONTAINER.isHealthy();
     CONTAINER.start();
+    System.out.println("checando" + CONTAINER.getReplicaSetUrl());
     setProperty(URI_TEST_APPLICATION_PROPERTY, CONTAINER.getReplicaSetUrl());
     globalContainerMessage(getTcContainer(), "container-start");
     globalContainerMessage(getTcContainer(), "container-state");
@@ -91,6 +93,7 @@ public class TcContainerConfig implements Extension {
   }
 
   public static MongoDBContainer getTcContainer() {
+
     return CONTAINER;
   }
 }

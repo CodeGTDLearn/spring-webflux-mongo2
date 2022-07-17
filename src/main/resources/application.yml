@@ -1,10 +1,9 @@
-server:
-  port: ${PORT_API}
-
 spring:
   profiles:
-    active: replica-set
+    active: replica-set-auth
     group:
       replica-set: replicaset, log
       replica-set-auth: replicaset-auth, log
       stand-alone: standalone, log
+server:
+  port: ${PORT_API}

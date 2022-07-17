@@ -1,18 +1,20 @@
-# TESTS MUST BE DONE WITH TEST-CONTAINERS
-# EXCEPTIONALLY: STAND-ALONE OR REPLICASET SHOULD BE USED
 spring:
   profiles:
-    active: testcontainer-replicaset
+    # 1) TESTING:
+    # - Change the profile in src\resource\application.yml AS WELL
+    active: test-container
     group:
-      # DOCKER-COMPOSE TESTING:
-      # - COMMENT TcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
-      # - COMMENT TcCompose[@Testcontainers]
+      # 2) GROUPS:
+      # 2.1) DOCKER-COMPOSE TESTING:
+      # COMMENT:
+      # - testcontainer\containerTcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
+      # - testcontainer\compose\TcCompose[@Testcontainers]
       test-replica-set: log, test-replicaset # ALLOW Transactions
       test-replica-set-auth: log, test-replicaset-auth # ALLOW Transactions
       test-stand-alone: log, test-standalone # ALLOW only General-DB-Operation
 
-      # TESTCONTAINER (NO NEED DOCKER-COMPOSE) TESTING:
-      # - "UN"COMMENT TcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
-      # - "UN"COMMENT TcCompose[@Testcontainers]
-      testcontainer-replicaset: log, testcontainer
-      testcontainer-noreplicaset: log, testcontainer-compose
+      # 2.2) TESTCONTAINER TESTING (NO NEED DOCKER-COMPOSE):
+      # "UN"COMMENT:
+      # - testcontainer\container\TcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
+      # - testcontainer\compose\TcCompose[@Testcontainers]
+      test-container: log, testcontainer-compose

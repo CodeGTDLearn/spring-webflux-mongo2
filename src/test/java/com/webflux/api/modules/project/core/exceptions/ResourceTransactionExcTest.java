@@ -58,12 +58,15 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
  ║    assim seu "importe" ja a iniciara, independente da anotacao  ║
  ╚═════════════════════════════════════════════════════════════════╝
 */
-@Tags(value = {@Tag("replicaset"), @Tag("standalone"), @Tag("testcontainer")})
+@Tags(value = {
+     @Tag("replicaset"),
+     @Tag("no-standalone"),
+     @Tag("testcontainer")})
 @Import({ReplicasetConfig.class})
 @Slf4j
 @DisplayName("6.1 ResourceTransactionExcTest")
 @ResourceConfig
-@TcContainerReplicaset
+@TcContainerReplicaset // TEST TRANSACTIONS
 public class ResourceTransactionExcTest {
 /*╔════════════════════════════════════════════════════════════╗
   ║              TEST-TRANSACTIONS + TEST-CONTAINERS           ║
@@ -84,10 +87,13 @@ public class ResourceTransactionExcTest {
   // BECAUSE THERE IS NO 'REAL-SERVER' CREATED VIA DOCKER-COMPOSE
   @Autowired
   WebTestClient mockedWebClient;
+
   @Autowired
   TestDbUtils dbUtils;
+
   @Autowired
   IServiceCrud serviceCrud;
+
   @Autowired
   IServiceTask taskService;
 
@@ -125,7 +131,7 @@ public class ResourceTransactionExcTest {
 
     Project projetoWithId = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                           of("HOL", "CAN")
-                                         ).create();
+    ).create();
 
     List<Project> projectList = asList(project1, projetoWithId);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -156,7 +162,7 @@ public class ResourceTransactionExcTest {
 
     Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
-                                   ).create();
+    ).create();
 
     project.setName("xx");
     newTaskName = "XX";
@@ -195,7 +201,7 @@ public class ResourceTransactionExcTest {
 
     Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
-                                   ).create();
+    ).create();
 
     project.setName("NOT-EMPTY");
     newTaskName = "XX";
@@ -235,7 +241,7 @@ public class ResourceTransactionExcTest {
 
     Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
-                                   ).create();
+    ).create();
 
     project.setName("NOT-EMPTY");
     newTaskName = "";
@@ -274,7 +280,7 @@ public class ResourceTransactionExcTest {
 
     Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
                                     of("UK", "USA")
-                                   ).create();
+    ).create();
 
     project.setName("");
     newTaskName = "";

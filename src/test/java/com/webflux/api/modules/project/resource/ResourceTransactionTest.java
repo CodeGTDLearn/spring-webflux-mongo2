@@ -49,7 +49,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 */
 @Tags(value = {
      @Tag("replicaset"),
-     @Tag("standalone"),
+     @Tag("no-standalone"),
      @Tag("testcontainer")
 })
 @Import({ReplicasetConfig.class})
@@ -143,11 +143,8 @@ public class ResourceTransactionTest {
 
 
   @Test
-  @EnabledIf(expression =
-       "#{systemProperties[runTest] == 'true' && " +
-            "!environment.acceptsProfiles('test-std-alone') ||" +
-            "!environment.acceptsProfiles('test-std-alone')" +
-            "}", loadContext = true)
+  @Tag("no-standalone")
+  @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("createProjectTransaction")
   public void createProjectTransaction() {
 
