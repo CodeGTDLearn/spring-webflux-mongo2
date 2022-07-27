@@ -1,8 +1,5 @@
 package com.webflux.api.core.config.testcontainer.compose;
 
-import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -11,7 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @Target(TYPE)
-@Testcontainers
-@ActiveProfiles({"testcontainer"})
+//@Testcontainers
 public @interface TcCompose {
 }

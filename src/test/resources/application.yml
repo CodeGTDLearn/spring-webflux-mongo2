@@ -2,7 +2,7 @@ spring:
   profiles:
     # 1) TESTING:
     # - Change the profile in src\resource\application.yml AS WELL
-    active: test-container
+    active: test-replica-set
     group:
       # 2) GROUPS:
       # 2.1) DOCKER-COMPOSE TESTING:
