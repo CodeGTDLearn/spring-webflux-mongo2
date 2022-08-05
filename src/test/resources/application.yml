@@ -1,20 +1,16 @@
 spring:
   profiles:
-    # 1) TESTING:
-    # - Change the profile in src\resource\application.yml AS WELL
+    # 1) TESTING: Change the profile in src\resource\application.yml AS WELL
     active: test-replica-set
     group:
-      # 2) GROUPS:
-      # 2.1) DOCKER-COMPOSE TESTING:
-      # COMMENT:
-      # - testcontainer\containerTcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
-      # - testcontainer\compose\TcCompose[@Testcontainers]
+      # DOCKER-COMPOSE TESTING - COMMENT:
+      # - testcontainer\container\TcContainerReplicaset: All annotations
+      # - testcontainer\compose\TcCompose: All annotations
       test-replica-set: log, test-replicaset # ALLOW Transactions
       test-replica-set-auth: log, test-replicaset-auth # ALLOW Transactions
       test-stand-alone: log, test-standalone # ALLOW only General-DB-Operation
 
-      # 2.2) TESTCONTAINER TESTING (NO NEED DOCKER-COMPOSE):
-      # "UN"COMMENT:
-      # - testcontainer\container\TcContainerReplicaset[@ExtendWith(TcContainerConfig.class)]
-      # - testcontainer\compose\TcCompose[@Testcontainers]
+      # TESTCONTAINER TESTING - "UN"COMMENT:
+      # - testcontainer\container\TcContainerReplicaset: All annotations
+      # - testcontainer\compose\TcCompose: All annotations
       test-container: log, testcontainer-compose

@@ -10,3 +10,4 @@ spring:
       username: ${REPLICASET_USERNAME}
       password: ${REPLICASET_PASSWORD}
       database: ${REPLICASET_DB_NAME}
+      replicaset_name: ${REPLICASET_NAME}

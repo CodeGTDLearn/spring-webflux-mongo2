@@ -1,8 +1,9 @@
 spring:
   data:
     mongodb:
-      host: mongo1
-      port: 27017
-      username: usern
-      password: passxxx
+      uri: mongodb://mongo-prod1:27017/rs-db-1?replicaSet=singleRs
       authentication-database: admin
+      username: dev-rs
+      password: dev-rs
+      database: rs-db-1
+      replicaset_name: singleRs
