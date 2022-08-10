@@ -5,8 +5,6 @@ x-common-variables:
   REPLICASET_URI: mongodb://mongo-prod1:27017/rs-db-1?replicaSet=singleRs
   REPLICASET_AUTH: admin
   REPLICASET_DB_NAME: rs-db-1
-  REPLICASET_USERNAME: dev-rs
-  REPLICASET_PASSWORD: dev-rs
   PORT_API: 8080
 
 volumes:

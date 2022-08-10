@@ -1,6 +1,6 @@
 spring:
   profiles:
-    # 1) TESTING: Change the profile in src\resource\application.yml AS WELL
+    # 1) TESTING: Change the profile in src\resource\application.yml AS WELL!
     active: test-replica-set
     group:
       # DOCKER-COMPOSE TESTING - COMMENT:
