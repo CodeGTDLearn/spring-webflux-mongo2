@@ -1,6 +1,3 @@
-# SAME PROPERTIES AS:
-# - ./DOCKER/RS-SINGLENODE-AUTH/DB-SCRETS
-# - ./DOCKER/RS-SINGLENODE-AUTH/ENVS
 spring:
   data:
     mongodb:
@@ -9,3 +6,6 @@ spring:
       username: usern
       password: passxxx
       authentication-database: admin
+# SAME PROPERTIES AS:
+# - ./DOCKER/RS-SINGLENODE-AUTH/DB-SCRETS
+# - ./DOCKER/RS-SINGLENODE-AUTH/ENVS

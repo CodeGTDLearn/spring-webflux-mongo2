@@ -1,9 +1,8 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo-prod1:27017/rs-db-1?replicaSet=singleRs
+      host: mongo1
+      port: 27017
       authentication-database: admin
-      username: dev-rs
-      password: dev-rs
-      database: rs-db-1
-      replicaset_name: singleRs
+# SAME PROPERTIES AS:
+# - ./DOCKER/REPLICASET-COMPOSE
