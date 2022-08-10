@@ -6,8 +6,8 @@ spring:
   data:
     mongodb:
       uri: ${REPLICASET_URI}
-      authentication-database: ${REPLICASET_AUTH}
-      username: ${MONGO_USERNAME}
-      password: ${MONGO_PASSWORD}
       database: ${MONGO_DATABASE}
       replicaset_name: ${REPLICASET_NAME}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+      authentication-database: ${REPLICASET_AUTH}
