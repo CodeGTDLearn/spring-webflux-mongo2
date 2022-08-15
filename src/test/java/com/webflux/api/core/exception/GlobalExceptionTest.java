@@ -5,6 +5,7 @@ import com.webflux.api.core.config.config.DbUtilsConfig;
 import com.webflux.api.core.config.testcontainer.compose.TcCompose;
 import com.webflux.api.core.config.testcontainer.compose.TcComposeConfig;
 import com.webflux.api.core.config.utils.TestDbUtils;
+import com.webflux.api.modules.project.core.exceptions.exception.GlobalExceptionCustomAttributes;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.task.entity.Task;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;

@@ -1,4 +1,4 @@
-package com.webflux.api.core.exception;
+package com.webflux.api.modules.project.core.exceptions.exception;
 
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;

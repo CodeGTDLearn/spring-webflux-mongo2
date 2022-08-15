@@ -1,3 +1,6 @@
+# To test using DOCKER-COMPOSE TESTING - COMMENT testcontainer Annotations:
+# - testcontainer\container\TcContainerReplicaset: All annotations
+# - testcontainer\compose\TcCompose: All annotations
 spring:
   profiles:
     active: replica-set

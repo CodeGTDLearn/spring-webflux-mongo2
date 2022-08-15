@@ -1,4 +1,4 @@
-package com.webflux.api.core.exception;
+package com.webflux.api.modules.project.core.exceptions.exception;
 
 import com.webflux.api.core.config.YamlProcessor;
 import lombok.Getter;

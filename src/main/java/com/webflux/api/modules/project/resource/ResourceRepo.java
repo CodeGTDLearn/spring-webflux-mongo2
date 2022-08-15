@@ -122,48 +122,4 @@ public class ResourceRepo {
               .findByNameRegexQuery(regexpProjectName)
          ;
   }
-
-
-  //  public Mono<ServerResponse> chunkAndSaveProject(ServerRequest request) {
-  //
-  //    Project p = new Project();
-  //    p.set_id("20");
-  //    p.setName("ProjectGrid");
-  //
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.chunkAndSaveProject(p),Void.class)
-  //         .log();
-  //  }
-
-
-  //  public Mono<ServerResponse> loadProjectFromGrid(ServerRequest request) {
-  //    String pid = request.queryParam("pid")
-  //                        .orElseThrow();
-  //
-  //
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.loadProjectFromGrid(pid),Project.class)
-  //         .log();
-  //  }
-
-
-  //  public Mono<ServerResponse> deleteProjectFromGrid(ServerRequest request) {
-  //    String pid = request.queryParam("pid")
-  //                        .orElseThrow();
-  //
-  //
-  //    return ok()
-  //
-  //         .contentType(JSON)
-  //
-  //         .body(projectService.deleteProjectFromGrid(pid),Project.class)
-  //         .log();
-  //  }
-
 }

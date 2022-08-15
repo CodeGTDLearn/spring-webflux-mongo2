@@ -7,6 +7,7 @@ import com.webflux.api.modules.project.core.exceptions.types.UpdateSimpleExcepti
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -23,6 +24,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ProjectExceptionsThrower {
 
+  @Autowired
   private ProjectExceptionsCustomAttributes projectExceptionsCustomAttributes;
 
   public <T> Mono<T> throwProjectNotFoundException() {

@@ -1,24 +1,67 @@
 ## Spring-WebFlux-Mongo2
 
 ### Table of Contents
+* [DISCLAIMER](#disclaimer)
 * [WebFlux](#webflux)
 * [MongoDB Strategy](#MongoDB-Strategy)
 * [Docker Mongo Replicaset](#docker-mongo-replicaset)
 * [Application.Yml](#application_yml)
-* [Application Profiles](#application-profiles)
+* [Profiles](#profiles)
 * [Docker](#docker)
 * [Testcontainers](#Testcontainers)
-* [CRUD Strategy](#CRUD Strategy)
+* [CRUD Strategy](#crud-strategy)
 * [Architectural Strategy](#architectural-strategy)
 * [SpringData](#springdata)
-* [Project Organization](#Project Organization)
-* [Bean Validation](#bean validation)
+* [Project Organization](#Project-organization)
+* [Bean Validation](#bean-validation)
 * [Exceptions](#Exceptions)
-* [Tests Junit 5](#Tests Junit 5)
+* [Tests Junit 5](#Tests-junit-5)
 
-### WebFlux:
+### Disclaimer
+1. This concept-proof is focused in test MongoDb
+   * GridFs "was not" explored in this concept-proof
+2. In real-life there is no scenerio with multiple Db-Connections, like those, studied in this concept-proof;
+3. For learning purpose, MongoDb were tested in 04 scenerios:
+   * By itself using docker-Compose
+   * By Testcontainers
+4. Modalities tested:
+   * replicaset without authentication 
+   * replicaset with authentication 
+   * stand-alone 
+   * TestContainers 
+5. To use those above, follow the instructions:
+    * Replicaset with auth + Replicaset without auth + Standalone
+      1. Select the profile in:
+        * src\main\resources\application.yml
+        * src\test\resources\application.yml
+      2. Start docker-compose file, choosing one of the follow the scripts:
+        * docker\replicaset-Compose
+        * docker\standalone-compose 
+        * docker\rs-singlenode-auth\replicaset-auth-compose
+      3. DOCKER-COMPOSE TESTING - COMMENT:
+        - testcontainer\container\TcContainerReplicaset: All annotations
+        - testcontainer\compose\TcCompose: All annotations
+      4. Execute the correct Test-Suite
+        - src\test\java\[...]\core\config\suites:
+          - Replicaset 
+          - Standalone
+          - Testcontainer          
+    * Testcontainers
+      1. Select the profile in :
+        * src\main\resources\application.yml
+        * src\test\resources\application.yml
+      2. Start file:
+        * scripts\compose-clean.bat
+      3. TESTCONTAINER TESTING - "UN"COMMENT:
+        * testcontainer\container\TcContainerReplicaset: All annotations
+        * testcontainer\compose\TcCompose: All annotations
+      4. Execute the correct Test-Suite
+        - src\test\java\[...]\core\config\suites
+          - Replicaset 
+          - Standalone
+          - Testcontainer
+### WebFlux
 1. RestControllers
-
 
 ### MongoDB Strategy
 1. Reactive SpringDataMongoDB
@@ -88,7 +131,7 @@
 3. Custom Logging.pattern.console
 
 
-### Application PROFILES
+### PROFILES
 1. **Sufix:** Defining Application-sufix.Yml files
 2. **Annotations:** Selecting beans with specific Db properties
 3. **Groups:**

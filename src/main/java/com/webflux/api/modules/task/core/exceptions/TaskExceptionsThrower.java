@@ -5,6 +5,7 @@ import com.webflux.api.modules.task.core.exceptions.types.TaskNameLessThanThreeE
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class TaskExceptionsThrower {
 
+  @Autowired
   private TaskExceptionsCustomAttributes taskExceptionsCustomAttributes;
 
   public <T> Mono<T> throwTaskNameIsEmptyException() {
@@ -29,4 +31,5 @@ public class TaskExceptionsThrower {
          taskExceptionsCustomAttributes.getTaskNameLessThanThreeMessage()));
 
   }
+
 }

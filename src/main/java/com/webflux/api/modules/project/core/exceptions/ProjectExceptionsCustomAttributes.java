@@ -15,8 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "modules.exception.project")
-@PropertySource(value = "classpath:exceptions-messages.yml", factory =
-     YamlProcessor.class)
+@PropertySource(value = "classpath:exceptions-messages.yml", factory = YamlProcessor.class)
 public class ProjectExceptionsCustomAttributes {
 
   // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
