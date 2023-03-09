@@ -35,7 +35,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /*
   ╔══════════════════════════════════════════════════════════════════════╗
@@ -298,8 +297,7 @@ public class ResourceTransactionExcTest {
                             .log()
                             .everything()
 
-                            //         .statusCode(NOT_ACCEPTABLE.value())
-                            .statusCode(NOT_FOUND.value())
+                            .statusCode(NOT_ACCEPTABLE.value())
                             .body(matchesJsonSchemaInClasspath(
                                  "contracts/transactions/transactionsClassicExcProjectEmpty.json"));
 
