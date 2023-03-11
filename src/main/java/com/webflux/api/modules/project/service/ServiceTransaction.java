@@ -44,8 +44,7 @@ public class ServiceTransaction implements IServiceTransaction {
     return
          Mono.just(project)
              .flatMap(proj1 -> {
-               if (proj1.getName()
-                        .isEmpty()) return projectThrower.throwProjectNameIsEmptyException();
+               if (proj1.getName().isEmpty()) return projectThrower.throwProjectNotFoundException();
                return Mono.just(proj1);
              })
              .flatMap(serviceRepo::save)
@@ -54,10 +53,8 @@ public class ServiceTransaction implements IServiceTransaction {
                return Mono.just(task);
              })
              .flatMap(task1 -> {
-               if (task1.getName()
-                        .isEmpty()) return taskThrower.throwTaskNameIsEmptyException();
-               if (task1.getName()
-                        .length() < 3) return taskThrower.throwTaskNameLessThanThreeException();
+               if (task1.getName().isEmpty()) return taskThrower.throwTaskNameIsEmptyException();
+               if (task1.getName().length() < 3) return taskThrower.throwTaskNameLessThanThreeException();
                return Mono.just(task1);
              })
              .flatMap(taskRepo::save)

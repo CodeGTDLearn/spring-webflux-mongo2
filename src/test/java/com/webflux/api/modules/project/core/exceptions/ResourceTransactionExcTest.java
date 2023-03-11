@@ -151,7 +151,7 @@ public class ResourceTransactionExcTest {
   // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
   @Test
   @EnabledIf(expression = "#{systemProperties[runTest] == 'true' && " + "!environment" +
-       ".acceptsProfiles('test-stand-alone')}", loadContext = true)
+                          ".acceptsProfiles('test-stand-alone')}", loadContext = true)
   @DisplayName("checkContentWithExc")
   public void checkContentWithExceptions() {
 
@@ -190,7 +190,7 @@ public class ResourceTransactionExcTest {
   // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
   @Test
   @EnabledIf(expression = "#{systemProperties[runTest] == 'true' " + "&& !environment" +
-       ".acceptsProfiles('test-stand-alone')}", loadContext = true)
+                          ".acceptsProfiles('test-stand-alone')}", loadContext = true)
   @DisplayName("transactionsClassicExcTaskLessThree")
   public void transactionsClassicExcTaskLessThanThree() {
 
@@ -221,7 +221,7 @@ public class ResourceTransactionExcTest {
                             .statusCode(NOT_ACCEPTABLE.value())
                             .body(matchesJsonSchemaInClasspath(
                                  "contracts/transactions/transactionsClassicExcTaskLessThanThree" +
-                                      ".json"));
+                                 ".json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -276,30 +276,43 @@ public class ResourceTransactionExcTest {
     var newTaskName = Faker.instance()
                            .name()
                            .firstName();
-
-    Project project = projectWithID("C", "2020-05-05", "2021-05-05", 1000L,
-                                    of("UK", "USA")
-    ).create();
+/*
+{
+    "path": "/project/savewithtx",
+    "status": 400,
+    "reason": "Validation failure",
+    "Global-Global-Atribute": "Global-General-Message",
+    "Global-Dev-Atribute": "Global-Dev-Message"
+}
+ */
+    Project project =
+         projectWithID("C",
+                       "2020-05-05",
+                       "2021-05-05",
+                       1000L,
+                       of("UK", "USA")
+         ).create();
 
     project.setName("");
     newTaskName = "";
 
-    RestAssuredWebTestClient.given()
-                            .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
-                            .body(project)
-                            .queryParam("taskNameInitial", newTaskName)
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
 
-                            .when()
-                            .post(REPO_TRANSACT_CLASSIC)
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
 
-                            .then()
-                            .log()
-                            .everything()
+         .then()
+         .log()
+         .everything()
 
-                            .statusCode(NOT_ACCEPTABLE.value())
-                            .body(matchesJsonSchemaInClasspath(
-                                 "contracts/transactions/transactionsClassicExcProjectEmpty.json"));
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/transactionsClassicExcProjectEmpty.json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);

@@ -1,4 +1,4 @@
-package com.webflux.api.core.exception;
+package com.webflux.api.core.exceptions;
 
 import com.webflux.api.core.config.YamlProcessor;
 import lombok.Getter;
@@ -27,7 +27,7 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "global.exception")
 @PropertySource(value = "classpath:exceptions-messages.yml", factory =
      YamlProcessor.class)
-public class GlobalExceptionCustomAttributes {
+public class GlobalExceptionMessages {
 
   // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
   // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE

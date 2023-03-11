@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": [
+    "path",
+    "status",
+    "reason",
+    "Global-Global-Atribute",
+    "Global-Dev-Atribute"
+  ],
+  "properties": {
+    "path": {
+      "type": "string",
+      "default": "",
+      "title": "The path Schema",
+      "examples": [
+        "/project/find/ByName"
+      ]
+    },
+    "status": {
+      "type": "integer",
+      "default": 0,
+      "title": "The status Schema",
+      "examples": [
+        400
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "default": "",
+      "title": "The reason Schema",
+      "examples": [
+        "Required String parameter 'projectName' is not present"
+      ]
+    },
+    "Global-Global-Atribute": {
+      "type": "string",
+      "default": "",
+      "title": "The Global-Global-Atribute Schema",
+      "examples": [
+        "Global-General-Message"
+      ]
+    },
+    "Global-Dev-Atribute": {
+      "type": "string",
+      "default": "",
+      "title": "The Global-Dev-Atribute Schema",
+      "examples": [
+        "Global-Dev-Message"
+      ]
+    }
+  },
+  "examples": [{
+    "path": "/project/find/ByName",
+    "status": 400,
+    "reason": "Required String parameter 'projectName' is not present",
+    "Global-Global-Atribute": "Global-General-Message",
+    "Global-Dev-Atribute": "Global-Dev-Message"
+  }]
+}

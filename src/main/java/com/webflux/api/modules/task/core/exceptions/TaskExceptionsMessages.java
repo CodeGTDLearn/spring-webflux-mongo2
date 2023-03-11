@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 @Configuration
 @ConfigurationProperties(prefix = "modules.exception.task")
 @PropertySource(value = "classpath:exceptions-messages.yml", ignoreResourceNotFound = true)
-public class TaskExceptionsCustomAttributes {
+public class TaskExceptionsMessages {
 
   // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
   // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE

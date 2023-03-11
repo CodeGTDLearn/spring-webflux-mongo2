@@ -94,7 +94,11 @@ public class ResourceCrud {
   @ResponseStatus(OK)
   public Flux<Project> findByName(@RequestParam String projectName) {
 
-    return serviceCrud.findByName(projectName);
+    return
+         serviceCrud
+              .findByName(projectName)
+              .switchIfEmpty(projectExceptionsThrower.throwProjectNotFoundException())
+         ;
   }
 
   @DeleteMapping(CRUD_ID)

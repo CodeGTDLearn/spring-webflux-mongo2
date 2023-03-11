@@ -1,4 +1,4 @@
-package com.webflux.api.core.exception;
+package com.webflux.api.core.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +28,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class GlobalExceptionAttributes extends DefaultErrorAttributes {
 
-  private GlobalExceptionCustomAttributes attributes;
+  private GlobalExceptionMessages attributes;
 
   @Override
   public Map<String, Object> getErrorAttributes(ServerRequest request,
@@ -61,16 +61,17 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
 
       // B) CREATING Parameters based on Default-Message
       // B.1) Fix the Default-Parameter "message"("message": "",) DO NOT USE ":"
-      globalAttributes.put("message", error.getMessage());
+      //globalAttributes.put("message", error.getMessage());  // 'message was removed
       globalAttributes.put("reason", error.getReason());
+
 
       // C) ADDING Custom-Parameters in the Default-Parameters
       globalAttributes.put("Global-Global-Atribute", attributes.getGlobalMessage());
       globalAttributes.put("Global-Dev-Atribute", attributes.getDeveloperMessage());
-      //      globalAttributes.put("example","example2");
+      // globalAttributes.put("example","example2");
 
       // D) REMOVING Keys/Fields from the Global-Exception-Message
-      //      globalAttributes.remove("path");
+      // globalAttributes.remove("path");
       globalAttributes.remove("error");
       globalAttributes.remove("message");
       globalAttributes.remove("timestamp");

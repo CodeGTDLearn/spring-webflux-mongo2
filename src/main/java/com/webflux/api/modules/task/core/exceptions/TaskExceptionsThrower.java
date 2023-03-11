@@ -17,18 +17,18 @@ import reactor.core.publisher.Mono;
 public class TaskExceptionsThrower {
 
   @Autowired
-  private TaskExceptionsCustomAttributes taskExceptionsCustomAttributes;
+  private TaskExceptionsMessages taskExceptionsMessages;
 
   public <T> Mono<T> throwTaskNameIsEmptyException() {
 
     return Mono.error(new TaskNameIsEmptyException(
-         taskExceptionsCustomAttributes.getTaskNameIsEmptyMessage()));
+         taskExceptionsMessages.getTaskNameIsEmptyMessage()));
   }
 
   public <T> Mono<T> throwTaskNameLessThanThreeException() {
 
     return Mono.error(new TaskNameLessThanThreeException(
-         taskExceptionsCustomAttributes.getTaskNameLessThanThreeMessage()));
+         taskExceptionsMessages.getTaskNameLessThanThreeMessage()));
 
   }
 

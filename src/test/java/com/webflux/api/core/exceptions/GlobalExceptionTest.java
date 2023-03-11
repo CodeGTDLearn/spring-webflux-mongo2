@@ -1,4 +1,4 @@
-package com.webflux.api.core.exception;
+package com.webflux.api.core.exceptions;
 
 import com.webflux.api.core.config.annotations.ResourceConfig;
 import com.webflux.api.core.config.config.DbUtilsConfig;
@@ -65,7 +65,7 @@ public class GlobalExceptionTest {
   TestDbUtils dbUtils;
 
   @Autowired
-  GlobalExceptionCustomAttributes globalException;
+  GlobalExceptionMessages globalException;
 
   private Project project1;
 

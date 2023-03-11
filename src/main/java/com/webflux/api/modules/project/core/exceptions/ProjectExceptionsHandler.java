@@ -1,6 +1,5 @@
 package com.webflux.api.modules.project.core.exceptions;
 
-import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVersionException;
 import com.webflux.api.modules.project.core.exceptions.types.UpdateSimpleException;
@@ -64,20 +63,6 @@ public class ProjectExceptionsHandler {
               new Date().getTime()
          );
     return new ResponseEntity<>(exceptionAttributes, BAD_REQUEST);
-  }
-
-  @ExceptionHandler(ProjectNameIsEmptyException.class)
-  public ResponseEntity<?> projectNameIsEmptyException(ProjectNameIsEmptyException exception) {
-
-    ProjectExceptionsAttributes exceptionAttributes =
-         new ProjectExceptionsAttributes(
-              exception.getMessage(),
-              exception.getClass()
-                       .getName(),
-              NOT_ACCEPTABLE.value(),
-              new Date().getTime()
-         );
-    return new ResponseEntity<>(exceptionAttributes, NOT_ACCEPTABLE);
   }
 
 }

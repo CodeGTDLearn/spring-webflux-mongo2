@@ -104,27 +104,27 @@ public class ResourceCrudExcTest {
                           "2021-05-05",
                           1000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     Project project2 = projecNoID("B",
                                   "2020-06-06",
                                   "2021-06-06",
                                   2000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
 
     Project project3 = projecNoID("B",
                                   "2020-07-07",
                                   "2021-07-07",
                                   3000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
     Project projetoNoId = projecNoID("C",
                                      "2020-05-05",
                                      "2021-05-05",
                                      1000L,
                                      of("HOL", "CAN")
-                                    ).create();
+    ).create();
 
     List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -133,7 +133,7 @@ public class ResourceCrudExcTest {
     Task task1 = taskWithID("3",
                             "Mark",
                             1000L
-                           ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -160,6 +160,28 @@ public class ResourceCrudExcTest {
          .get(CRUD_ID, Faker.instance()
                             .idNumber()
                             .invalid())
+
+         .then()
+         .log()
+         .everything()
+
+         .statusCode(NOT_FOUND.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/projectNotFound.json"))
+    ;
+  }
+
+  @Test
+  @EnabledIf(expression = enabledTest, loadContext = true)
+  @DisplayName("FindByNameExc")
+  public void FindByNameExc() {
+    RestAssuredWebTestClient
+
+         .given()
+         .webTestClient(mockedWebClient)
+         .queryParam("projectName", "project1.getName()")
+
+         .when()
+         .get(CRUD_BYNAME)
 
          .then()
          .log()
@@ -225,8 +247,8 @@ public class ResourceCrudExcTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateOptExc")
-  public void UpdateOptExc() {
+  @DisplayName("UpdateOptimisticExc")
+  public void UpdateOptimisticExc() {
     // OPTIMISTIC-LOCKING-UPDATE:
     // A) Uses the 'VERSION-ANNOTATION' in THE Entity
     // B) to prevent update-problems when happens 'CONCURRENT-UPDATES'
@@ -257,34 +279,8 @@ public class ResourceCrudExcTest {
 
   @Test
   @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateValid")
-  public void UpdateValid() {
-
-    project1.setName("");
-
-    RestAssuredWebTestClient
-         .given()
-         .webTestClient(mockedWebClient)
-
-         .body(project1)
-
-         .when()
-         .put(CRUD_UPD)
-
-         .then()
-         .log()
-         .everything()
-
-         .statusCode(BAD_REQUEST.value())
-         .body(matchesJsonSchemaInClasspath(
-              "contracts/exceptions/project/updateValidNotEmptyError.json"))
-    ;
-  }
-
-  @Test
-  @EnabledIf(expression = enabledTest, loadContext = true)
-  @DisplayName("UpdateValidNotEmpty")
-  public void UpdateValidNameNotEmpty() {
+  @DisplayName("BeanValidation_NameNotEmpty")
+  public void BeanValidation_NameNotEmpty() {
 
     project1.setName("");
 
@@ -302,7 +298,7 @@ public class ResourceCrudExcTest {
          .everything()
          .statusCode(BAD_REQUEST.value())
          .body(matchesJsonSchemaInClasspath(
-              "contracts/exceptions/project/updateValidNotEmptyError.json"))
+              "contracts/exceptions/project/beanValidation_NameNotEmpty.json"))
     ;
   }
 

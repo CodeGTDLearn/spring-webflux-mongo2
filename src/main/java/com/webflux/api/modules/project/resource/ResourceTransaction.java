@@ -1,7 +1,6 @@
 package com.webflux.api.modules.project.resource;
 
 import com.webflux.api.modules.project.core.exceptions.ProjectExceptionsThrower;
-import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceRepo;
@@ -16,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
 
 import static com.webflux.api.core.TaskBuilder.taskNoID;
 import static com.webflux.api.modules.project.core.routes.RoutesTransaction.*;
@@ -44,27 +45,23 @@ public class ResourceTransaction {
   @ResponseStatus(CREATED)
   public Mono<Task> checkContentWithExc(
        @RequestParam
-            //       @NotEmpty
-            //       @NotNull
-            String taskNameInitial,
-       //       @Valid
+       //       @NotEmpty
+       //       @NotNull
+       String taskNameInitial,
+       @Valid
        @RequestBody
-            Project project) {
+       Project project) {
 
     Task initialTask = taskNoID("3",
                                 "Mark",
                                 1000L
-                               ).create();
+    ).create();
 
     initialTask.setName(taskNameInitial);
 
     // @formatter:off
     return
          Mono.just(project)
-             .flatMap(proj1 -> {
-               if (proj1.getName().isEmpty()) return projectThrower.throwProjectNameIsEmptyException();
-               return Mono.just(proj1);
-             })
              .flatMap(proj2 -> {
                if (proj2.getName().isEmpty()) return taskThrower.throwTaskNameIsEmptyException();
                if (proj2.getName().length() < 3) return taskThrower.throwTaskNameLessThanThreeException();
@@ -87,17 +84,17 @@ public class ResourceTransaction {
   @ResponseStatus(CREATED)
   public Mono<Task> transactionsClassic(
        @RequestParam
-            //       @NotEmpty
-            //       @NotNull
-            String taskNameInitial,
-       //       @Valid
-       @RequestBody
-            Project project) {
+       //       @NotEmpty
+       //        @NotNull
+       String taskNameInitial,
+       @Valid
+       @RequestBody Project project) {
 
-    Task task = taskNoID("3",
-                         "Mark",
-                         1000L
-                        ).create();
+    Task task =
+         taskNoID("3",
+                  "Mark",
+                  1000L
+         ).create();
 
     task.setName(taskNameInitial);
 
@@ -108,9 +105,6 @@ public class ResourceTransaction {
 
                   // ON-ERROR-RESUME: CATCH+HANDLE THOSE EXCEPTIONS
                   .onErrorResume(error -> {
-                                   if (error instanceof ProjectNameIsEmptyException) {
-                                     return projectThrower.throwProjectNameIsEmptyException();
-                                   }
                                    if (error instanceof ProjectNotFoundException) {
                                      return projectThrower.throwProjectNotFoundException();
                                    }

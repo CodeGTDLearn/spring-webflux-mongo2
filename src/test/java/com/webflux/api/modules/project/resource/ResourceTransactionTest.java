@@ -109,14 +109,14 @@ public class ResourceTransactionTest {
                                   "2021-05-05",
                                   1000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
 
     Project projetoWithId = projectWithID("C",
                                           "2020-05-05",
                                           "2021-05-05",
                                           1000L,
                                           of("HOL", "CAN")
-                                         ).create();
+    ).create();
 
     List<Project> projectList = asList(project1, projetoWithId);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -126,7 +126,7 @@ public class ResourceTransactionTest {
     Task task1 = taskWithID("3",
                             "Mark",
                             1000L
-                           ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -148,16 +148,18 @@ public class ResourceTransactionTest {
   @DisplayName("createProjectTransaction")
   public void createProjectTransaction() {
 
-    var newTaskName = Faker.instance()
-                           .name()
-                           .fullName();
+    var newTaskName =
+         Faker.instance()
+              .name()
+              .fullName();
 
-    Project project = projectWithID("C",
-                                    "2020-05-05",
-                                    "2021-05-05",
-                                    1000L,
-                                    of("UK", "USA")
-                                   ).create();
+    Project project =
+         projectWithID("C",
+                       "2020-05-05",
+                       "2021-05-05",
+                       1000L,
+                       of("UK", "USA")
+         ).create();
 
     RestAssuredWebTestClient
          .given()

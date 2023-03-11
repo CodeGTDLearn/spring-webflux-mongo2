@@ -1,6 +1,5 @@
 package com.webflux.api.modules.project.core.exceptions;
 
-import com.webflux.api.modules.project.core.exceptions.types.ProjectNameIsEmptyException;
 import com.webflux.api.modules.project.core.exceptions.types.ProjectNotFoundException;
 import com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVersionException;
 import com.webflux.api.modules.project.core.exceptions.types.UpdateSimpleException;
@@ -25,30 +24,23 @@ import reactor.core.publisher.Mono;
 public class ProjectExceptionsThrower {
 
   @Autowired
-  private ProjectExceptionsCustomAttributes projectExceptionsCustomAttributes;
+  private ProjectExceptionsMessages projectExceptionsMessages;
 
   public <T> Mono<T> throwProjectNotFoundException() {
 
     return Mono.error(new ProjectNotFoundException(
-         projectExceptionsCustomAttributes.getProjectNotFoundMessage()));
+         projectExceptionsMessages.getProjectNotFoundMessage()));
   }
 
   public <T> Mono<T> throwUpdateOptmVersionException() {
 
     return Mono.error(new UpdateOptmisticVersionException(
-         projectExceptionsCustomAttributes.getProjectUpdateOptFailMessage()));
+         projectExceptionsMessages.getProjectUpdateOptFailMessage()));
   }
 
   public <T> Mono<T> throwUpdateSimpleException() {
 
     return Mono.error(new UpdateSimpleException(
-         projectExceptionsCustomAttributes.getProjectUpdateSimpleFailMessage()));
+         projectExceptionsMessages.getProjectUpdateSimpleFailMessage()));
   }
-
-  public <T> Mono<T> throwProjectNameIsEmptyException() {
-
-    return Mono.error(new ProjectNameIsEmptyException(
-         projectExceptionsCustomAttributes.getProjectNameIsEmptyMessage()));
-  }
-
 }

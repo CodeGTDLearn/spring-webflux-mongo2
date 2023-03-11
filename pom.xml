@@ -20,7 +20,7 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <rest-assured.version>4.3.0</rest-assured.version>
         <groovy.version>3.0.2</groovy.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
