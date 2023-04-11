@@ -1,4 +1,4 @@
-package com.webflux.api.core.exceptions;
+package com.webflux.api.core.exceptions.global;
 
 import com.webflux.api.core.config.YamlProcessor;
 import lombok.Getter;
@@ -17,21 +17,23 @@ import org.springframework.context.annotation.PropertySource;
     ║         not programmatically in a specific method         ║
     ║(meaning threw inside a method according the coder defined)║
     ╚═══════════════════════════════════════════════════════════╝
-*/
-// =================== PropertySource + ConfigurationProperties + YAML Files =======================
-// - @PropertySource with YAML Files in Spring Boot - https://www.baeldung.com/spring-yaml-propertysource
-// - Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly
+
+  ╔══════════════════════════════════════════════════════════════════════════════════════╗
+  ║                     PropertySource + YAML ConfigurationProperties                    ║
+  ╠══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ https://www.appsdeveloperblog.com/spring-boot-configurationproperties-tutorial/      ║
+  ║ PropertySource|PropertyFile www.baeldung.com/configuration-properties-in-spring-boot ║
+  ║ PropertySource|YAML: www.baeldung.com/spring-yaml-propertysource                     ║
+  ║ Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly║
+  ╚══════════════════════════════════════════════════════════════════════════════════════╝*/
 @Getter
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "global.exception")
-@PropertySource(value = "classpath:exceptions-messages.yml", factory =
+@PropertySource(value = "classpath:exception-messages\\global.yml", factory =
      YamlProcessor.class)
 public class GlobalExceptionMessages {
 
-  // THE BEAN-VALIDATION IS VALIDATING THE MESSAGE-CONTENT
-  // THAT COMES FROM THE EXCEPTIONS-MANAGEMENT.PROPERTIES FILE
-  // THOSE VALIDATIONS NOT HAVE RELATION WITH THE EXCEPTIONS
   private String developerMessage;
   private String globalMessage;
 

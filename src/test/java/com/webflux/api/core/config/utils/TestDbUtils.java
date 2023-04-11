@@ -30,7 +30,6 @@ public class TestDbUtils {
   @Autowired
   TemplColections collections;
 
-
   public <E> void countAndExecuteFlux(Flux<E> flux, int totalElements) {
 
     StepVerifier
@@ -46,14 +45,12 @@ public class TestDbUtils {
                       .thenMany(Flux.fromIterable(projectList))
                       .flatMap(projectRepo::save)
                       .doOnNext(item -> projectRepo.findAll())
-                      .doOnNext(item -> System.out.printf(
-                           ">=> Saved 'ProjectChild' in DB:\n" +
-                                "    |> ID: %s\n" +
-                                "    |> Name: %s\n\n"
-                           ,
-                           item.get_id(),
-                           item.getName()
-                                                         ));
+                      .doOnNext(item ->
+                                     ConsolePanelUtil.simplePanel(
+                                          "Saved 'ProjectChild' in DB",
+                                          "ID: ".concat(item.get_id()),
+                                          "Name: ".concat(item.getName())
+                                     ));
   }
 
   public Flux<ProjectChild> saveProjectChildList(List<ProjectChild> projectList) {
@@ -62,14 +59,12 @@ public class TestDbUtils {
                     .thenMany(Flux.fromIterable(projectList))
                     .flatMap(repoChild::save)
                     .doOnNext(item -> repoChild.findAll())
-                    .doOnNext(item -> System.out.printf(
-                         ">=> Saved 'ProjectChild' in DB:\n" +
-                              "    |> ID: %s\n" +
-                              "    |> Name: %s\n\n"
-                         ,
-                         item.get_id(),
-                         item.getName()
-                                                       ));
+                    .doOnNext(item ->
+                                   ConsolePanelUtil.simplePanel(
+                                        "Saved 'ProjectChild' in DB",
+                                        "ID: ".concat(item.get_id()),
+                                        "Name: ".concat(item.getName())
+                                   ));
   }
 
   public Flux<Task> saveTaskList(List<Task> taskList) {
@@ -78,15 +73,12 @@ public class TestDbUtils {
                    .thenMany(Flux.fromIterable(taskList))
                    .flatMap(taskRepo::save)
                    .doOnNext(item -> taskRepo.findAll())
-                   .doOnNext(item -> System.out.printf(
-                        ">=> Saved 'Task' in DB:\n" +
-                             "    |> ID: %s\n" +
-                             "    |> Name: %s\n\n"
-                        ,
-                        item.get_id(),
-                        item.getName()
-                                                      ))
-         ;
+                   .doOnNext(item ->
+                                  ConsolePanelUtil.simplePanel(
+                                       "Saved 'Task' in DB",
+                                       "ID: ".concat(item.get_id()),
+                                       "Name: ".concat(item.getName())
+                                  ));
   }
 
   public <E> void checkFluxListElements(Flux<E> listFlux, List<E> listCompare) {
@@ -105,11 +97,12 @@ public class TestDbUtils {
          .expectSubscription()
          .verifyComplete();
 
-    System.out.println(
-         ">==================================================>\n" +
-              ">===============> CLEAN-DB-TO-TEST >===============>\n" +
-              ">==================================================>\n\n"
-                      );
-  }
+    //    System.out.println(
+    //         ">==================================================>\n" +
+    //         ">===============> CLEAN-DB-TO-TEST >===============>\n" +
+    //         ">==================================================>\n\n"
+    //    );
 
+    ConsolePanelUtil.simplePanel("CLEAN-DB-TO-TEST");
+  }
 }

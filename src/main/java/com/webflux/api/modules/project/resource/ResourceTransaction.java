@@ -45,9 +45,8 @@ public class ResourceTransaction {
   @ResponseStatus(CREATED)
   public Mono<Task> checkContentWithExc(
        @RequestParam
-       //       @NotEmpty
-       //       @NotNull
        String taskNameInitial,
+
        @Valid
        @RequestBody
        Project project) {

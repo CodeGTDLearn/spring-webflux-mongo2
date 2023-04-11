@@ -1,0 +1,6 @@
+# CUSTOM-EXCEPTION:
+modules:
+  exception:
+    task:
+      taskNameIsEmptyMessage: Task name is empty or not have minimal chracteres. It is not allowed!!!!
+      taskNameLessThanThreeMessage: Task name is less than three!!!!

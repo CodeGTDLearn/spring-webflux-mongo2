@@ -1,0 +1,5 @@
+# GLOBAL-EXCEPTION:
+global:
+  exception:
+    developerMessage: Global-Dev-Message
+    globalMessage: Global-General-Message

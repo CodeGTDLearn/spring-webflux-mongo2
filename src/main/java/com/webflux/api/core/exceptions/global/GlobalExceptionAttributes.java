@@ -1,4 +1,4 @@
-package com.webflux.api.core.exceptions;
+package com.webflux.api.core.exceptions.global;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
