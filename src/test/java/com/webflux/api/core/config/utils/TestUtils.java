@@ -32,13 +32,16 @@ public class TestUtils {
     RestAssuredWebTestClient.reset();
   }
 
-  public static void globalTestMessage(String content, String testType) {
+  public static void globalTestMessage(
+       String testDisplayName,
+       String titleTestType) {
 
     final String error =
          "Error: Provide TestInfo testInfo.getTestMethod().toString()";
+
     // @formatter:off
-    var contentEdited =
-         Stream.of(content)
+    var testName =
+         Stream.of(testDisplayName)
                .map(check -> check.contains("repetition") ? error : check)
                .map(text -> {
                  var check = text.contains("()]") & ! text.contains("repetition");
@@ -52,7 +55,7 @@ public class TestUtils {
                .get();
     // @formatter:on
 
-    String title = switch (testType.toLowerCase()) {
+    String title = switch (titleTestType.toLowerCase()) {
       case "class-start" -> " STARTING TEST-CLASS...";
       case "class-end" -> "...FINISHED TEST-CLASS ";
       case "method-start" -> "STARTING TEST-METHOD...";
@@ -60,17 +63,17 @@ public class TestUtils {
       default -> "";
     };
 
-    ConsolePanelUtil.simplePanel(title, contentEdited);
+    ConsolePanelUtil.simplePanel(title, testName);
   }
 
   public static void globalContainerMessage(
        MongoDBContainer container,
-       String typeTestMessage) {
+       String titleTestType) {
 
     // @formatter:off
     if (container == null) return;
 
-    String title = switch (typeTestMessage.toLowerCase()) {
+    String title = switch (titleTestType.toLowerCase()) {
       case "container-start" -> "STARTING TEST-CONTAINER...";
       case "container-end" -> "...FINISHED TEST-CONTAINER";
       case "container-state" -> "  ...TEST'S TC-CONTAINER  ";
@@ -95,13 +98,17 @@ public class TestUtils {
     if (compose == null) return;
 
     var container = compose.getContainerByServiceName(service + "_1").get();
+
+    var title = "TC-CONTAINER-COMPOSE";
+
     ConsolePanelUtil
-         .simplePanel("TC-CONTAINER-COMPOSE",
-                      service,
-                      compose.getServiceHost(service, port),
-                      compose.getServicePort(service, port).toString(),
-                      "Created: ".concat(valueOf(container.isCreated())),
-                      "Running: ".concat(valueOf(container.isRunning()))
+         .simplePanel(
+              title,
+              service,
+              compose.getServiceHost(service, port),
+              compose.getServicePort(service, port).toString(),
+              "Created: ".concat(valueOf(container.isCreated())),
+              "Running: ".concat(valueOf(container.isRunning()))
          );
     // @formatter:on
   }

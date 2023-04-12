@@ -52,7 +52,6 @@ public class TcContainerConfig implements Extension {
 
   public static void startTcContainer() {
 
-
     CONTAINER.isHealthy();
     CONTAINER.start();
     System.out.println("checando" + CONTAINER.getReplicaSetUrl());

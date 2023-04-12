@@ -166,22 +166,23 @@ public class ResourceTransactionExcTest {
     project.setName("xx");
     newTaskName = "XX";
 
-    RestAssuredWebTestClient.given()
-                            .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
-                            .body(project)
-                            .queryParam("taskNameInitial", newTaskName)
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
 
-                            .when()
-                            .post(REPO_TRANSACT_CLASSIC)
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
 
-                            .then()
-                            .log()
-                            .everything()
+         .then()
+         .log()
+         .everything()
 
-                            .statusCode(NOT_ACCEPTABLE.value())
-                            .body(matchesJsonSchemaInClasspath(
-                                 "contracts/transactions/checkContentWithExc.json"));
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/checkContentWithExc.json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -205,23 +206,24 @@ public class ResourceTransactionExcTest {
     project.setName("NOT-EMPTY");
     newTaskName = "XX";
 
-    RestAssuredWebTestClient.given()
-                            .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
-                            .body(project)
-                            .queryParam("taskNameInitial", newTaskName)
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
 
-                            .when()
-                            .post(REPO_TRANSACT_CLASSIC)
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
 
-                            .then()
-                            .log()
-                            .everything()
+         .then()
+         .log()
+         .everything()
 
-                            .statusCode(NOT_ACCEPTABLE.value())
-                            .body(matchesJsonSchemaInClasspath(
-                                 "contracts/transactions/transactionsClassicExcTaskLessThanThree" +
-                                 ".json"));
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/transactionsClassicExcTaskLessThanThree" +
+              ".json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -245,22 +247,23 @@ public class ResourceTransactionExcTest {
     project.setName("NOT-EMPTY");
     newTaskName = "";
 
-    RestAssuredWebTestClient.given()
-                            .webTestClient(mockedWebClient)
+    RestAssuredWebTestClient
+         .given()
+         .webTestClient(mockedWebClient)
 
-                            .body(project)
-                            .queryParam("taskNameInitial", newTaskName)
+         .body(project)
+         .queryParam("taskNameInitial", newTaskName)
 
-                            .when()
-                            .post(REPO_TRANSACT_CLASSIC)
+         .when()
+         .post(REPO_TRANSACT_CLASSIC)
 
-                            .then()
-                            .log()
-                            .everything()
+         .then()
+         .log()
+         .everything()
 
-                            .statusCode(NOT_ACCEPTABLE.value())
-                            .body(matchesJsonSchemaInClasspath(
-                                 "contracts/transactions/transactionsClassicExcTaskEmpty.json"));
+         .statusCode(NOT_ACCEPTABLE.value())
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/transactions/transactionsClassicExcTaskEmpty.json"));
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);

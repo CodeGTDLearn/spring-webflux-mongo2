@@ -30,8 +30,7 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "global.exception")
-@PropertySource(value = "classpath:exception-messages\\global.yml", factory =
-     YamlProcessor.class)
+@PropertySource(value = "classpath:exception-messages\\global.yml", factory = YamlProcessor.class)
 public class GlobalExceptionMessages {
 
   private String developerMessage;

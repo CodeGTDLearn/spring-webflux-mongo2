@@ -14,7 +14,7 @@ https://medium.com/pictet-technologies-blog/speeding-up-your-integration-tests-w
  */
 public class TcComposeConfig {
 
-  final static public int STARTUP_TIMEOUT = 15;
+  final static public int STARTUP_TIMEOUT = 30;
   final static public int SERVICE_TEST_PORT = 27017;
   final static public String SERVICE_TEST = "api-test-db";
   final static private String COMPOSE_TEST_PATH = "src/test/resources/compose-tc-compose.yml";

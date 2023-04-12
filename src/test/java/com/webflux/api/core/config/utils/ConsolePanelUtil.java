@@ -7,8 +7,8 @@ public class ConsolePanelUtil {
 
   public static void simplePanel(String... texts) {
 
-    panel(
-         21,
+    fullPanel(
+         50,
          5,
          1,
          1,
@@ -24,7 +24,7 @@ public class ConsolePanelUtil {
 
   public static void scalablePanel(int scale, String... texts) {
 
-    panel(
+    fullPanel(
          scale,
          5,
          1,
@@ -39,7 +39,7 @@ public class ConsolePanelUtil {
     );
   }
 
-  public static void panel(
+  public static void fullPanel(
        int scale,
        int margin,
        int headerSpaces,
