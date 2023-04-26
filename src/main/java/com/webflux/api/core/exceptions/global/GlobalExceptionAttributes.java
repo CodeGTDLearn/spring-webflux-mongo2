@@ -31,46 +31,54 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
   private GlobalExceptionMessages attributes;
 
   @Override
-  public Map<String, Object> getErrorAttributes(ServerRequest request,
-                                                ErrorAttributeOptions options) {
+  public Map<String, Object> getErrorAttributes(
+       ServerRequest request,
+       ErrorAttributeOptions options) {
 
     Map<String, Object> globalAttributes = super.getErrorAttributes(request, options);
 
-    // ADICIONA A GLOBAL-EXCEPTION(ResponseStatusException)
-    // POIS NAO SE TRATA DE NENHUMA DAS 'CUSTOM-EXCEPTIONS'
+    /*╔══════════════════════════════════════════════════════╗
+      ║ ADICIONA A GLOBAL-EXCEPTION(ResponseStatusException) ║
+      ╠══════════════════════════════════════════════════════╣
+      ║ POIS NAO SE TRATA DE NENHUMA DAS 'CUSTOM-EXCEPTIONS' ║
+      ╚══════════════════════════════════════════════════════╝*/
     Throwable throwable = getError(request);
     if (throwable instanceof ResponseStatusException) {
 
       ResponseStatusException error = (ResponseStatusException) throwable;
 
-      // IDEIA GERAL
-      // SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)
-      // adiciona ATTRIBUTES no globalAttributes
-
-      // A) DEFAULT-EXCEPTION-ATTRIBUTES EXAMPLE:
-            /*
-            {
-                 "timestamp": "2022-02-08T22:02:08.410+00:00",
-                 "path": "/project/save",
-                 "status": 500,
-                 "error": "Internal Server Error",
-                 "message": "",
-                 "requestId": "317e3568"
-            }
-            */
-
-      // B) CREATING Parameters based on Default-Message
-      // B.1) Fix the Default-Parameter "message"("message": "",) DO NOT USE ":"
-      //globalAttributes.put("message", error.getMessage());  // 'message was removed
+      /*╔═════════════════════════════════════════════╗
+        ║    1) ADDING GLOBAL-EXCEPTION-ATTRIBUTES    ║
+        ╠═════════════════════════════════════════════╣
+        ║ adiciona/PUT ATTRIBUTES no globalAttributes ║
+        ║             DEFAULT ATTRIBUTES              ║
+        ╚═════════════════════════════════════════════╝
+        ╔═════════════════════════════════════════════╗
+        ║  1.1) CLASSIC-ERROR IN 'MESSAGE' ATTRIBUTE  ║
+        ╠═════════════════════════════════════════════╣
+        ║   DONT USE ":" - "message"("message": "",)  ║
+        ╚═════════════════════════════════════════════╝*/
+      globalAttributes.put("message", error.getMessage());  // 'message was removed
       globalAttributes.put("reason", error.getReason());
 
-
-      // C) ADDING Custom-Parameters in the Default-Parameters
+      /*╔══════════════════════════════════════════════╗
+        ║ 2) ADDING CUSTOM GLOBAL-EXCEPTION-ATTRIBUTES ║
+        ╠══════════════════════════════════════════════╣
+        ║      PUT CUSTOM-ATRIBUTES (NOT DEFAULT)      ║
+        ║EX: globalAttributes.put("example","example2")║
+        ╚══════════════════════════════════════════════╝*/
       globalAttributes.put("Global-Global-Atribute", attributes.getGlobalMessage());
       globalAttributes.put("Global-Dev-Atribute", attributes.getDeveloperMessage());
-      // globalAttributes.put("example","example2");
 
-      // D) REMOVING Keys/Fields from the Global-Exception-Message
+      /*╔══════════════════════════════════════════════╗
+        ║    3) REMOVING GLOBAL-EXCEPTION-ATTRIBUTES   ║
+        ╠══════════════════════════════════════════════╣
+        ║           REMOVE CUSTOM-ATTRIBUTES           ║
+        ║          REMOVING Keys/Fields from           ║
+        ║         the Global-Exception-Message         ║
+        ║      EX: globalAttributes.remove("path");    ║
+        ║   EX: globalAttributes.remove("message");    ║
+        ╚══════════════════════════════════════════════╝*/
       // globalAttributes.remove("path");
       globalAttributes.remove("error");
       globalAttributes.remove("message");
@@ -78,13 +86,16 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
       globalAttributes.remove("requestId");
     }
 
-    // NAO SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)
-    // PORTANTO SENDO, UMA CUSTOM-EXCEPTION
-    // retorna o valor PADRAO de ATTRIBUTES ou seja,
-    // o globalAttributes "PURO", sem insercao(.put's do IF acima) de qquer atributo
-    // personalizado
-    // OU SEJA, nao se acrescenta os atributos definidos no IF-ACIMA
+/*
+     NAO SENDO UMA GLOBAL-EXCEPTION(ResponseStatusException)
+     PORTANTO SENDO, UMA CUSTOM-EXCEPTION
+     retorna o valor PADRAO de ATTRIBUTES ou seja,
+     o globalAttributes "PURO", sem insercao(.put's do IF acima) de qquer atributo
+     personalizado
+     OU SEJA, nao se acrescenta os atributos definidos no IF-ACIMA
+*/
     return globalAttributes;
+
   }
 
 }

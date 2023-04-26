@@ -21,7 +21,7 @@ public class Project implements Serializable {
   @Id
   private String _id;
 
-  @NotEmpty
+  @NotEmpty(message = "teste one message")
   private String name;
 
   private String code;

@@ -51,10 +51,11 @@ public class ResourceTransaction {
        @RequestBody
        Project project) {
 
-    Task initialTask = taskNoID("3",
-                                "Mark",
-                                1000L
-    ).create();
+    Task initialTask =
+         taskNoID("3",
+                  "Mark",
+                  1000L
+         ).create();
 
     initialTask.setName(taskNameInitial);
 
@@ -83,9 +84,8 @@ public class ResourceTransaction {
   @ResponseStatus(CREATED)
   public Mono<Task> transactionsClassic(
        @RequestParam
-       //       @NotEmpty
-       //        @NotNull
        String taskNameInitial,
+
        @Valid
        @RequestBody Project project) {
 

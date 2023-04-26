@@ -80,6 +80,13 @@ public class TestUtils {
       default -> "";
     };
 
+//    String XXX = switch (titleTestType.toLowerCase()) {
+//      case TestOption.CONTAINER_START -> "STARTING TEST-CONTAINER...";
+//      case TestOption.CONTAINER_END -> "...FINISHED TEST-CONTAINER";
+//      case TestOption.CONTAINER_STATE -> "  ...TEST'S TC-CONTAINER  ";
+//      default -> "";
+//    };
+
     ConsolePanelUtil.simplePanel(
          title,
          container.getContainerName().transform("Name: "::concat),
@@ -111,5 +118,17 @@ public class TestUtils {
               "Running: ".concat(valueOf(container.isRunning()))
          );
     // @formatter:on
+  }
+
+  public enum TestOption {
+    CONTAINER_START("STARTING TEST-CONTAINER..."),
+    CONTAINER_END("...FINISHED TEST-CONTAINER"),
+    CONTAINER_STATE("  ...TEST'S TC-CONTAINER  ");
+
+    String option;
+
+    TestOption(String s) {
+
+    }
   }
 }
