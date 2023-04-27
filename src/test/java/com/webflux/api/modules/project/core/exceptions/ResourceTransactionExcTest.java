@@ -9,7 +9,6 @@ import com.webflux.api.modules.project.entity.Project;
 import com.webflux.api.modules.project.service.IServiceCrud;
 import com.webflux.api.modules.task.entity.Task;
 import com.webflux.api.modules.task.service.IServiceTask;
-import io.restassured.RestAssured;
 import io.restassured.module.webtestclient.RestAssuredWebTestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -35,7 +34,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
 
@@ -302,7 +301,7 @@ public class ResourceTransactionExcTest {
     project.setName("");
     newTaskName = "";
 
-    RestAssuredWebTestClient
+    var response = RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
 
@@ -315,23 +314,13 @@ public class ResourceTransactionExcTest {
          .then()
          .log()
          .everything()
-
          .statusCode(BAD_REQUEST.value())
+         .body("reason", containsString("Validation failure"))
+         .body("message", containsString("teste one message"))
+         // .body(matchesJsonSchemaInClasspath(
+         //       "contracts/transactions/transactionsClassicExcProjectEmpty.json"))
+         ;
 
-//         .header("Request URI:",
-//                 equalTo(
-//                      "%s:%s%s%s".formatted(
-//                           RestAssured.baseURI,
-//                           "8080",
-//                           PROJ_ROOT_CRUD,
-//                           REPO_TRANSACT_CLASSIC))
-//         )
-         .body("default message", containsString("teste one message"))
-    //         .body(matchesJsonSchemaInClasspath(
-    //              "contracts/transactions/transactionsClassicExcProjectEmpty.json"))
-    ;
-
-    System.out.println(RestAssured.baseURI + ":" + RestAssured.port + RestAssured.basePath);
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -345,3 +334,13 @@ public class ResourceTransactionExcTest {
     blockHoundTestCheck();
   }
 }
+         //         .header("Location",
+         //                 equalTo(
+         //                      "%s:%s%s%s%s".formatted(
+         //                           RestAssured.baseURI,
+         //                           "8080",
+         //                           PROJ_ROOT_CRUD,
+         //                           REPO_TRANSACT_CLASSIC,
+         //                           "?taskNameInitial="
+         //                      ))
+         //         )

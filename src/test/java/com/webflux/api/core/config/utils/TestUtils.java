@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockhoundInstallWithSpecificAllowedCalls;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecs;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
+import static com.webflux.api.core.config.utils.TestUtils.TitleTestTypeContainer.*;
 import static java.lang.String.valueOf;
 
 @Slf4j
@@ -68,24 +69,17 @@ public class TestUtils {
 
   public static void globalContainerMessage(
        MongoDBContainer container,
-       String titleTestType) {
+       TitleTestTypeContainer titleTestType
+  ) {
 
     // @formatter:off
     if (container == null) return;
 
-    String title = switch (titleTestType.toLowerCase()) {
-      case "container-start" -> "STARTING TEST-CONTAINER...";
-      case "container-end" -> "...FINISHED TEST-CONTAINER";
-      case "container-state" -> "  ...TEST'S TC-CONTAINER  ";
-      default -> "";
+    String title = switch (titleTestType) {
+      case CONTAINER_START -> CONTAINER_START.testType;
+      case CONTAINER_END -> CONTAINER_END.testType;
+      case CONTAINER_STATE -> CONTAINER_STATE.testType;
     };
-
-//    String XXX = switch (titleTestType.toLowerCase()) {
-//      case TestOption.CONTAINER_START -> "STARTING TEST-CONTAINER...";
-//      case TestOption.CONTAINER_END -> "...FINISHED TEST-CONTAINER";
-//      case TestOption.CONTAINER_STATE -> "  ...TEST'S TC-CONTAINER  ";
-//      default -> "";
-//    };
 
     ConsolePanelUtil.simplePanel(
          title,
@@ -120,15 +114,40 @@ public class TestUtils {
     // @formatter:on
   }
 
-  public enum TestOption {
+  public enum TitleTestTypeContainer {
     CONTAINER_START("STARTING TEST-CONTAINER..."),
     CONTAINER_END("...FINISHED TEST-CONTAINER"),
     CONTAINER_STATE("  ...TEST'S TC-CONTAINER  ");
 
-    String option;
+    private final String testType;
 
-    TestOption(String s) {
+    TitleTestTypeContainer(String testType) {
 
+      this.testType = testType;
+    }
+  }
+
+  public enum TitleTestTypeClass {
+    CLASS_START(" STARTING TEST-CLASS..."),
+    CLASS_END("...FINISHED TEST-CLASS ");
+
+    private final String testType;
+
+    TitleTestTypeClass(String testType) {
+
+      this.testType = testType;
+    }
+  }
+
+  public enum TitleTestTypeMethod {
+    CLASS_METHOD_START("STARTING TEST-METHOD..."),
+    CLASS_METHOD_END("...FINISHED TEST-METHOD");
+
+    private final String testType;
+
+    TitleTestTypeMethod(String testType) {
+
+      this.testType = testType;
     }
   }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.extension.Extension;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import static com.webflux.api.core.config.utils.TestUtils.TitleTestTypeContainer.*;
 import static com.webflux.api.core.config.utils.TestUtils.globalContainerMessage;
 import static java.lang.System.setProperty;
 
@@ -56,14 +57,14 @@ public class TcContainerConfig implements Extension {
     CONTAINER.start();
     System.out.println("checando" + CONTAINER.getReplicaSetUrl());
     setProperty(URI_TEST_APPLICATION_PROPERTY, CONTAINER.getReplicaSetUrl());
-    globalContainerMessage(getTcContainer(), "container-start");
-    globalContainerMessage(getTcContainer(), "container-state");
+    globalContainerMessage(getTcContainer(), CONTAINER_START);
+    globalContainerMessage(getTcContainer(), CONTAINER_STATE);
   }
 
 
   public static void restartTcContainer() {
 
-    globalContainerMessage(getTcContainer(), "container-end");
+    globalContainerMessage(getTcContainer(), CONTAINER_END);
     CONTAINER.close();
     startTcContainer();
   }
@@ -72,7 +73,7 @@ public class TcContainerConfig implements Extension {
   public static void closeTcContainer() {
 
     setReuseTcContainer(false);
-    globalContainerMessage(getTcContainer(), "container-end");
+    globalContainerMessage(getTcContainer(), CONTAINER_END);
     if (! CONTAINER.isShouldBeReused()) CONTAINER.stop();
   }
 
@@ -87,8 +88,8 @@ public class TcContainerConfig implements Extension {
     getTcContainer().isHealthy();
     getTcContainer().isCreated();
     getTcContainer().isRunning();
-    globalContainerMessage(getTcContainer(), "container-start");
-    globalContainerMessage(getTcContainer(), "container-state");
+    globalContainerMessage(getTcContainer(), CONTAINER_START);
+    globalContainerMessage(getTcContainer(), CONTAINER_STATE);
   }
 
   public static MongoDBContainer getTcContainer() {
