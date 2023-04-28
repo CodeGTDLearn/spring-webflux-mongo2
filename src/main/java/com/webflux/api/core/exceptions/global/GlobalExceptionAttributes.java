@@ -79,7 +79,7 @@ public class GlobalExceptionAttributes extends DefaultErrorAttributes {
         ║      EX: globalAttributes.remove("path");    ║
         ║   EX: globalAttributes.remove("message");    ║
         ╚══════════════════════════════════════════════╝*/
-      // globalAttributes.remove("path");
+      //globalAttributes.remove("path");
       globalAttributes.remove("error");
       //globalAttributes.remove("message");
       globalAttributes.remove("timestamp");

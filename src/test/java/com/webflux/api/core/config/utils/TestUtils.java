@@ -12,7 +12,8 @@ import java.util.stream.Stream;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockhoundInstallWithSpecificAllowedCalls;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecs;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
-import static com.webflux.api.core.config.utils.TestUtils.TitleTestTypeContainer.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesContainer.*;
 import static java.lang.String.valueOf;
 
 @Slf4j
@@ -35,7 +36,7 @@ public class TestUtils {
 
   public static void globalTestMessage(
        String testDisplayName,
-       String titleTestType) {
+       TestTitlesClass testTitle) {
 
     final String error =
          "Error: Provide TestInfo testInfo.getTestMethod().toString()";
@@ -56,12 +57,11 @@ public class TestUtils {
                .get();
     // @formatter:on
 
-    String title = switch (titleTestType.toLowerCase()) {
-      case "class-start" -> " STARTING TEST-CLASS...";
-      case "class-end" -> "...FINISHED TEST-CLASS ";
-      case "method-start" -> "STARTING TEST-METHOD...";
-      case "method-end" -> "...FINISHED TEST-METHOD";
-      default -> "";
+    String title = switch (testTitle) {
+      case CLASS_START -> CLASS_START.testType;
+      case CLASS_END -> CLASS_END.testType;
+      case METHOD_START -> METHOD_START.testType;
+      case METHOD_END -> METHOD_END.testType;
     };
 
     ConsolePanelUtil.simplePanel(title, testName);
@@ -69,13 +69,13 @@ public class TestUtils {
 
   public static void globalContainerMessage(
        MongoDBContainer container,
-       TitleTestTypeContainer titleTestType
+       TestTitlesContainer testTitle
   ) {
 
     // @formatter:off
     if (container == null) return;
 
-    String title = switch (titleTestType) {
+    String title = switch (testTitle) {
       case CONTAINER_START -> CONTAINER_START.testType;
       case CONTAINER_END -> CONTAINER_END.testType;
       case CONTAINER_STATE -> CONTAINER_STATE.testType;
@@ -114,38 +114,28 @@ public class TestUtils {
     // @formatter:on
   }
 
-  public enum TitleTestTypeContainer {
+  public enum TestTitlesContainer {
     CONTAINER_START("STARTING TEST-CONTAINER..."),
     CONTAINER_END("...FINISHED TEST-CONTAINER"),
     CONTAINER_STATE("  ...TEST'S TC-CONTAINER  ");
 
     private final String testType;
 
-    TitleTestTypeContainer(String testType) {
+    TestTitlesContainer(String testType) {
 
       this.testType = testType;
     }
   }
 
-  public enum TitleTestTypeClass {
+  public enum TestTitlesClass {
     CLASS_START(" STARTING TEST-CLASS..."),
-    CLASS_END("...FINISHED TEST-CLASS ");
+    CLASS_END("...FINISHED TEST-CLASS "),
+    METHOD_START("STARTING TEST-METHOD..."),
+    METHOD_END("...FINISHED TEST-METHOD");
 
     private final String testType;
 
-    TitleTestTypeClass(String testType) {
-
-      this.testType = testType;
-    }
-  }
-
-  public enum TitleTestTypeMethod {
-    CLASS_METHOD_START("STARTING TEST-METHOD..."),
-    CLASS_METHOD_END("...FINISHED TEST-METHOD");
-
-    private final String testType;
-
-    TitleTestTypeMethod(String testType) {
+    TestTitlesClass(String testType) {
 
       this.testType = testType;
     }

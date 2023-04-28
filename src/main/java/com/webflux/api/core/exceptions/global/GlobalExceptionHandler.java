@@ -30,12 +30,15 @@ import static org.springframework.boot.web.error.ErrorAttributeOptions.*;
     ║(meaning threw inside a method according the coder defined)║
     ╚═══════════════════════════════════════════════════════════╝
 */
-// ==> EXCEPTIONS IN CONTROLLER:
-// *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
-//     - "Como stream pode ser manipulado por diferentes grupos de thread,
-//     - caso um erro aconteça em uma thread que não é a que operou a controller,
-//     - o ControllerAdvice não vai ser notificado "
-//     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb-chega-de-sofrer-f92fb64517c3
+/*
+ ==> EXCEPTIONS IN CONTROLLER:
+ *** REASON: IN WEBFLUX, EXCEPTIONS MUST BE IN CONTROLLER - WHY?
+     - "Como stream pode ser manipulado por diferentes grupos de thread,
+     - caso um erro aconteça em uma thread que não é a que operou a controller,
+     - o ControllerAdvice não vai ser notificado "
+     - https://medium.com/nstech/programa%C3%A7%C3%A3o-reativa-com-spring-boot-webflux-e-mongodb
+     -chega-de-sofrer-f92fb64517c3
+*/
 @Component
 @Order(- 2)
 //CustomGlobalExceptionHandler COMES BEFORE the SpringWebFluxGlobalExceptionHandlerDefault
@@ -63,7 +66,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
          .route(
               RequestPredicates.all(),
               this::formatErrorResponse
-               );
+         );
   }
 
 

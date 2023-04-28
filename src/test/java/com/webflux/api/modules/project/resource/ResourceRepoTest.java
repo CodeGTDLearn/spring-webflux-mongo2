@@ -25,6 +25,7 @@ import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCh
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.RoutesRepo.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
@@ -70,7 +71,7 @@ public class ResourceRepoTest {
     //                                         TC_COMPOSE_SERVICE_PORT
     //                                        );
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
          requestSpecsSetPath("http://localhost:8080" + REPO_ROOT);
@@ -82,7 +83,7 @@ public class ResourceRepoTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -97,21 +98,21 @@ public class ResourceRepoTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     project1 = projecNoID("C",
                           "2020-05-05",
                           "2021-05-05",
                           1000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     project2 = projecNoID("B",
                           "2020-06-06",
                           "2021-06-06",
                           2000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -121,7 +122,7 @@ public class ResourceRepoTest {
     Task task1 = taskWithID("3",
                             "Mark",
                             1000L
-                           ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -131,7 +132,7 @@ public class ResourceRepoTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
 

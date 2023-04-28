@@ -27,6 +27,7 @@ import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCh
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
 import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT_CLASSIC;
 import static java.util.Arrays.asList;
@@ -80,7 +81,7 @@ public class ResourceTransactionTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -94,7 +95,7 @@ public class ResourceTransactionTest {
 
     //    closeTcContainer();
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -102,7 +103,7 @@ public class ResourceTransactionTest {
   void beforeEach(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     Project project1 = projecNoID("C",
                                   "2020-05-05",
@@ -136,7 +137,7 @@ public class ResourceTransactionTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
 
     dbUtils.cleanTestDb();
   }

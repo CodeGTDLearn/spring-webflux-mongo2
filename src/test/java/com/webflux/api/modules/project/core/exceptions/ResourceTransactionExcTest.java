@@ -27,6 +27,7 @@ import static com.webflux.api.core.config.testcontainer.container.TcContainerCon
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.core.config.utils.TestUtils.*;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
 import static com.webflux.api.modules.project.core.routes.RoutesTransaction.REPO_TRANSACT_CLASSIC;
@@ -105,7 +106,7 @@ public class ResourceTransactionExcTest {
     System.setProperty("runTest", enabledTest);
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification = requestSpecsSetPath(
@@ -119,14 +120,14 @@ public class ResourceTransactionExcTest {
 
     closeTcContainer();
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
   @BeforeEach
   void beforeEach(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     Project project1 = projecNoID("C", "2020-05-05", "2021-05-05", 1000L, of("UK", "USA")).create();
 
@@ -147,7 +148,7 @@ public class ResourceTransactionExcTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
   // STYLE 01: System.setProperty + Spring Expression Language (SpEL)
@@ -301,7 +302,7 @@ public class ResourceTransactionExcTest {
     project.setName("");
     newTaskName = "";
 
-    var response = RestAssuredWebTestClient
+    RestAssuredWebTestClient
          .given()
          .webTestClient(mockedWebClient)
 
@@ -315,12 +316,9 @@ public class ResourceTransactionExcTest {
          .log()
          .everything()
          .statusCode(BAD_REQUEST.value())
-         .body("reason", containsString("Validation failure"))
-         .body("message", containsString("teste one message"))
-         // .body(matchesJsonSchemaInClasspath(
-         //       "contracts/transactions/transactionsClassicExcProjectEmpty.json"))
+         .body("detail", containsString("teste one message"))
+         .body("classType", containsString("Bean Validations"))
          ;
-
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
     dbUtils.countAndExecuteFlux(taskService.findAll(), 1);
@@ -334,13 +332,13 @@ public class ResourceTransactionExcTest {
     blockHoundTestCheck();
   }
 }
-         //         .header("Location",
-         //                 equalTo(
-         //                      "%s:%s%s%s%s".formatted(
-         //                           RestAssured.baseURI,
-         //                           "8080",
-         //                           PROJ_ROOT_CRUD,
-         //                           REPO_TRANSACT_CLASSIC,
-         //                           "?taskNameInitial="
-         //                      ))
-         //         )
+//         .header("Location",
+//                 equalTo(
+//                      "%s:%s%s%s%s".formatted(
+//                           RestAssured.baseURI,
+//                           "8080",
+//                           PROJ_ROOT_CRUD,
+//                           REPO_TRANSACT_CLASSIC,
+//                           "?taskNameInitial="
+//                      ))
+//         )

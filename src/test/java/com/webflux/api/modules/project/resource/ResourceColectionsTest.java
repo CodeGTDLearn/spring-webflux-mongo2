@@ -30,6 +30,7 @@ import static com.webflux.api.core.config.databuilders.ProjectBuilder.projecNoID
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.*;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.template.RoutesColections.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
@@ -77,7 +78,7 @@ public class ResourceColectionsTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -90,7 +91,7 @@ public class ResourceColectionsTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -105,21 +106,21 @@ public class ResourceColectionsTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     Project project1 = projecNoID("C",
                                   "2020-05-05",
                                   "2021-05-05",
                                   1000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
 
     Project project2 = projecNoID("B",
                                   "2020-06-06",
                                   "2021-06-06",
                                   2000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
 
     List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -129,11 +130,11 @@ public class ResourceColectionsTest {
     task1 = taskWithID("3",
                        "Mark",
                        1000L
-                      ).create();
+    ).create();
     task2 = taskWithID("4",
                        "Mark Zuck",
                        7000L
-                      ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
 
     dbUtils.countAndExecuteFlux(taskFlux, 1);
@@ -145,7 +146,7 @@ public class ResourceColectionsTest {
                                   "2023-07-07",
                                   4000L,
                                   Arrays.asList(task1, task2)
-                                 )
+              )
               .create();
 
     List<ProjectChild> projectChildList = List.of(project1Child);
@@ -159,7 +160,7 @@ public class ResourceColectionsTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
   @Test
@@ -210,7 +211,7 @@ public class ResourceColectionsTest {
     var task3 = taskWithID(project1Child.get_id(),
                            "Mark Zuck",
                            7000L
-                          ).create();
+    ).create();
 
     RestAssuredWebTestClient
 

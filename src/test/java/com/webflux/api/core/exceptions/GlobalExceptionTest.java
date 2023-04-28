@@ -25,6 +25,7 @@ import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.core.config.utils.TestUtils.*;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.ERROR_PATH;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.PROJ_ROOT_CRUD;
@@ -75,7 +76,7 @@ public class GlobalExceptionTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -88,7 +89,7 @@ public class GlobalExceptionTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -103,28 +104,28 @@ public class GlobalExceptionTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     project1 = projecNoID("C",
                           "2020-05-05",
                           "2021-05-05",
                           1000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     Project project2 = projecNoID("B",
                                   "2020-06-06",
                                   "2021-06-06",
                                   2000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
     Flux<Project> projectFlux = dbUtils.saveProjectList(Arrays.asList(project1, project2));
     dbUtils.countAndExecuteFlux(projectFlux, 2);
 
     Task task1 = taskWithID("3",
                             "Mark",
                             1000L
-                           ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -134,7 +135,7 @@ public class GlobalExceptionTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
   @Test

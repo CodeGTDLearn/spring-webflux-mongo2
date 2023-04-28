@@ -25,6 +25,7 @@ import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCheck;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.*;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
@@ -69,7 +70,7 @@ public class ResourceCrudTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
     //    globalComposeServiceContainerMessage(compose,
     //                                         TC_COMPOSE_SERVICE,
     //                                         TC_COMPOSE_SERVICE_PORT
@@ -84,7 +85,7 @@ public class ResourceCrudTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -100,28 +101,28 @@ public class ResourceCrudTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     project1 = projecNoID("C",
                           "2020-05-05",
                           "2021-05-05",
                           1000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     project2 = projecNoID("B",
                           "2020-06-06",
                           "2021-06-06",
                           2000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     projetoNoId = projecNoID("C",
                              "2020-05-05",
                              "2021-05-05",
                              1000L,
                              of("HOL", "CAN")
-                            ).create();
+    ).create();
 
     List<Project> projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -131,7 +132,7 @@ public class ResourceCrudTest {
     Task task1 = taskWithID("3",
                             "Mark",
                             1000L
-                           ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -141,7 +142,7 @@ public class ResourceCrudTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
 
@@ -171,7 +172,7 @@ public class ResourceCrudTest {
                       .get(0),
               project1.getCountryList()
                       .get(1)
-                                      ))
+         ))
          .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
@@ -201,7 +202,7 @@ public class ResourceCrudTest {
                          .get(0),
               projetoNoId.getCountryList()
                          .get(1)
-                                      ))
+         ))
          .body(matchesJsonSchemaInClasspath("contracts/project/saveOrUpdate.json"))
     ;
   }
@@ -215,7 +216,7 @@ public class ResourceCrudTest {
          serviceCrud.findAll()
                     .flatMap(Flux::just),
          asList(project1, project2)
-                                 );
+    );
 
     RestAssuredWebTestClient
 
@@ -239,7 +240,7 @@ public class ResourceCrudTest {
                                                   .get(0),
                                           project2.getCountryList()
                                                   .get(1)
-                                         ))
+         ))
          .body(matchesJsonSchemaInClasspath("contracts/project/projects.json"))
     ;
   }
@@ -269,7 +270,7 @@ public class ResourceCrudTest {
                       .get(0),
               project1.getCountryList()
                       .get(1)
-                                      ))
+         ))
          .body(matchesJsonSchemaInClasspath("contracts/project/findbyid.json"))
     ;
   }

@@ -29,6 +29,7 @@ import static com.webflux.api.core.config.databuilders.ProjectBuilder.projectWit
 import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.*;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.template.RoutesTempl.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
@@ -74,7 +75,7 @@ public class ResourceTemplTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -87,7 +88,7 @@ public class ResourceTemplTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -102,7 +103,7 @@ public class ResourceTemplTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     // ----- PROJECT TEST ELEMENTS SAVED IN DB ---------------------------------
     project1 = projecNoID("C",
@@ -110,14 +111,14 @@ public class ResourceTemplTest {
                           "2021-05-05",
                           1000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     Project project2 = projecNoID("B",
                                   "2020-06-06",
                                   "2021-06-06",
                                   2000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
 
     projectList = asList(project1, project2);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
@@ -127,11 +128,11 @@ public class ResourceTemplTest {
     Task task1 = taskWithID("3",
                             "Mark",
                             1000L
-                           ).create();
+    ).create();
     Task task2 = taskWithID("4",
                             "Mark Zuck",
                             7000L
-                           ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
 
@@ -141,7 +142,7 @@ public class ResourceTemplTest {
                                                                         "2023-07-07",
                                                                         4000L,
                                                                         Arrays.asList(task1, task2)
-                                                                       )
+                                                    )
                                                     .create();
     List<ProjectChild> projectChildList = List.of(project1Child);
     Flux<ProjectChild> projectChildFlux = dbUtils.saveProjectChildList(projectChildList);
@@ -154,7 +155,7 @@ public class ResourceTemplTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
 
@@ -260,7 +261,7 @@ public class ResourceTemplTest {
                                  "2021-07-07",
                                  3000L,
                                  of("UK", "USA")
-                                ).create();
+    ).create();
     projectList = of(project4);
     Flux<Project> projectFlux = dbUtils.saveProjectList(projectList);
     dbUtils.countAndExecuteFlux(projectFlux, 1);

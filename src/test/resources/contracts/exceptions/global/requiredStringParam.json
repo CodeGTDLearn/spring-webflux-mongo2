@@ -53,11 +53,13 @@
       ]
     }
   },
-  "examples": [{
-    "path": "/project/find/ByName",
-    "status": 400,
-    "reason": "Required String parameter 'projectName' is not present",
-    "Global-Global-Atribute": "Global-General-Message",
-    "Global-Dev-Atribute": "Global-Dev-Message"
-  }]
+  "examples": [
+    {
+      "path": "/project/find/ByName",
+      "status": 400,
+      "reason": "Required String parameter 'projectName' is not present",
+      "Global-Global-Atribute": "Global-General-Message",
+      "Global-Dev-Atribute": "Global-Dev-Message"
+    }
+  ]
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.extension.Extension;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import static com.webflux.api.core.config.utils.TestUtils.TitleTestTypeContainer.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesContainer.*;
 import static com.webflux.api.core.config.utils.TestUtils.globalContainerMessage;
 import static java.lang.System.setProperty;
 

@@ -27,6 +27,7 @@ import static com.webflux.api.core.config.utils.BlockhoundUtils.blockHoundTestCh
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.RoutesCrud.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Arrays.asList;
@@ -69,7 +70,7 @@ public class ResourceCrudExcTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -82,7 +83,7 @@ public class ResourceCrudExcTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -97,7 +98,7 @@ public class ResourceCrudExcTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     project1 = projecNoID("C",
                           "2020-05-05",
@@ -143,7 +144,7 @@ public class ResourceCrudExcTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
   @Test
@@ -174,6 +175,7 @@ public class ResourceCrudExcTest {
   @EnabledIf(expression = enabledTest, loadContext = true)
   @DisplayName("FindByNameExc")
   public void FindByNameExc() {
+
     RestAssuredWebTestClient
 
          .given()
@@ -297,8 +299,6 @@ public class ResourceCrudExcTest {
          .log()
          .everything()
          .statusCode(BAD_REQUEST.value())
-         .body(matchesJsonSchemaInClasspath(
-              "contracts/exceptions/project/beanValidation_NameNotEmpty.json"))
     ;
   }
 

@@ -22,6 +22,7 @@ import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.task.core.RoutesTask.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static java.util.Collections.singletonList;
@@ -62,7 +63,7 @@ public class ResourceTaskTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -75,7 +76,7 @@ public class ResourceTaskTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -90,21 +91,21 @@ public class ResourceTaskTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     Project project1 = projecNoID("C",
                                   "2020-05-05",
                                   "2021-05-05",
                                   1000L,
                                   of("UK", "USA")
-                                 ).create();
+    ).create();
     Flux<Project> projectFlux = dbUtils.saveProjectList(singletonList(project1));
     dbUtils.countAndExecuteFlux(projectFlux, 1);
 
     task1 = taskWithID("3",
                        "Mark",
                        1000L
-                      ).create();
+    ).create();
     Flux<Task> taskFlux = dbUtils.saveTaskList(singletonList(task1));
     dbUtils.countAndExecuteFlux(taskFlux, 1);
   }
@@ -114,7 +115,7 @@ public class ResourceTaskTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
 

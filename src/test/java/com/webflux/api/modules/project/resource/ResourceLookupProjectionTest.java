@@ -28,6 +28,7 @@ import static com.webflux.api.core.config.databuilders.TaskBuilder.taskWithID;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.requestSpecsSetPath;
 import static com.webflux.api.core.config.utils.RestAssureSpecs.responseSpecs;
 import static com.webflux.api.core.config.utils.TestUtils.*;
+import static com.webflux.api.core.config.utils.TestUtils.TestTitlesClass.*;
 import static com.webflux.api.modules.project.core.routes.template.RoutesLookupProjection.TEMPL_LOOKUP_PROJ;
 import static com.webflux.api.modules.project.core.routes.template.RoutesLookupProjection.TEMPL_ROOT_LOOKUP;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -72,7 +73,7 @@ public class ResourceLookupProjectionTest {
   static void beforeAll(TestInfo testInfo) {
 
     globalBeforeAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-start");
+    globalTestMessage(testInfo.getDisplayName(), TestTitlesClass.CLASS_START);
 
     RestAssuredWebTestClient.reset();
     RestAssuredWebTestClient.requestSpecification =
@@ -85,7 +86,7 @@ public class ResourceLookupProjectionTest {
   static void afterAll(TestInfo testInfo) {
 
     globalAfterAll();
-    globalTestMessage(testInfo.getDisplayName(), "class-end");
+    globalTestMessage(testInfo.getDisplayName(), CLASS_END);
   }
 
 
@@ -100,7 +101,7 @@ public class ResourceLookupProjectionTest {
     //                      .build();
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-start");
+                              .toString(), METHOD_START);
 
     createThreeSimpleProjects();
     List<Project> projectList = asList(project1, project2);
@@ -121,7 +122,7 @@ public class ResourceLookupProjectionTest {
   void tearDown(TestInfo testInfo) {
 
     globalTestMessage(testInfo.getTestMethod()
-                              .toString(), "method-end");
+                              .toString(), METHOD_END);
   }
 
 
@@ -164,7 +165,7 @@ public class ResourceLookupProjectionTest {
                                        "2023-07-07",
                                        4000L,
                                        Arrays.asList(task1, task2)
-                                      ).create();
+    ).create();
   }
 
   private void createTwoSimpleTasks() {
@@ -172,12 +173,12 @@ public class ResourceLookupProjectionTest {
     task1 = taskWithID("3",
                        "Mark",
                        1000L
-                      ).create();
+    ).create();
 
     task2 = taskWithID("4",
                        "Mark Zuck",
                        7000L
-                      ).create();
+    ).create();
   }
 
   private void createThreeSimpleProjects() {
@@ -187,14 +188,14 @@ public class ResourceLookupProjectionTest {
                           "2021-05-05",
                           1000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
     project2 = projecNoID("B",
                           "2020-06-06",
                           "2021-06-06",
                           2000L,
                           of("UK", "USA")
-                         ).create();
+    ).create();
 
   }
 
@@ -206,7 +207,7 @@ public class ResourceLookupProjectionTest {
                        "2021-05-05",
                        1000L,
                        of("UK", "USA")
-                      ).create();
+         ).create();
 
     projectLookup2 =
          projectWithID("C",
@@ -214,7 +215,7 @@ public class ResourceLookupProjectionTest {
                        "2021-05-05",
                        1000L,
                        of("UK", "CAN")
-                      ).create();
+         ).create();
 
     Flux<Project> projectFlux = dbUtils.saveProjectList(asList(projectLookup1, projectLookup2));
     dbUtils.countAndExecuteFlux(projectFlux, 2);
@@ -222,13 +223,13 @@ public class ResourceLookupProjectionTest {
     taskLookup1 = taskWithID("3",
                              "Mark",
                              1000L
-                            ).create();
+    ).create();
     taskLookup1.setProjectId(projectLookup1.get_id());
 
     taskLookup2 = taskWithID("3",
                              "Mark",
                              1000L
-                            ).create();
+    ).create();
     taskLookup2.setProjectId(projectLookup2.get_id());
 
     Flux<Task> taskFlux = dbUtils.saveTaskList(asList(taskLookup1, taskLookup2));

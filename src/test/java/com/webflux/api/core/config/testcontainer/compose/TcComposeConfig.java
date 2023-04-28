@@ -27,7 +27,7 @@ public class TcComposeConfig {
                                 Wait.forListeningPort()
                                     .withStartupTimeout(
                                          Duration.ofSeconds(STARTUP_TIMEOUT))
-                               );
+            );
 
   //format 02: using a getter/accessor to create the tcContainerCompose
   public DockerComposeContainer<?> getContainer() {
