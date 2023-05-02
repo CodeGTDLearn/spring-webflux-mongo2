@@ -7,6 +7,3 @@ modules:
       projectUpdateSimpleFailMessage: the Update operation fail. Try again later!!!!
       projectUpdateOptFailMessage: The Update operation fail. Someone did it before you. Try again!!!!
       projectNameIsEmptyMessage: Project name is empty. It is not allowed!!!!
-
-    beanValidation:
-      projectNameEmptyBeanValidationMessage: the Project Name cannot be Empty!!!!

@@ -1,0 +1,5 @@
+# CUSTOM-EXCEPTION:
+modules:
+  exception:
+    project:
+      nameEmptyMessage: Project Name cannot be Empty - BeanValid!!!!
