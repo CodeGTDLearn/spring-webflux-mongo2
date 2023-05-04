@@ -1,11 +1,10 @@
-package com.webflux.api.core.exceptions.global;
+package com.webflux.api.core.exceptions.beanValidation;
 
-import com.webflux.api.core.config.YamlProcessorConfig;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /*
     ╔═══════════════════════════════════════════════════════════╗
@@ -26,14 +25,27 @@ import org.springframework.context.annotation.PropertySource;
   ║ PropertySource|YAML: www.baeldung.com/spring-yaml-propertysource                     ║
   ║ Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly║
   ╚══════════════════════════════════════════════════════════════════════════════════════╝*/
-@Getter
-@Setter
 @Configuration
-@ConfigurationProperties(prefix = "global.exception")
-@PropertySource(value = "classpath:exception-messages\\global.yml", factory = YamlProcessorConfig.class)
-public class GlobalExceptionMessages {
+public class BeanValidationExceptionMessages {
 
-  private String developerMessage;
-  private String globalMessage;
+  // https://www.javadevjournal.com/spring-boot/spring-custom-validation-message-source/
+
+  private final String messagesSourcePath = "classpath:exception-messages\\beanValidation.yml";
+
+  @Bean
+  public MessageSource messageSource() {
+    var source = new ReloadableResourceBundleMessageSource();
+    source.setBasename(messagesSourcePath);
+    source.setDefaultEncoding("UTF-8");
+    return source;
+  }
+
+  @Bean
+  public LocalValidatorFactoryBean validator(MessageSource messageSource) {
+
+    var bean = new LocalValidatorFactoryBean();
+    bean.setValidationMessageSource(messageSource);
+    return bean;
+  }
 
 }

@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 // ========================== PropertySource + ConfigurationProperties =============================
 // Check - PropertySource: https://www.baeldung.com/configuration-properties-in-spring-boot
 // Getter+Setter are CRUCIAL for PropertySource + ConfigurationProperties works properly
-@PropertySource(value = "classpath:application.yml", factory = YamlProcessor.class)
+@PropertySource(value = "classpath:application.yml", factory = YamlProcessorConfig.class)
 @ConfigurationProperties(prefix = "spring.data.mongodb")
 @Setter
 @Getter

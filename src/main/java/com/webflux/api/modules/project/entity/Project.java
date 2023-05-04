@@ -23,7 +23,7 @@ public class Project implements Serializable {
   @Id
   private String _id;
 
-  @NotEmpty(message = "{modules.exception.project.nameEmptyMessage}" )
+  @NotEmpty(message = "{project.empty.name}" )
   private String name;
 
   private String code;

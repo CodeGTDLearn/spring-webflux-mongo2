@@ -1,6 +1,6 @@
 package com.webflux.api.modules.project.core.exceptions;
 
-import com.webflux.api.core.config.YamlProcessor;
+import com.webflux.api.core.config.YamlProcessorConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "modules.exception.project")
-@PropertySource(value = "classpath:exception-messages\\project.yml", factory = YamlProcessor.class)
+@PropertySource(value = "classpath:exception-messages\\project.yml", factory = YamlProcessorConfig.class)
 public class ProjectExceptionsMessages {
 
   private String projectNotFoundMessage;

@@ -2,6 +2,9 @@
 # - testcontainer\container\TcContainerReplicaset: All annotations
 # - testcontainer\compose\TcCompose: All annotations
 spring:
+  messages:
+    basename: messages
+    cache-duration: 3600
   profiles:
     active: replica-set
     group:

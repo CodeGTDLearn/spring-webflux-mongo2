@@ -5,15 +5,12 @@ import com.webflux.api.modules.project.core.exceptions.types.UpdateOptmisticVers
 import com.webflux.api.modules.project.core.exceptions.types.UpdateSimpleException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.support.WebExchangeBindException;
 
 import java.util.Date;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -71,31 +68,4 @@ public class ProjectExceptionsHandler {
          );
     return new ResponseEntity<>(exceptionAttributes, BAD_REQUEST);
   }
-
-  @ExceptionHandler(WebExchangeBindException.class)
-  public ResponseEntity<?> beanValidationExceptions(WebExchangeBindException exception) {
-
-    log.error("Exception Caught in handleRequestBodyError : {}", exception.getMessage());
-
-    var beanValidationErrors =
-         exception
-              .getBindingResult()
-              .getAllErrors()
-              .stream()
-              .map(DefaultMessageSourceResolvable::getDefaultMessage)
-              .sorted()
-              .collect(Collectors.joining(", "));
-
-    log.error("BeanValidation Errors: {}", beanValidationErrors);
-
-    ProjectExceptionsAttributes exceptionAttributes =
-         new ProjectExceptionsAttributes(
-              beanValidationErrors,
-              "Bean Validations",
-              BAD_REQUEST.value(),
-              new Date().getTime()
-         );
-    return new ResponseEntity<>(exceptionAttributes, BAD_REQUEST);
-  }
-
 }
