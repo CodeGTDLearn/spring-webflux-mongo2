@@ -1,0 +1,3 @@
+project:
+  notempty:
+    name: Project Name cannot be Empty - BeanValid!!!!

@@ -2,6 +2,8 @@
 # - testcontainer\container\TcContainerReplicaset: All annotations
 # - testcontainer\compose\TcCompose: All annotations
 spring:
+  messages:
+    basename: BeanValidationMessages
   profiles:
     active: replica-set
     group:

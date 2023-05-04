@@ -16,7 +16,7 @@ import java.util.Properties;
   ║ APPLICATION.PROPERTIES "NO NEED" CONVERSION                  ║
   ║ Source: https://www.baeldung.com/spring-yaml-propertysource  ║
   ╚══════════════════════════════════════════════════════════════╝*/
-public class YamlProcessor implements PropertySourceFactory {
+public class YamlProcessorConfig implements PropertySourceFactory {
 
   @Override
   public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource)

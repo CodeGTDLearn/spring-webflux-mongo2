@@ -1,6 +1,6 @@
 package com.webflux.api.core.exceptions.global;
 
-import com.webflux.api.core.config.YamlProcessor;
+import com.webflux.api.core.config.YamlProcessorConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,7 +30,7 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "global.exception")
-@PropertySource(value = "classpath:exception-messages\\global.yml", factory = YamlProcessor.class)
+@PropertySource(value = "classpath:exception-messages\\global.yml", factory = YamlProcessorConfig.class)
 public class GlobalExceptionMessages {
 
   private String developerMessage;

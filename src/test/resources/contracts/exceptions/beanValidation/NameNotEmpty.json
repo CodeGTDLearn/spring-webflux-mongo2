@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": [
+    "detail",
+    "title",
+    "status",
+    "timeStamp"
+  ],
+  "properties": {
+    "detail": {
+      "type": "string",
+      "default": "",
+      "title": "The detail Schema",
+      "examples": [
+        "Project Name cannot be Empty - BeanValid!!!!"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "default": "",
+      "title": "The title Schema",
+      "examples": [
+        "Bean Validations"
+      ]
+    },
+    "status": {
+      "type": "integer",
+      "default": 0,
+      "title": "The status Schema",
+      "examples": [
+        400
+      ]
+    },
+    "timeStamp": {
+      "type": "integer",
+      "default": 0,
+      "title": "The timeStamp Schema",
+      "examples": [
+        1683845341002
+      ]
+    }
+  },
+  "examples": [{
+    "detail": "Project Name cannot be Empty - BeanValid!!!!",
+    "title": "Bean Validations",
+    "status": 400,
+    "timeStamp": 1683845341002
+  }]
+}

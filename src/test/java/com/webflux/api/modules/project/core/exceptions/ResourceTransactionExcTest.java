@@ -316,8 +316,9 @@ public class ResourceTransactionExcTest {
          .log()
          .everything()
          .statusCode(BAD_REQUEST.value())
-         .body("detail", containsString("teste one message"))
+         .body("detail", containsString("Project Name cannot be Empty - BeanValid!!!!"))
          .body("classType", containsString("Bean Validations"))
+
          ;
 
     dbUtils.countAndExecuteFlux(serviceCrud.findAll(), 2);
@@ -332,13 +333,3 @@ public class ResourceTransactionExcTest {
     blockHoundTestCheck();
   }
 }
-//         .header("Location",
-//                 equalTo(
-//                      "%s:%s%s%s%s".formatted(
-//                           RestAssured.baseURI,
-//                           "8080",
-//                           PROJ_ROOT_CRUD,
-//                           REPO_TRANSACT_CLASSIC,
-//                           "?taskNameInitial="
-//                      ))
-//         )

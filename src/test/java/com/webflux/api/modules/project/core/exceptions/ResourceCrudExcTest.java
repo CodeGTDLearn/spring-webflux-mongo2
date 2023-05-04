@@ -274,7 +274,6 @@ public class ResourceCrudExcTest {
          .everything()
 
          .statusCode(BAD_REQUEST.value())
-         //         .statusCode(NOT_FOUND.value())
          .body(matchesJsonSchemaInClasspath("contracts/exceptions/project/UpdateOptExc.json"))
     ;
   }
@@ -299,6 +298,7 @@ public class ResourceCrudExcTest {
          .log()
          .everything()
          .statusCode(BAD_REQUEST.value())
+         .body(matchesJsonSchemaInClasspath("contracts/exceptions/beanValidation/NameNotEmpty.json"))
     ;
   }
 

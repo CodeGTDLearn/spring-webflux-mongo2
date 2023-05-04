@@ -1,6 +1,6 @@
 package com.webflux.api.modules.task.core.exceptions;
 
-import com.webflux.api.core.config.YamlProcessor;
+import com.webflux.api.core.config.YamlProcessorConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.PropertySource;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "modules.exception.task")
-@PropertySource(value = "classpath:exception-messages\\task.yml", factory = YamlProcessor.class)
+@PropertySource(value = "classpath:exception-messages\\task.yml", factory = YamlProcessorConfig.class)
 public class TaskExceptionsMessages {
 
   private String taskNameIsEmptyMessage;

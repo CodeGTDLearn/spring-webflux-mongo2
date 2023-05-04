@@ -1,4 +1,4 @@
-package com.webflux.api.modules.project.core.exceptions;
+package com.webflux.api.core.exceptions.beanValidation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ProjectExceptionsAttributes {
+public class BeanValidationExceptionAttributes {
   private String detail;
-  private String classType;
+  private String title;
   private int status;
   private long timeStamp;
 }

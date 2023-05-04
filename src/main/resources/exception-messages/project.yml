@@ -1,7 +1,6 @@
 # CUSTOM-EXCEPTION:
 modules:
   exception:
-
     project:
       projectNotFoundMessage: the Project was not found!!!!
       projectUpdateSimpleFailMessage: the Update operation fail. Try again later!!!!
