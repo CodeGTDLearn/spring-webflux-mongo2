@@ -317,7 +317,9 @@ public class ResourceTransactionExcTest {
          .everything()
          .statusCode(BAD_REQUEST.value())
          .body("detail", containsString("Project Name cannot be Empty - BeanValid!!!!"))
-         .body("classType", containsString("Bean Validations"))
+         .body("title", containsString("Bean Validations"))
+         .body(matchesJsonSchemaInClasspath(
+              "contracts/exceptions/beanValidation/NameNotEmpty.json"));
 
          ;
 

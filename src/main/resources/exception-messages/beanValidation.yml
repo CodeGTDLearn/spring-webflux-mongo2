@@ -1,9 +1,0 @@
-# English
-project:
-  notempty:
-    name: Project Name cannot be Empty - BeanValid!!!!
-
-## Portuguese
-#project:
-#  notempty:
-#    name: Nome do Projeto nao pode ser vazio - BeanValid!!!!

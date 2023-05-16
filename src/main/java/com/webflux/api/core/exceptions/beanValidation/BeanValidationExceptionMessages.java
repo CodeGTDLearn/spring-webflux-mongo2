@@ -6,46 +6,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-/*
-    ╔═══════════════════════════════════════════════════════════╗
-    ║              GLOBAL-EXCEPTIONS EXPLANATIONS               ║
-    ╠═══════════════════════════════════════════════════════════╣
-    ║         There is no Thrower in Global-Exceptions          ║
-    ║           Because Global-Exceptions are threw             ║
-    ║               for "the system by itself",                 ║
-    ║         not programmatically in a specific method         ║
-    ║(meaning threw inside a method according the coder defined)║
-    ╚═══════════════════════════════════════════════════════════╝
-
-  ╔══════════════════════════════════════════════════════════════════════════════════════╗
-  ║                     PropertySource + YAML ConfigurationProperties                    ║
-  ╠══════════════════════════════════════════════════════════════════════════════════════╣
-  ║ https://www.appsdeveloperblog.com/spring-boot-configurationproperties-tutorial/      ║
-  ║ PropertySource|PropertyFile www.baeldung.com/configuration-properties-in-spring-boot ║
-  ║ PropertySource|YAML: www.baeldung.com/spring-yaml-propertysource                     ║
-  ║ Setter/Getter are CRUCIAL for PropertySource + ConfigurationProperties works properly║
-  ╚══════════════════════════════════════════════════════════════════════════════════════╝*/
 @Configuration
 public class BeanValidationExceptionMessages {
 
-  // https://www.javadevjournal.com/spring-boot/spring-custom-validation-message-source/
-
-  private final String messagesSourcePath = "classpath:exception-messages\\beanValidation.yml";
+  private final String messagesPath = "classpath:/exception-messages/beanValidation";
 
   @Bean
-  public MessageSource messageSource() {
-    var source = new ReloadableResourceBundleMessageSource();
-    source.setBasename(messagesSourcePath);
-    source.setDefaultEncoding("UTF-8");
-    return source;
+  public MessageSource messages() {
+    var messageSource = new ReloadableResourceBundleMessageSource();
+    messageSource.setBasenames(messagesPath);
+    messageSource.setDefaultEncoding("UTF-8");
+    return messageSource;
   }
+
 
   @Bean
-  public LocalValidatorFactoryBean validator(MessageSource messageSource) {
-
-    var bean = new LocalValidatorFactoryBean();
-    bean.setValidationMessageSource(messageSource);
-    return bean;
+  public LocalValidatorFactoryBean validator(MessageSource messages) {
+    var localValidatorFactoryBean = new LocalValidatorFactoryBean();
+    localValidatorFactoryBean.setValidationMessageSource(messages);
+    return localValidatorFactoryBean;
   }
-
 }
