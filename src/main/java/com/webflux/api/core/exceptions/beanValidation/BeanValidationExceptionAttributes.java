@@ -1,8 +1,8 @@
 package com.webflux.api.core.exceptions.beanValidation;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
 
 @Data
 @AllArgsConstructor
